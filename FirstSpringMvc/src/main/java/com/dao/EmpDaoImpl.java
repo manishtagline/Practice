@@ -45,4 +45,12 @@ public class EmpDaoImpl implements  EmpDao{
     public List<Employee> getAllEmployee(){
         return hibernateTemplate.loadAll(Employee.class);
     }
+
+    @Override
+    public List<Employee> getEmployeesByPage(int pageid, int total) {
+        return hibernateTemplate.execute(session -> session.createQuery("from Employee ",Employee.class)
+                .setFirstResult(pageid -1)
+                .setMaxResults(total)
+                .list());
+    }
 }

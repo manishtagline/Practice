@@ -27,10 +27,21 @@ public class HomeController {
         return "redirect:/viewemp";
     }
 
-    @RequestMapping("/viewemp")
-    public String viewEmployee(Model model){
-        List<Employee> list = dao.getAllEmployee();
+    @RequestMapping("/viewemp/{pageid}")
+    public String viewEmployee(@PathVariable("pageid")int pageid ,Model model){
+//        List<Employee> list = dao.getAllEmployee();
+//        model.addAttribute("listOfEmployee", list);
+//        return "viewemp";
+
+        int total = 10;
+        int start=1;
+        if(pageid == 1){
+        }else{
+            start = (pageid - 1) * total + 1;
+        }
+        List<Employee> list = dao.getEmployeesByPage(start, total);
         model.addAttribute("listOfEmployee", list);
+        model.addAttribute("page", pageid);
         return "viewemp";
     }
 
@@ -41,16 +52,17 @@ public class HomeController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editEmployee(@PathVariable("id")int id, Model model){
+    public String editEmployee(@RequestParam("page") int page,@PathVariable("id")int id, Model model){
         Employee emp = dao.getEmployeeById(id);
         model.addAttribute("employee",emp);
+        model.addAttribute("page", page);
         return "editform";
     }
 
     @PostMapping("/editsave")
-    public String updateEmployee(@ModelAttribute("employee")Employee employee){
+    public String updateEmployee(@RequestParam("page") int page,@ModelAttribute("employee")Employee employee){
         dao.updateEmployee(employee);
-        return "redirect:/viewemp";
+        return "redirect:/viewemp/"+page;
     }
 
 }

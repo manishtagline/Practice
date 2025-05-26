@@ -11,5 +11,6 @@ public interface EmpDao {
     void updateEmployee(Employee e);
     Employee getEmployeeById(int id);
     List<Employee> getAllEmployee();
+    List<Employee> getEmployeesByPage(int pageid, int total);
 
 }

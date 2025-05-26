@@ -97,7 +97,7 @@
 <body>
 <div class="form-container">
     <h2>Edit Employee</h2>
-    <form:form action="../editsave" method="post" modelAttribute="employee">
+    <form:form action="../editsave?page=${page==null?1:page}" method="post" modelAttribute="employee">
         <form:hidden path="id" />
         <table>
             <tr>
@@ -117,7 +117,7 @@
             </tr>
         </table>
     </form:form>
-    <a class="back-link" href="viewemp">Back to Employee List</a>
+    <a class="back-link" href="../viewemp/1">Back to Employee List</a>
 </div>
 </body>
 </html>

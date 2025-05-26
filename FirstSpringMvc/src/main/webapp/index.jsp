@@ -54,7 +54,7 @@
 
     <div>
         <a href="empform" class="button">Add Employee</a>
-        <a href="viewemp" class="button">View Employees</a>
+        <a href="viewemp/1" class="button">View Employees</a>
     </div>
 </div>
 

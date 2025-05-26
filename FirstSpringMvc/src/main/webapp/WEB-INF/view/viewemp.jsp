@@ -88,14 +88,20 @@
             <td>${emp.getSalary()}</td>
             <td>${emp.getDesignation()}</td>
             <td>
-                <a href="edit/${emp.getId()}">Edit</a> |
-                <a href="delete/${emp.getId()}" onclick="return confirm('Are you sure? You want to delete!!')">Delete</a>
+                <a href="../edit/${emp.getId()}?page=${page==null?1:page}">Edit</a> |
+                <a href="../delete/${emp.getId()}?page=${page==null?1:page}" onclick="return confirm('Are you sure? You want to delete!!')">Delete</a>
             </td>
         </tr>
     </c:forEach>
 </table>
 
 <a href="empform" class="add-button">Add New Employee</a>
+
+<div style="text-align: center; margin-top: 20px;">
+    <a href="/FirstSpringMvc_war/viewemp/1" style="margin: 0 8px; padding: 8px 12px; background-color: #4CAF50; color: white; border-radius: 4px; text-decoration: none;">1</a>
+    <a href="/FirstSpringMvc_war/viewemp/2" style="margin: 0 8px; padding: 8px 12px; background-color: #4CAF50; color: white; border-radius: 4px; text-decoration: none;">2</a>
+    <a href="/FirstSpringMvc_war/viewemp/3" style="margin: 0 8px; padding: 8px 12px; background-color: #4CAF50; color: white; border-radius: 4px; text-decoration: none;">3</a>
+</div>
 
 </body>
 </html>

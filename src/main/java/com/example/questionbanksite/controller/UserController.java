@@ -83,6 +83,11 @@ public class UserController {
         String username = (String) session.getAttribute("username");
         model.addAttribute("username", username);
 
+        if(username == null){
+            model.addAttribute("error","Please, Login first!!!");
+            return "loginPage";
+        }
+
         List<Exam> examDescriptions = examService.getAllExam();
         model.addAttribute("examList", examDescriptions);
 
@@ -137,6 +142,11 @@ public class UserController {
     public String showResult(HttpSession session, Model model){
         String username = (String) session.getAttribute("username");
         model.addAttribute("username", username);
+
+        if(username == null){
+            model.addAttribute("error","Please, Login first!!!");
+            return "loginPage";
+        }
 
         User user = userService.getUserByName(username);
         long userId = user.getId();

@@ -30,7 +30,6 @@ public class AdminController {
 
     private final UserService userService;
 
-    private final CreateExamService createExamService;
 
     //**************************** Subject API *************************//
     // Create a new subject
@@ -157,7 +156,7 @@ public class AdminController {
             @RequestParam String description,
             @RequestParam int totalMarks) {
 
-        createExamService.createExamForSubject(subjectId, description, totalMarks);
+        examService.createExamForSubject(subjectId, description, totalMarks);
         return new ResponseEntity<>("Exam created based on total marks.", HttpStatus.OK);
     }
 

@@ -25,10 +25,6 @@ public class UserController {
 
     private final ExamService examService;
 
-    private final CreateExamService createExamService;
-
-    private final ExamSubmissionService examSubmissionService;
-
     private final UserResultService userResultService;
 
 
@@ -122,7 +118,7 @@ public class UserController {
         User user = userService.getUserByName(username);
         paramMap.remove("examId");
 
-        UserResult result = examSubmissionService.evaluateAndSaveResult(user, examId, paramMap);
+        UserResult result = examService.evaluateAndSaveResult(user, examId, paramMap);
 
         session.setAttribute("result", result);
 
@@ -155,7 +151,6 @@ public class UserController {
 
         return "result";
     }
-
 
     @GetMapping("/logout")
     public String logout(HttpSession session){
@@ -214,12 +209,9 @@ public class UserController {
         return "resultDetails";
     }
 
-
     @GetMapping("/errorPage")
     public String errorPage(){
         return "errorPage";
     }
-
-
 
 }

@@ -8,4 +8,6 @@ public interface UserResultService {
 
     List<UserResult> getResultsByUserId(Long userId);
 
+    UserResult getResultDetailsById(Long resultId);
+
 }

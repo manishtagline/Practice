@@ -9,7 +9,7 @@ import com.example.questionbanksite.entity.Question;
 import com.example.questionbanksite.entity.Subject;
 import com.example.questionbanksite.entity.User;
 import com.example.questionbanksite.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,22 +19,18 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class AdminController {
 
-    @Autowired
-    private SubjectService subjectService;
+    private final SubjectService subjectService;
 
-    @Autowired
-    private QuestionService questionService;
+    private final QuestionService questionService;
 
-    @Autowired
-    private ExamService examService;
+    private final ExamService examService;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private CreateExamService createExamService;
+    private final CreateExamService createExamService;
 
     //**************************** Subject API *************************//
     // Create a new subject

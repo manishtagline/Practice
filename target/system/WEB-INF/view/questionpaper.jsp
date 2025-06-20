@@ -190,7 +190,7 @@
 
             <div class="marks-complexity">
                 <span>Marks: ${question.marks}</span>
-                <span>Complexity: ${question.complexity}</span>
+                <%--<span>Complexity: ${question.complexity}</span>--%>
             </div>
         </div>
     </c:forEach>

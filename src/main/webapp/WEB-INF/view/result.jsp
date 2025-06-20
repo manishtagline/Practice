@@ -104,31 +104,33 @@
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             <c:forEach var="res" items="${resultList}">
                 <div class="col">
-                    <div class="result-card h-100">
-                        <div class="result-header">
-                            <div class="result-title">
-                                    ${res.exam.description}
+                    <a href="examResultDetails?resultId=${res.id}" style="text-decoration:none; color:inherit;">
+                        <div class="result-card h-100">
+                            <div class="result-header">
+                                <div class="result-title">
+                                        ${res.exam.description}
+                                </div>
+                                <div class="result-date">
+                                    Exam ID: #${res.exam.id}
+                                </div>
                             </div>
-                            <div class="result-date">
-                                Exam ID: #${res.exam.id}
+                            <div>
+                                <strong>Score:</strong> ${res.totalScore} / ${res.exam.totalMarks}
+                                <br/>
+                                <strong>Percentage:</strong>
+                                <fmt:formatNumber value="${res.percentage}" maxFractionDigits="2"/>%
+                            </div>
+                            <div class="progress mt-3">
+                                <div class="progress-bar bg-success"
+                                     role="progressbar"
+                                     style="width:${res.percentage}%"
+                                     aria-valuenow="${res.percentage}"
+                                     aria-valuemin="0" aria-valuemax="100">
+                                    <fmt:formatNumber value="${res.percentage}" maxFractionDigits="1"/>%
+                                </div>
                             </div>
                         </div>
-                        <div>
-                            <strong>Score:</strong> ${res.totalScore} / ${res.exam.totalMarks}
-                            <br/>
-                            <strong>Percentage:</strong>
-                            <fmt:formatNumber value="${res.percentage}" maxFractionDigits="2"/>%
-                        </div>
-                        <div class="progress mt-3">
-                            <div class="progress-bar bg-success"
-                                 role="progressbar"
-                                 style="width:${res.percentage}%"
-                                 aria-valuenow="${res.percentage}"
-                                 aria-valuemin="0" aria-valuemax="100">
-                                <fmt:formatNumber value="${res.percentage}" maxFractionDigits="1"/>%
-                            </div>
-                        </div>
-                    </div>
+                    </a>
                 </div>
             </c:forEach>
         </div>

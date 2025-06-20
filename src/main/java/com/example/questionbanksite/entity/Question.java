@@ -1,43 +1,43 @@
-package com.example.questionbanksite.entity;
+    package com.example.questionbanksite.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+    import lombok.AllArgsConstructor;
+    import lombok.Getter;
+    import lombok.NoArgsConstructor;
+    import lombok.Setter;
 
-import javax.persistence.*;
-import java.util.List;
+    import javax.persistence.*;
+    import java.util.List;
 
-@Entity
-@Table(name = "question")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class Question {
+    @Entity
+    @Table(name = "question")
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public class Question {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
 
-    private String questiondDesc;
+        private String questiondDesc;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> options;
+        @ElementCollection(fetch = FetchType.EAGER)
+        private List<String> options;
 
-    private int marks;
+        private int marks;
 
-    @Column(name = "correct_answer")
-    private String correctAnswer;
+        @Column(name = "correct_answer")
+        private String correctAnswer;
 
-    private String complexity;
+        private String complexity;
 
-    @ManyToOne
-    @JoinColumn(name = "subject_id")
-    private Subject subject;
+        @ManyToOne
+        @JoinColumn(name = "subject_id")
+        private Subject subject;
 
-    @ManyToMany(mappedBy = "questions")
-    private List<Exam> exams;
+        @ManyToMany(mappedBy = "questions")
+        private List<Exam> exams;
 
 
-}
+    }

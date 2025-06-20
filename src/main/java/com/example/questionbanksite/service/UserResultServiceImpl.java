@@ -25,4 +25,17 @@ public class UserResultServiceImpl implements UserResultService{
     }
 
 
+    @Override
+    @Transactional(readOnly = true)
+    public UserResult getResultDetailsById(Long resultId) {
+        String jpql = "SELECT r FROM UserResult r " +
+                "LEFT JOIN FETCH r.exam e " +
+                "LEFT JOIN FETCH e.questions " +
+                "WHERE r.id = :resultId";
+        TypedQuery<UserResult> query = entityManager.createQuery(jpql, UserResult.class);
+        query.setParameter("resultId", resultId);
+        return query.getResultStream().findFirst().orElse(null);
+    }
+
+
 }

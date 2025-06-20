@@ -1,10 +1,11 @@
 package com.example.questionbanksite.controller;
 
 import com.example.questionbanksite.entity.Exam;
+import com.example.questionbanksite.entity.Question;
 import com.example.questionbanksite.entity.User;
 import com.example.questionbanksite.entity.UserResult;
 import com.example.questionbanksite.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,26 +13,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Controller
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private ExamService examService;
+    private final ExamService examService;
 
-    @Autowired
-    private CreateExamService createExamService;
+    private final CreateExamService createExamService;
 
-    @Autowired
-    private ExamSubmissionService examSubmissionService;
+    private final ExamSubmissionService examSubmissionService;
 
-    @Autowired
-    private UserResultService userResultService;
+    private final UserResultService userResultService;
+
 
     @GetMapping("/")
     public String index(){
@@ -163,5 +162,64 @@ public class UserController {
         session.invalidate();
         return "redirect:/";
     }
+
+
+    //Handler for checking
+    @GetMapping("/examResultDetails")
+    public String examResultDetails(@RequestParam("resultId") Long resultId, Model model) {
+        UserResult userResult = userResultService.getResultDetailsById(resultId);
+
+        if (userResult == null) {
+            model.addAttribute("errorMessage", "Result not found");
+            return "errorPage";
+        }
+
+        Exam exam = userResult.getExam();
+        List<Question> questions = exam.getQuestions();
+
+        Map<String, String> userAnswers = new HashMap<>();
+
+        try {
+            String answerRaw = userResult.getAnswer();
+
+            if (answerRaw != null && !answerRaw.trim().isEmpty()) {
+                String[] entries = answerRaw.split("\\|");
+
+                for (String entry : entries) {
+                    String[] parts = entry.split(":", 2);
+                    if (parts.length == 2) {
+                        String key = parts[0].trim();
+                        String value = parts[1].trim();
+                        userAnswers.put(key, value);
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("errorMessage", "Failed to parse stored answers.");
+            return "errorPage";
+        }
+
+        Map<String, String> correctAnswers = new HashMap<>();
+        for (Question q : questions) {
+            correctAnswers.put("Q" + q.getId(), q.getCorrectAnswer());
+        }
+
+        model.addAttribute("exam", exam);
+        model.addAttribute("questions", questions);
+        model.addAttribute("userAnswers", userAnswers);
+        model.addAttribute("correctAnswers", correctAnswers);
+
+        return "resultDetails";
+    }
+
+
+    @GetMapping("/errorPage")
+    public String errorPage(){
+        return "errorPage";
+    }
+
+
 
 }

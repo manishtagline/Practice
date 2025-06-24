@@ -37,16 +37,16 @@ public class UserController {
     //Handler for login and authenticate user
     @PostMapping("/login")
     public String authenticateUser(@RequestParam String username, @RequestParam String password, Model model, HttpSession session ) {
-        User user = userService.getUserByName(username);
 
         session.setAttribute("username", username);
 
-        if (user == null) {
-            model.addAttribute("error", "Invalid username or password");
-            return "loginPage";
+        if(username.equals("Admin") && password.equals("admin")) {
+            return "adminPage";
         }
 
-        if (!user.getPassword().equals(password)) {
+        User user = userService.getUserByName(username);
+
+        if(user == null || !user.getPassword().equals(password)) {
             model.addAttribute("error", "Invalid username or password");
             return "loginPage";
         }

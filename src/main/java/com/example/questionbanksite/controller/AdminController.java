@@ -1,9 +1,6 @@
 package com.example.questionbanksite.controller;
 
-import com.example.questionbanksite.dto.GetAllExamDto;
-import com.example.questionbanksite.dto.GetAllQuestionDto;
-import com.example.questionbanksite.dto.GetAllSubjectDto;
-import com.example.questionbanksite.dto.GetAllUserDto;
+import com.example.questionbanksite.dto.*;
 import com.example.questionbanksite.entity.Exam;
 import com.example.questionbanksite.entity.Question;
 import com.example.questionbanksite.entity.Subject;
@@ -12,13 +9,15 @@ import com.example.questionbanksite.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RestController
-@RequestMapping("/api")
+@Controller
 @RequiredArgsConstructor
 public class AdminController {
 
@@ -60,6 +59,27 @@ public class AdminController {
                                 .collect(Collectors.toList()))
                         .build()
                 );
+    }
+    @GetMapping("/subjectList")
+    @Transactional(readOnly = true)  // <-- Add transactional here
+    public String showSubjectList(Model model) {
+        List<Subject> subjects = subjectService.getAllSubjects();
+
+        // Force initialization of lazy collections inside transaction
+        subjects.forEach(subject -> {
+            subject.getQuestions().size(); // initialize questions list
+            subject.getExams().size();     // initialize exams list
+        });
+
+        List<SubjectDto> subjectDtos = subjects.stream().map(s -> new SubjectDto(
+                s.getId(),
+                s.getName(),
+                s.getQuestions() != null ? s.getQuestions().size() : 0,
+                s.getExams() != null ? s.getExams().size() : 0
+        )).collect(Collectors.toList());
+
+        model.addAttribute("subjects", subjectDtos);
+        return "subjectList";
     }
 
     // Update subject by id

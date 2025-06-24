@@ -4,6 +4,8 @@
         import lombok.Getter;
         import lombok.NoArgsConstructor;
         import lombok.Setter;
+        import org.hibernate.annotations.Fetch;
+        import org.hibernate.annotations.FetchMode;
 
         import javax.persistence.*;
         import java.util.List;
@@ -23,9 +25,11 @@
             private String name;
 
             @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+            @Fetch(FetchMode.SUBSELECT)
             private List<Question> questions;
 
             @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
+            @Fetch(FetchMode.SUBSELECT)
             private List<Exam> exams;
 
         }

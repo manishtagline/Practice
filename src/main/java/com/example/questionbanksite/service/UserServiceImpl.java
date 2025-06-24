@@ -41,4 +41,32 @@ public class UserServiceImpl implements UserService{
             return null;
         }
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public User getUserById(Long id) {
+        return entityManager.find(User.class, id);
+    }
+
+    @Override
+    @Transactional
+    public User updateUser(Long id, User updatedUser) {
+        User existingUser = entityManager.find(User.class, id);
+        if (existingUser != null) {
+            existingUser.setUsername(updatedUser.getUsername());
+            existingUser.setPassword(updatedUser.getPassword());
+
+            entityManager.merge(existingUser);
+        }
+        return existingUser;
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(Long id) {
+        User user = entityManager.find(User.class, id);
+        if (user != null) {
+            entityManager.remove(user);
+        }
+    }
 }

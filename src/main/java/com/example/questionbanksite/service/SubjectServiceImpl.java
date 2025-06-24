@@ -32,8 +32,10 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     @Transactional(readOnly = true)
     public List<Subject> getAllSubjects() {
+        // Fetch only Subject entities, collections remain lazy
         return entityManager.createQuery("SELECT s FROM Subject s", Subject.class).getResultList();
     }
+
 
     @Override
     @Transactional

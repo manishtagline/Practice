@@ -5,20 +5,24 @@
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="
-        http://www.springframework.org/schema/beans
-        https://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context
-        https://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/mvc
-        https://www.springframework.org/schema/mvc/spring-mvc.xsd
-        http://www.springframework.org/schema/tx
-        https://www.springframework.org/schema/tx/spring-tx.xsd">
+           http://www.springframework.org/schema/beans
+           https://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           https://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/mvc
+           https://www.springframework.org/schema/mvc/spring-mvc.xsd
+           http://www.springframework.org/schema/tx
+           https://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <!-- Component Scan -->
     <context:component-scan base-package="com.example.questionbanksite" />
-    <context:annotation-config/>
-    <!-- Spring MVC config -->
+    <context:annotation-config />
+
+    <!-- Enable Spring MVC annotations like @Controller -->
     <mvc:annotation-driven />
+
+    <!-- Static Resource Handler -->
+    <mvc:resources mapping="/static/**" location="/resources/static/" />
 
     <!-- View Resolver -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -26,7 +30,7 @@
         <property name="suffix" value=".jsp" />
     </bean>
 
-    <!-- DataSource -->
+    <!-- Database Configuration -->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
         <property name="url" value="jdbc:mysql://localhost:3306/questionbank" />
@@ -34,7 +38,7 @@
         <property name="password" value="Manish789" />
     </bean>
 
-    <!-- JPA EntityManagerFactory -->
+    <!-- JPA Entity Manager Factory -->
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource" />
         <property name="packagesToScan" value="com.example.questionbanksite.entity" />
@@ -55,6 +59,7 @@
         <property name="entityManagerFactory" ref="entityManagerFactory" />
     </bean>
 
-    <tx:annotation-driven/>
+    <!-- Enable Transaction Annotations -->
+    <tx:annotation-driven />
 
 </beans>

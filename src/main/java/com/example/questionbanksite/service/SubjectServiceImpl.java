@@ -16,11 +16,9 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     @Transactional
-    public List<Subject> saveSubject(List<Subject> subjectList) {
-        for (Subject subject : subjectList) {
-            entityManager.persist(subject);
-        }
-        return subjectList;
+    public int saveSubject(Subject subject) {
+        entityManager.persist(subject);
+        return 1;
     }
 
     @Override

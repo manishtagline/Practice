@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
@@ -38,20 +39,22 @@ public class UserController {
     @PostMapping("/login")
     public String authenticateUser(@RequestParam String username, @RequestParam String password, Model model, HttpSession session ) {
 
-        session.setAttribute("username", username);
-
-        if(username.equals("Admin") && password.equals("admin")) {
-            return "adminPage";
-        }
-
         User user = userService.getUserByName(username);
 
-        if(user == null || !user.getPassword().equals(password)) {
+        if (user == null || !user.getPassword().equals(password)) {
             model.addAttribute("error", "Invalid username or password");
             return "loginPage";
         }
 
-        return "redirect:/home";
+        session.setAttribute("username", user.getUsername());
+        session.setAttribute("role", user.getRole());
+
+        // Set session attributes based on role
+        if ("ADMIN".equalsIgnoreCase(user.getRole())) {
+            return "adminPage";
+        } else {
+            return "redirect:/home";
+        }
     }
 
 
@@ -61,11 +64,12 @@ public class UserController {
 
         String username = (String) session.getAttribute("username");
         model.addAttribute("username", username);
-
-        if(username == null){
+        String role = (String) session.getAttribute("role");
+        if(username == null || role.equalsIgnoreCase("Admin")){
             model.addAttribute("error","Please, Login first!!!");
             return "loginPage";
         }
+
 
         return "home";
     }
@@ -76,12 +80,12 @@ public class UserController {
     public String examPage(HttpSession session, Model model){
 
         String username = (String) session.getAttribute("username");
-        model.addAttribute("username", username);
-
-        if(username == null){
+        String role = (String) session.getAttribute("role");
+        if(username == null || role.equalsIgnoreCase("Admin")){
             model.addAttribute("error","Please, Login first!!!");
             return "loginPage";
         }
+        model.addAttribute("username", username);
 
         List<Exam> examDescriptions = examService.getAllExam();
         model.addAttribute("examList", examDescriptions);
@@ -111,8 +115,10 @@ public class UserController {
                              Model model) {
 
         String username = (String) session.getAttribute("username");
-        if (username == null) {
-            return "redirect:/login";
+        String role = (String) session.getAttribute("role");
+        if(username == null || role.equalsIgnoreCase("Admin")){
+            model.addAttribute("error","Please, Login first!!!");
+            return "loginPage";
         }
 
         User user = userService.getUserByName(username);
@@ -138,7 +144,8 @@ public class UserController {
         String username = (String) session.getAttribute("username");
         model.addAttribute("username", username);
 
-        if(username == null){
+        String role = (String) session.getAttribute("role");
+        if(username == null || role.equalsIgnoreCase("Admin")){
             model.addAttribute("error","Please, Login first!!!");
             return "loginPage";
         }

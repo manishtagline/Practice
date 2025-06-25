@@ -16,17 +16,18 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional
-    public void saveQuestion(List<Question> questions) {
-        for (Question question : questions) {
-            entityManager.persist(question);
-        }
+    public void saveQuestion(Question question) {
+        entityManager.persist(question);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Question> getAllQuestion() {
-        return entityManager.createQuery("SELECT q FROM Question q", Question.class).getResultList();
+        return entityManager.createQuery("SELECT q FROM Question q WHERE q.deleted = false", Question.class)
+                .getResultList();
     }
+
+
     @Override
     @Transactional(readOnly = true)
     public Question getQuestionById(Long id) {
@@ -52,10 +53,11 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional
-    public void deleteQuestion(Long id) {
+    public void softDeleteQuestion(Long id) {
         Question question = entityManager.find(Question.class, id);
         if (question != null) {
-            entityManager.remove(question);
+            question.setDeleted(true);
+            entityManager.merge(question);
         }
     }
 

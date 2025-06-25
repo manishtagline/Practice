@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface QuestionService {
 
-    void saveQuestion(List<Question> question);
+    void saveQuestion(Question question);
 
     List<Question> getAllQuestion();
 
@@ -14,7 +14,7 @@ public interface QuestionService {
 
     Question updateQuestion(Long id, Question question);
 
-    void deleteQuestion(Long id);
+    void softDeleteQuestion(Long id);
 
 
 }

@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,22 +32,54 @@ public class AdminController {
     private final UserService userService;
 
 
+    @GetMapping("/adminPage")
+    public String adminPage(HttpSession session, Model model){
+        String username = (String) session.getAttribute("username");
+        model.addAttribute("username", username);
+        String role = (String) session.getAttribute("role");
+        if(username == null || role.equalsIgnoreCase("User")){
+            model.addAttribute("error","Please, Login first, as a Admin...");
+            return "loginPage";
+        }
+        return "adminPage";
+    }
+
     //**************************** Subject API *************************//
     // Create a new subject
-    @PostMapping
-    public ResponseEntity<?> addSubject(@RequestBody List<Subject> subjects) {
-        List<Subject> savedSubject = subjectService.saveSubject(subjects);
-        return new ResponseEntity<>(savedSubject, HttpStatus.CREATED);
+    @PostMapping("/saveSubject")
+    public String addSubject(@ModelAttribute Subject subject, Model model, HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        model.addAttribute("username", username);
+        String role = (String) session.getAttribute("role");
+        if(username == null || role.equalsIgnoreCase("User")){
+            model.addAttribute("error","Please, Login first!!!");
+            return "loginPage";
+        }
+
+        int i = subjectService.saveSubject(subject);
+        if (i > 0) {
+            model.addAttribute("successMsg", "Subject added successfully...");
+        } else {
+            model.addAttribute("errorMsg", "Something went wrong!!!");
+        }
+        return "adminAddSubject";
     }
 
     // Get subject by id
-    @GetMapping("/{id}")
-    public ResponseEntity<Subject> getSubjectById(@PathVariable Long id) {
-        Subject subject = subjectService.getSubjectById(id);
-        if (subject == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @GetMapping("/editSubject")
+    public String getSubjectById(@RequestParam Long id, Model model,HttpSession session) {
+
+        String username = (String) session.getAttribute("username");
+        model.addAttribute("username", username);
+        String role = (String) session.getAttribute("role");
+        if(username == null || role.equalsIgnoreCase("User")){
+            model.addAttribute("error","Please, Login first!!!");
+            return "loginPage";
         }
-        return new ResponseEntity<>(subject, HttpStatus.OK);
+
+        Subject subject = subjectService.getSubjectById(id);
+        model.addAttribute("subject", subject);
+        return "adminEditSubject";
     }
 
     // Get all subjects
@@ -60,15 +94,26 @@ public class AdminController {
                         .build()
                 );
     }
+
+
+
     @GetMapping("/subjectList")
-    @Transactional(readOnly = true)  // <-- Add transactional here
-    public String showSubjectList(Model model) {
+    @Transactional(readOnly = true)
+    public String showSubjectList(Model model, HttpSession session) {
+
+        String username = (String) session.getAttribute("username");
+        model.addAttribute("username", username);
+        String role = (String) session.getAttribute("role");
+        if(username == null || role.equalsIgnoreCase("User")){
+            model.addAttribute("error","Please, Login first!!!");
+            return "loginPage";
+        }
+
         List<Subject> subjects = subjectService.getAllSubjects();
 
-        // Force initialization of lazy collections inside transaction
         subjects.forEach(subject -> {
-            subject.getQuestions().size(); // initialize questions list
-            subject.getExams().size();     // initialize exams list
+            subject.getQuestions().size();
+            subject.getExams().size();
         });
 
         List<SubjectDto> subjectDtos = subjects.stream().map(s -> new SubjectDto(
@@ -79,38 +124,61 @@ public class AdminController {
         )).collect(Collectors.toList());
 
         model.addAttribute("subjects", subjectDtos);
-        return "subjectList";
+        return "adminSubjectList";
     }
 
     // Update subject by id
-    @PutMapping("/{id}")
-    public ResponseEntity<Subject> updateSubject(@PathVariable Long id, @RequestBody Subject subject) {
-        Subject updatedSubject = subjectService.updateSubject(id, subject);
-        if (updatedSubject == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(updatedSubject, HttpStatus.OK);
+    @PostMapping("/updateSubject")
+    public String updateSubjectForm(@ModelAttribute Subject subject) {
+        subjectService.updateSubject(subject.getId(), subject);
+        return "adminSubjectList";
     }
 
+
     // Delete subject by id
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSubject(@PathVariable Long id) {
-        Subject subject = subjectService.getSubjectById(id);
-        if (subject == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @GetMapping("/deleteSubject/{id}")
+    public String deleteSubject(@PathVariable Long id) {
         subjectService.deleteSubject(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return "adminSubjectList";
     }
     //**************************** Subject API Ends *************************//
 
 
     //**************************** Question API  *************************//
-    // Create a new question
-    @PostMapping("/question")
-    public ResponseEntity<?> addQuestion(@RequestBody List<Question> questions) {
-        questionService.saveQuestion(questions);
-        return new ResponseEntity<>("Done", HttpStatus.CREATED);
+
+    @GetMapping("/addQuestionPage")
+    public String addQuestionPage(@RequestParam Long subjectId, Model model, HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        model.addAttribute("username", username);
+        String role = (String) session.getAttribute("role");
+        if(username == null || role.equalsIgnoreCase("User")){
+            model.addAttribute("error","Please, Login first!!!");
+            return "loginPage";
+        }
+
+        model.addAttribute("subjectId", subjectId);
+        model.addAttribute("question", new Question());  // empty Question object for form binding
+        return "adminAddQuestionPage";
+    }
+
+    @PostMapping("/saveQuestion")
+    public String saveQuestion(
+            @RequestParam Long subjectId,
+            @RequestParam("options") String[] optionsArray,
+            @ModelAttribute("question") Question question) {
+
+        List<String> options = Arrays.stream(optionsArray)
+                .filter(opt -> opt != null && !opt.trim().isEmpty())
+                .collect(Collectors.toList());
+
+        question.setOptions(options);
+
+        Subject subject = subjectService.getSubjectById(subjectId);
+        question.setSubject(subject);
+
+        questionService.saveQuestion(question);
+
+        return "redirect:/manageQuestions?subjectId=" + subjectId;
     }
 
     // Get all question
@@ -125,6 +193,47 @@ public class AdminController {
                         .build()
                 );
     }
+
+    @GetMapping("/manageQuestions")
+    @Transactional(readOnly = true)
+    public String manageQuestions(@RequestParam Long subjectId, Model model, HttpSession session){
+        String username = (String) session.getAttribute("username");
+        model.addAttribute("username", username);
+        String role = (String) session.getAttribute("role");
+        if(username == null || role.equalsIgnoreCase("User")){
+            model.addAttribute("error","Please, Login first!!!");
+            return "loginPage";
+        }
+
+        Subject subject = subjectService.getSubjectById(subjectId);
+
+        subject.getQuestions().size();
+
+        model.addAttribute("subject", subject);
+        return "adminManageQuestions";
+    }
+
+    @GetMapping("/deleteQuestion")
+    public String deleteQuestion(@RequestParam Long id,@RequestParam Long subjectId){
+        questionService.softDeleteQuestion(id);
+        return "redirect:/manageQuestions?subjectId=" + subjectId;
+    }
+
+    @GetMapping("/editQuestion")
+    public String editQuestionPage(@RequestParam Long id, Model model){
+
+        Question question = questionService.getQuestionById(id);
+
+        List<String> options = question.getOptions();
+        while (options.size() < 4) {
+            options.add("");
+        }
+        question.setOptions(options);
+
+        model.addAttribute("question", question);
+        return "adminEditQuestion";
+    }
+
     //**************************** Question API Ends *************************//
 
 
@@ -178,6 +287,12 @@ public class AdminController {
 
         examService.createExamForSubject(subjectId, description, totalMarks);
         return new ResponseEntity<>("Exam created based on total marks.", HttpStatus.OK);
+    }
+
+
+    @GetMapping("/addSubjectPage")
+    public String addSubjectPage(){
+        return "adminAddSubject";
     }
 
 

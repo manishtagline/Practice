@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface SubjectService {
 
-    List<Subject> saveSubject(List<Subject> subject);
+    int saveSubject(Subject subject);
 
     Subject getSubjectById(Long id);
 

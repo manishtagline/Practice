@@ -25,6 +25,9 @@
         @ElementCollection(fetch = FetchType.EAGER)
         private List<String> options;
 
+        @Column(name = "deleted")
+        private boolean deleted = false;
+
         private int marks;
 
         @Column(name = "correct_answer")

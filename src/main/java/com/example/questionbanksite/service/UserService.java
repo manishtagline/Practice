@@ -1,6 +1,7 @@
 package com.example.questionbanksite.service;
 
 
+import com.example.questionbanksite.dto.UserDetailsListDto;
 import com.example.questionbanksite.entity.Subject;
 import com.example.questionbanksite.entity.User;
 
@@ -11,6 +12,8 @@ public interface UserService {
     User saveUser(User user);
 
     List<User> getAllUser();
+
+    List<UserDetailsListDto> getAllUserDetails();
 
     User getUserByName(String username);
 

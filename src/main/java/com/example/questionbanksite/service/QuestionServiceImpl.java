@@ -20,12 +20,6 @@ public class QuestionServiceImpl implements QuestionService {
         entityManager.persist(question);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<Question> getAllQuestion() {
-        return entityManager.createQuery("SELECT q FROM Question q WHERE q.deleted = false", Question.class)
-                .getResultList();
-    }
 
 
     @Override
@@ -59,6 +53,28 @@ public class QuestionServiceImpl implements QuestionService {
             question.setDeleted(true);
             entityManager.merge(question);
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Question> getQuestionBySubjectWithPagination(Long subjectId, int page, int size) {
+        return entityManager.createQuery(
+                "SELECT q FROM Question q WHERE q.subject.id = :subjectId AND q.deleted = false ORDER BY q.id",
+                Question.class
+        ).setParameter("subjectId", subjectId)
+         .setFirstResult((page - 1) * size)
+         .setMaxResults(size)
+         .getResultList();
+    }
+
+    @Override
+    public int countQuestionBySubject(Long subjectId) {
+        Long count = entityManager.createQuery(
+            "SELECT COUNT(q) FROM Question q WHERE q.subject.id = :subjectId AND q.deleted = false ",
+                Long.class
+        ).setParameter("subjectId",subjectId)
+         .getSingleResult();
+        return count.intValue();
     }
 
 }

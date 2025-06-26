@@ -33,28 +33,35 @@ public class AdminController {
 
 
     @GetMapping("/adminPage")
-    public String adminPage(HttpSession session, Model model){
+    public String adminPage(HttpSession session, Model model) {
         String username = (String) session.getAttribute("username");
         model.addAttribute("username", username);
         String role = (String) session.getAttribute("role");
-        if(username == null || role.equalsIgnoreCase("User")){
-            model.addAttribute("error","Please, Login first, as a Admin...");
+        if (username == null || role.equalsIgnoreCase("User")) {
+            model.addAttribute("error", "Please, Login first, as a Admin...");
             return "loginPage";
         }
         return "adminPage";
     }
 
+    //<-------------- Authentication Method -------------->//
+    private boolean Auth(Model model, HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        model.addAttribute("username", username);
+        String role = (String) session.getAttribute("role");
+        if (username == null || role.equalsIgnoreCase("User")) {
+            model.addAttribute("error", "Please, Login first!!!");
+            return true;
+        }
+        return false;
+    }
+
+
     //**************************** Subject API *************************//
     // Create a new subject
     @PostMapping("/saveSubject")
     public String addSubject(@ModelAttribute Subject subject, Model model, HttpSession session) {
-        String username = (String) session.getAttribute("username");
-        model.addAttribute("username", username);
-        String role = (String) session.getAttribute("role");
-        if(username == null || role.equalsIgnoreCase("User")){
-            model.addAttribute("error","Please, Login first!!!");
-            return "loginPage";
-        }
+        if (Auth(model, session)) return "loginPage";
 
         int i = subjectService.saveSubject(subject);
         if (i > 0) {
@@ -67,47 +74,21 @@ public class AdminController {
 
     // Get subject by id
     @GetMapping("/editSubject")
-    public String getSubjectById(@RequestParam Long id, Model model,HttpSession session) {
+    public String getSubjectById(@RequestParam Long id, Model model, HttpSession session) {
 
-        String username = (String) session.getAttribute("username");
-        model.addAttribute("username", username);
-        String role = (String) session.getAttribute("role");
-        if(username == null || role.equalsIgnoreCase("User")){
-            model.addAttribute("error","Please, Login first!!!");
-            return "loginPage";
-        }
+        if (Auth(model, session)) return "loginPage";
 
         Subject subject = subjectService.getSubjectById(id);
         model.addAttribute("subject", subject);
         return "adminEditSubject";
     }
 
-    // Get all subjects
-    @GetMapping("/getSubject")
-    public ResponseEntity<GetAllSubjectDto> getAllSubjects() {
-       return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(GetAllSubjectDto.builder()
-                        .subjectList(subjectService.getAllSubjects().stream()
-                                .map(subject -> subject.getName())
-                                .collect(Collectors.toList()))
-                        .build()
-                );
-    }
-
-
 
     @GetMapping("/subjectList")
     @Transactional(readOnly = true)
     public String showSubjectList(Model model, HttpSession session) {
 
-        String username = (String) session.getAttribute("username");
-        model.addAttribute("username", username);
-        String role = (String) session.getAttribute("role");
-        if(username == null || role.equalsIgnoreCase("User")){
-            model.addAttribute("error","Please, Login first!!!");
-            return "loginPage";
-        }
+        if (Auth(model, session)) return "loginPage";
 
         List<Subject> subjects = subjectService.getAllSubjects();
 
@@ -116,22 +97,23 @@ public class AdminController {
             subject.getExams().size();
         });
 
-        List<SubjectDto> subjectDtos = subjects.stream().map(s -> new SubjectDto(
+        List<SubjectDto> subjectDto = subjects.stream().map(s -> new SubjectDto(
                 s.getId(),
                 s.getName(),
                 s.getQuestions() != null ? s.getQuestions().size() : 0,
                 s.getExams() != null ? s.getExams().size() : 0
         )).collect(Collectors.toList());
 
-        model.addAttribute("subjects", subjectDtos);
+        model.addAttribute("subjects", subjectDto);
         return "adminSubjectList";
     }
+
 
     // Update subject by id
     @PostMapping("/updateSubject")
     public String updateSubjectForm(@ModelAttribute Subject subject) {
         subjectService.updateSubject(subject.getId(), subject);
-        return "adminSubjectList";
+        return "redirect:/subjectList";
     }
 
 
@@ -141,6 +123,12 @@ public class AdminController {
         subjectService.deleteSubject(id);
         return "adminSubjectList";
     }
+
+    @GetMapping("/addSubjectPage")
+    public String addSubjectPage() {
+        return "adminAddSubject";
+    }
+
     //**************************** Subject API Ends *************************//
 
 
@@ -148,16 +136,10 @@ public class AdminController {
 
     @GetMapping("/addQuestionPage")
     public String addQuestionPage(@RequestParam Long subjectId, Model model, HttpSession session) {
-        String username = (String) session.getAttribute("username");
-        model.addAttribute("username", username);
-        String role = (String) session.getAttribute("role");
-        if(username == null || role.equalsIgnoreCase("User")){
-            model.addAttribute("error","Please, Login first!!!");
-            return "loginPage";
-        }
+        if (Auth(model, session)) return "loginPage";
 
         model.addAttribute("subjectId", subjectId);
-        model.addAttribute("question", new Question());  // empty Question object for form binding
+        model.addAttribute("question", new Question());
         return "adminAddQuestionPage";
     }
 
@@ -181,46 +163,37 @@ public class AdminController {
         return "redirect:/manageQuestions?subjectId=" + subjectId;
     }
 
-    // Get all question
-    @GetMapping("/getQuestion")
-    public ResponseEntity<GetAllQuestionDto> getAllQuestions() {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(GetAllQuestionDto.builder()
-                        .questionList(questionService.getAllQuestion().stream()
-                                .map(question -> question.getQuestiondDesc())
-                                .collect(Collectors.toList()))
-                        .build()
-                );
-    }
 
     @GetMapping("/manageQuestions")
     @Transactional(readOnly = true)
-    public String manageQuestions(@RequestParam Long subjectId, Model model, HttpSession session){
-        String username = (String) session.getAttribute("username");
-        model.addAttribute("username", username);
-        String role = (String) session.getAttribute("role");
-        if(username == null || role.equalsIgnoreCase("User")){
-            model.addAttribute("error","Please, Login first!!!");
-            return "loginPage";
-        }
+    public String manageQuestions(@RequestParam Long subjectId, @RequestParam(defaultValue = "1") int page, Model model, HttpSession session) {
+        if (Auth(model, session)) return "loginPage";
+
+        int pageSize = 10;
+
+        List<Question> questions = questionService.getQuestionBySubjectWithPagination(subjectId, page, pageSize);
+        int totalQuestions = questionService.countQuestionBySubject(subjectId);
+        int totalPages = (int) Math.ceil((double) totalQuestions / pageSize);
 
         Subject subject = subjectService.getSubjectById(subjectId);
 
-        subject.getQuestions().size();
-
         model.addAttribute("subject", subject);
+        model.addAttribute("questions", questions);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("subjectId", subjectId);
+
         return "adminManageQuestions";
     }
 
     @GetMapping("/deleteQuestion")
-    public String deleteQuestion(@RequestParam Long id,@RequestParam Long subjectId){
+    public String deleteQuestion(@RequestParam Long id, @RequestParam Long subjectId) {
         questionService.softDeleteQuestion(id);
         return "redirect:/manageQuestions?subjectId=" + subjectId;
     }
 
     @GetMapping("/editQuestion")
-    public String editQuestionPage(@RequestParam Long id, Model model){
+    public String editQuestionPage(@RequestParam Long id, Model model) {
 
         Question question = questionService.getQuestionById(id);
 
@@ -235,11 +208,11 @@ public class AdminController {
     }
 
     @PostMapping("/updateQuestion")
-    public String updateQuestion(@ModelAttribute("question") Question question){
-        Long id =  question.getId();
+    public String updateQuestion(@ModelAttribute("question") Question question) {
+        Long id = question.getId();
         Long subjectId = question.getSubject().getId();
-        System.out.println("Question id :"+id);
-        System.out.println("Subject id :"+subjectId);
+        System.out.println("Question id :" + id);
+        System.out.println("Subject id :" + subjectId);
 
         questionService.updateQuestion(id, question);
         return "redirect:/manageQuestions?subjectId=" + subjectId;
@@ -286,6 +259,16 @@ public class AdminController {
                         .build()
                 );
     }
+
+
+    @GetMapping("/userList")
+    public String userList(Model model){
+        List<UserDetailsListDto> users = userService.getAllUserDetails();
+        model.addAttribute("users", users);
+        return "adminUserList";
+    }
+
+
     //**************************** User API Ends  *************************//
 
 
@@ -300,11 +283,6 @@ public class AdminController {
         return new ResponseEntity<>("Exam created based on total marks.", HttpStatus.OK);
     }
 
-
-    @GetMapping("/addSubjectPage")
-    public String addSubjectPage(){
-        return "adminAddSubject";
-    }
 
 
 }

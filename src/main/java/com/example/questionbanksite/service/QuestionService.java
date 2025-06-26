@@ -8,13 +8,14 @@ public interface QuestionService {
 
     void saveQuestion(Question question);
 
-    List<Question> getAllQuestion();
-
     Question getQuestionById(Long id);
 
     Question updateQuestion(Long id, Question question);
 
     void softDeleteQuestion(Long id);
 
+    List<Question> getQuestionBySubjectWithPagination(Long subjectId, int page, int size);
+
+    int countQuestionBySubject(Long subjectId);
 
 }

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
@@ -30,14 +29,14 @@ public class UserController {
 
 
     @GetMapping("/")
-    public String index(){
+    public String index() {
         return "loginPage";
     }
 
 
     //Handler for login and authenticate user
     @PostMapping("/login")
-    public String authenticateUser(@RequestParam String username, @RequestParam String password, Model model, HttpSession session ) {
+    public String authenticateUser(@RequestParam String username, @RequestParam String password, Model model, HttpSession session) {
 
         User user = userService.getUserByName(username);
 
@@ -60,13 +59,13 @@ public class UserController {
 
     //Handler for hom page
     @GetMapping("/home")
-    public String homePage(HttpSession session, Model model){
+    public String homePage(HttpSession session, Model model) {
 
         String username = (String) session.getAttribute("username");
         model.addAttribute("username", username);
         String role = (String) session.getAttribute("role");
-        if(username == null || role.equalsIgnoreCase("Admin")){
-            model.addAttribute("error","Please, Login first!!!");
+        if (username == null || role.equalsIgnoreCase("Admin")) {
+            model.addAttribute("error", "Please, Login first!!!");
             return "loginPage";
         }
 
@@ -77,12 +76,12 @@ public class UserController {
 
     //Handler for opening exam available for user
     @GetMapping("/exam")
-    public String examPage(HttpSession session, Model model){
+    public String examPage(HttpSession session, Model model) {
 
         String username = (String) session.getAttribute("username");
         String role = (String) session.getAttribute("role");
-        if(username == null || role.equalsIgnoreCase("Admin")){
-            model.addAttribute("error","Please, Login first!!!");
+        if (username == null || role.equalsIgnoreCase("Admin")) {
+            model.addAttribute("error", "Please, Login first!!!");
             return "loginPage";
         }
         model.addAttribute("username", username);
@@ -97,7 +96,7 @@ public class UserController {
 
     //Handler for opening particular question paper
     @GetMapping("/questionPaper")
-    public String questionPaper(@RequestParam("examId") Long examId, Model model){
+    public String questionPaper(@RequestParam("examId") Long examId, Model model) {
         Exam exam = examService.getExamById(examId);
 
         model.addAttribute("exam", exam);
@@ -116,15 +115,14 @@ public class UserController {
 
         String username = (String) session.getAttribute("username");
         String role = (String) session.getAttribute("role");
-        if(username == null || role.equalsIgnoreCase("Admin")){
-            model.addAttribute("error","Please, Login first!!!");
+        if (username == null || role.equalsIgnoreCase("Admin")) {
+            model.addAttribute("error", "Please, Login first!!!");
             return "loginPage";
         }
 
-        User user = userService.getUserByName(username);
         paramMap.remove("examId");
 
-        UserResult result = examService.evaluateAndSaveResult(user, examId, paramMap);
+        UserResult result = examService.evaluateAndSaveResult(username, examId, paramMap);
 
         session.setAttribute("result", result);
 
@@ -133,34 +131,34 @@ public class UserController {
 
 
     @GetMapping("/submissionMessage")
-    public String submission(){
+    public String submission() {
         return "submissionMessage";
     }
 
 
     //Handler for Checking exam history / Result
     @GetMapping("/result")
-    public String showResult(HttpSession session, Model model){
+    public String showResult(HttpSession session, Model model) {
         String username = (String) session.getAttribute("username");
         model.addAttribute("username", username);
 
         String role = (String) session.getAttribute("role");
-        if(username == null || role.equalsIgnoreCase("Admin")){
-            model.addAttribute("error","Please, Login first!!!");
+        if (username == null || role.equalsIgnoreCase("Admin")) {
+            model.addAttribute("error", "Please, Login first!!!");
             return "loginPage";
         }
 
         User user = userService.getUserByName(username);
         long userId = user.getId();
 
-        List<UserResult> resultList =  userResultService.getResultsByUserId(userId);
+        List<UserResult> resultList = userResultService.getResultsByUserId(userId);
         model.addAttribute("resultList", resultList);
 
         return "result";
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session){
+    public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/";
     }
@@ -217,7 +215,7 @@ public class UserController {
     }
 
     @GetMapping("/errorPage")
-    public String errorPage(){
+    public String errorPage() {
         return "errorPage";
     }
 

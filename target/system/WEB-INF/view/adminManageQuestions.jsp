@@ -28,61 +28,43 @@
             color: white;
             font-size: 1.5rem;
             font-weight: 600;
-            z-index: 10;
             text-align: center;
             letter-spacing: 1px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
         main {
             flex: 1;
-            z-index: 2;
             padding: 4rem 2rem 2rem;
         }
-
-        /* Remove table-container and style table directly */
         table.table {
             width: 100%;
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            background-color: #2a2a3c; /* grey background */
+            background-color: #2a2a3c;
             color: #fff;
-            border-collapse: separate;
-            border-spacing: 0;
         }
         thead th {
             background-color: #33334d;
-            color: #fff;
             text-transform: uppercase;
             font-size: 0.9rem;
-            padding: 1rem;
-            vertical-align: middle;
-            border-bottom: 2px solid #555;
         }
         tbody tr {
             background-color: #2d2d44;
             transition: 0.3s ease;
-            color: #fff;
         }
         tbody tr:hover {
             background-color: #3e3e5e;
             transform: scale(1.005);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
         th, td {
             padding: 1rem;
             vertical-align: middle;
         }
-
         h2 {
             font-weight: 700;
             text-align: center;
-            margin-bottom: 2rem;
             color: #fff;
         }
-
         .btn-sm {
             padding: 6px 12px;
             font-size: 0.85rem;
@@ -90,14 +72,12 @@
         .btn-action {
             background-color: #00c9ff;
             color: white;
-            border: none;
             border-radius: 20px;
-            transition: background-color 0.3s ease;
             margin: 0 4px;
+            transition: background-color 0.3s ease;
         }
         .btn-action:hover {
             background-color: #0096c7;
-            color: white;
         }
         .btn-delete {
             background-color: #e63946 !important;
@@ -105,59 +85,34 @@
         .btn-delete:hover {
             background-color: #b92a39 !important;
         }
-        .add-question-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+        .add-question-btn, .back-btn {
+            display: inline-block;
             background-color: #00c9ff;
             color: white;
             font-weight: 600;
             padding: 12px 24px;
             border-radius: 30px;
             font-size: 1rem;
-            margin-top: 2rem;
-            box-shadow: 0 4px 12px rgba(0,201,255,0.4);
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
             text-decoration: none;
+            transition: background-color 0.3s ease;
         }
-        .add-question-btn:hover {
+        .add-question-btn:hover, .back-btn:hover {
             background-color: #0096c7;
-            box-shadow: 0 6px 18px rgba(0,201,255,0.55);
-            color: white;
         }
-
-        footer {
-            background-color: #1a1a2e;
-            color: #ccc;
-            text-align: center;
-            padding: 1rem;
-            font-size: 0.9rem;
-            z-index: 2;
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
         }
-        ul.option-list {
-            list-style: none;
-            padding-left: 0;
-            margin-bottom: 0;
+        .pagination {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
         }
-        ul.option-list li {
-            margin-bottom: 0.3rem;
-        }
-        ul.option-list li::before {
-            content: attr(data-label) ". ";
-            font-weight: 700;
-            color: #00c9ff;
-        }
-        @media (max-width: 768px) {
-            th, td {
-                padding: 0.75rem 0.5rem;
-                font-size: 0.9rem;
-            }
-            .add-question-btn {
-                width: 100%;
-                justify-content: center;
-            }
+        .page-link {
+            border-radius: 20px !important;
+            padding: 6px 12px;
         }
         .modal-content {
             background: #2a2a3c;
@@ -167,73 +122,17 @@
         .modal-header, .modal-footer {
             border: none;
         }
-        .btn-danger {
-            background-color: #e63946;
-            border: none;
-            border-radius: 20px;
-            padding: 6px 16px;
-            font-weight: 600;
-            transition: background-color 0.3s ease;
+        ul.option-list {
+            list-style: none;
+            padding-left: 0;
         }
-        .btn-danger:hover {
-            background-color: #b92a39;
-            color: white;
-        }
-        .btn-secondary.btn-action {
-            background-color: #6c757d;
-            color: white;
-            border-radius: 20px;
-            padding: 6px 16px;
-            font-weight: 600;
-            transition: background-color 0.3s ease;
-        }
-        .btn-secondary.btn-action:hover {
-            background-color: #5a6268;
-            color: white;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 8px; /* space between buttons */
-            justify-content: center; /* center horizontally */
-            align-items: center;
-        }
-        /* Header container */
-        .header-row {
-            position: relative;
-            margin-bottom: 2rem;
-            color: #fff;
-            height: 48px;
-        }
-        .header-row h2 {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            margin: 0;
-            line-height: 48px;
-        }
-        .back-btn {
-            position: absolute;
-            right: 0;
-            top: 0;
-            padding: 12px 24px;
-            font-weight: 600;
-            border-radius: 30px;
-            font-size: 1rem;
-            background-color: #00c9ff;
-            color: white;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: background-color 0.3s ease;
-        }
-        .back-btn:hover {
-            background-color: #0096c7;
-            color: white;
+        ul.option-list li::before {
+            content: attr(data-label) ". ";
+            font-weight: bold;
+            color: #00c9ff;
         }
     </style>
 </head>
-
 <body>
 
 <!-- Navbar -->
@@ -241,12 +140,13 @@
 
 <!-- Main Content -->
 <main>
-    <div class="header-row">
-        <h2>Questions List</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
         <a href="${pageContext.request.contextPath}/subjectList" class="back-btn">&larr; Back</a>
+        <h2>Questions List</h2>
+        <a href="addQuestionPage?subjectId=${subjectId}" class="add-question-btn">+ Add Question</a>
     </div>
 
-    <!-- Table styled directly, no wrapper -->
+    <!-- Table -->
     <table class="table table-hover text-center align-middle">
         <thead>
         <tr>
@@ -260,56 +160,66 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="question" items="${subject.questions}">
-            <c:if test="${question.deleted != true}">
-                <tr>
-                    <td>${question.id}</td>
-                    <td>${question.questiondDesc}</td>
-                    <td>
-                        <ul class="option-list">
-                            <c:set var="labels" value="${['A','B','C','D']}" />
-                            <c:forEach var="option" items="${question.options}" varStatus="status">
-                                <li data-label="${labels[status.index]}">${option}</li>
-                            </c:forEach>
-                        </ul>
-                    </td>
-                    <td>${question.correctAnswer}</td>
-                    <td>${question.marks}</td>
-                    <td>${question.complexity}</td>
-                    <td>
-                        <div class="action-buttons">
-                            <a href="editQuestion?id=${question.id}" class="btn btn-sm btn-action">Edit</a>
-                            <a href="#"
-                               class="btn btn-sm btn-action btn-delete"
-                               data-delete-url="deleteQuestion?id=${question.id}&subjectId=${subject.id}"
-                               data-question-id="${question.id}">
-                                Delete
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-            </c:if>
+        <c:forEach var="question" items="${questions}">
+            <tr>
+                <td>${question.id}</td>
+                <td>${question.questiondDesc}</td>
+                <td>
+                    <ul class="option-list">
+                        <c:set var="labels" value="${['A','B','C','D']}" />
+                        <c:forEach var="option" items="${question.options}" varStatus="status">
+                            <li data-label="${labels[status.index]}">${option}</li>
+                        </c:forEach>
+                    </ul>
+                </td>
+                <td>${question.correctAnswer}</td>
+                <td>${question.marks}</td>
+                <td>${question.complexity}</td>
+                <td>
+                    <div class="action-buttons">
+                        <a href="editQuestion?id=${question.id}" class="btn btn-sm btn-action">Edit</a>
+                        <a href="#"
+                           class="btn btn-sm btn-action btn-delete"
+                           data-delete-url="deleteQuestion?id=${question.id}&subjectId=${subjectId}"
+                           data-question-id="${question.id}">
+                            Delete
+                        </a>
+                    </div>
+                </td>
+            </tr>
         </c:forEach>
         </tbody>
     </table>
 
-    <div class="text-center">
-        <a href="addQuestionPage?subjectId=${subject.id}" class="add-question-btn mt-4">
-            + Add Question
-        </a>
-    </div>
+    <!-- Pagination -->
+    <nav class="pagination">
+        <c:if test="${currentPage > 1}">
+            <a class="btn btn-outline-light page-link" href="manageQuestions?subjectId=${subjectId}&page=${currentPage - 1}">&laquo; Prev</a>
+        </c:if>
+        <c:forEach var="i" begin="1" end="${totalPages}">
+            <a class="btn ${i == currentPage ? 'btn-light' : 'btn-outline-light'} page-link"
+               href="manageQuestions?subjectId=${subjectId}&page=${i}">
+                    ${i}
+            </a>
+        </c:forEach>
+        <c:if test="${currentPage < totalPages}">
+            <a class="btn btn-outline-light page-link" href="manageQuestions?subjectId=${subjectId}&page=${currentPage + 1}">Next &raquo;</a>
+        </c:if>
+    </nav>
+
+
 </main>
 
-<!-- Delete Confirmation Modal -->
+<!-- Modal for delete confirmation -->
 <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteConfirmModalLabel">Confirm Delete</h5>
+                <h5 class="modal-title">Confirm Delete</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to delete the question number <span id="questionNumberSpan"></span>?</p>
+                Are you sure you want to delete the question number <span id="questionNumberSpan"></span>?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-action" data-bs-dismiss="modal">Cancel</button>
@@ -320,11 +230,10 @@
 </div>
 
 <!-- Footer -->
-<footer>
+<footer class="text-center mt-auto py-3" style="background-color: #1a1a2e; color: #ccc;">
     &copy; 2025 Admin Panel | Exam Center. All rights reserved.
 </footer>
 
-<!-- Bootstrap JS Bundle (includes Popper) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>

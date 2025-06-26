@@ -1,6 +1,7 @@
 package com.example.questionbanksite.service;
 
 import com.example.questionbanksite.entity.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,9 @@ public class ExamServiceImpl implements ExamService{
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     @Transactional
@@ -93,7 +97,8 @@ public class ExamServiceImpl implements ExamService{
 
     @Override
     @Transactional
-    public UserResult evaluateAndSaveResult(User user, Long examId, Map<String, String> answersMap) {
+    public UserResult evaluateAndSaveResult(String username, Long examId, Map<String, String> answersMap) {
+        User user = userService.getUserByName(username);
 
         Exam exam = entityManager.find(Exam.class, examId);
         if (exam == null) {
@@ -126,6 +131,12 @@ public class ExamServiceImpl implements ExamService{
         result.setAnswer(answerLog.toString());
 
         entityManager.persist(result);
+        user.getExams().add(exam);
+        exam.getUsers().add(user);
+
+        entityManager.merge(exam);
+        entityManager.merge(user);
+
         return result;
     }
 

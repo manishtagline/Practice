@@ -19,7 +19,7 @@ public interface ExamService {
 
     Exam createExamForSubject(Long subjectId, String description, int targetTotalMarks);
 
-    UserResult evaluateAndSaveResult(User user, Long examId, Map<String, String> answersMap);
+    UserResult evaluateAndSaveResult(String username, Long examId, Map<String, String> answersMap);
 
 
 }

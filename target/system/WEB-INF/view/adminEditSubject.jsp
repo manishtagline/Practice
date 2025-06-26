@@ -66,6 +66,24 @@
             background-color: #0096c7;
             box-shadow: 0 6px 18px rgba(0, 201, 255, 0.45);
         }
+        .btn-back {
+            background-color: transparent;
+            color: #ccc;
+            border: 1px solid #ccc;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 500;
+            margin-top: 1rem;
+            text-decoration: none;
+            transition: 0.3s;
+            display: inline-block;
+            text-align: center;
+        }
+        .btn-back:hover {
+            color: white;
+            border-color: #fff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
         footer {
             background-color: #1a1a2e;
             color: #ccc;
@@ -82,6 +100,7 @@
 
 <body>
 
+<!-- Background Animation -->
 <div class="background-animation">
     <svg viewBox="0 0 1440 320" preserveAspectRatio="none" style="width:100%; height:100%;">
         <path fill="#ffffff" fill-opacity="0.3"
@@ -90,8 +109,10 @@
     </svg>
 </div>
 
+<!-- Navbar -->
 <div class="navbar">✏️ Edit Subject</div>
 
+<!-- Main Content -->
 <main>
     <div class="form-container">
         <h2>Edit Subject</h2>
@@ -109,9 +130,15 @@
                 <button type="submit" class="btn btn-submit">Update Subject</button>
             </div>
         </form>
+
+        <!-- Back Button -->
+        <div class="text-center mt-3">
+            <a href="${pageContext.request.contextPath}/subjectList" class="btn-back">← Back to Subject List</a>
+        </div>
     </div>
 </main>
 
+<!-- Footer -->
 <footer>
     &copy; 2025 Admin Panel | Exam Center. All rights reserved.
 </footer>

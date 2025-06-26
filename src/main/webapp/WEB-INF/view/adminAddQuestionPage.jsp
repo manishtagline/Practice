@@ -6,6 +6,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Add Question - Admin Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="${pageContext.request.contextPath}/static/richtexteditor/rte_theme_default.css" />
@@ -38,12 +39,12 @@
       max-width: 800px;
       margin: 2rem auto;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-      height: 700px;
-      overflow-y: auto;
+      height: auto;
     }
 
-    label {
+    label, .form-label {
       margin-top: 1rem;
+      color: #ccc;
     }
 
     .btn-submit {
@@ -53,6 +54,7 @@
       border-radius: 30px;
       padding: 10px 20px;
       margin-top: 1.5rem;
+      width: 100%;
     }
 
     .btn-submit:hover {
@@ -60,15 +62,22 @@
     }
 
     .btn-back {
-      background-color: #6c757d;
-      border: none;
-      color: white;
-      margin-bottom: 1rem;
+      background-color: transparent;
+      border: 1px solid #ccc;
+      color: #ccc;
+      padding: 8px 16px;
       font-weight: 600;
+      border-radius: 30px;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 1.5rem;
+      transition: all 0.3s ease-in-out;
     }
 
     .btn-back:hover {
-      background-color: #5a6268;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      border-color: white;
     }
 
     footer {
@@ -81,7 +90,6 @@
 
     #div_editor1 {
       min-height: 150px;
-      max-width: 100%;
       border: 1px solid #555;
       border-radius: 6px;
       background-color: white;
@@ -108,7 +116,7 @@
 <!-- Form Container -->
 <div class="form-container">
 
-  <!-- Success Flash Message -->
+  <!-- Flash Success Message -->
   <c:if test="${not empty successMsg}">
     <div class="alert alert-success text-center" role="alert">
         ${successMsg}
@@ -117,17 +125,21 @@
 
   <h2 class="text-center mb-4">Add New Question</h2>
 
+  <!-- Question Form -->
   <form:form method="post" action="${pageContext.request.contextPath}/saveQuestion" modelAttribute="question" onsubmit="submitForm()">
 
+    <!-- Hidden fields -->
     <form:hidden path="id" />
     <input type="hidden" name="subjectId" value="${subjectId}" />
 
+    <!-- Question Description with RichText Editor -->
     <div class="mb-3">
       <label for="div_editor1" class="form-label">Question Description</label>
       <div id="div_editor1"></div>
       <form:hidden path="questiondDesc" id="questiondDesc" />
     </div>
 
+    <!-- Options -->
     <label class="form-label">Options</label>
     <div class="mb-2">
       <input type="text" name="options" class="form-control mb-2" placeholder="Option 1" required />
@@ -136,16 +148,19 @@
       <input type="text" name="options" class="form-control" placeholder="Option 4" />
     </div>
 
+    <!-- Correct Answer -->
     <div class="mb-3">
       <form:label path="correctAnswer" cssClass="form-label">Correct Answer</form:label>
       <form:input path="correctAnswer" cssClass="form-control" required="true" />
     </div>
 
+    <!-- Marks -->
     <div class="mb-3">
       <form:label path="marks" cssClass="form-label">Marks</form:label>
       <form:input path="marks" type="number" cssClass="form-control" required="true" />
     </div>
 
+    <!-- Complexity -->
     <div class="mb-3">
       <form:label path="complexity" cssClass="form-label">Complexity</form:label>
       <form:select path="complexity" cssClass="form-select" required="true">
@@ -156,7 +171,13 @@
       </form:select>
     </div>
 
-    <button type="submit" class="btn btn-submit w-100">Save Question</button>
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-submit">Save Question</button>
+
+    <!-- Back Button -->
+    <div class="text-center">
+      <a href="manageQuestions?subjectId=${subjectId}" class="btn-back">← Back to List</a>
+    </div>
 
   </form:form>
 </div>
@@ -167,8 +188,8 @@
 </footer>
 
 <!-- RichTextEditor Scripts -->
-<script type="text/javascript" src="${pageContext.request.contextPath}/static/richtexteditor/rte.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/static/richtexteditor/plugins/all_plugins.js"></script>
+<script src="${pageContext.request.contextPath}/static/richtexteditor/rte.js"></script>
+<script src="${pageContext.request.contextPath}/static/richtexteditor/plugins/all_plugins.js"></script>
 
 <script>
   var editor1;

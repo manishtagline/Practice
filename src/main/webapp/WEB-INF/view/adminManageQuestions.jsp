@@ -40,18 +40,26 @@
             z-index: 2;
             padding: 4rem 2rem 2rem;
         }
-        .table-container {
-            background-color: #2a2a3c;
+
+        /* Remove table-container and style table directly */
+        table.table {
+            width: 100%;
             border-radius: 16px;
+            overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            padding: 2rem;
-            overflow-x: auto;
+            background-color: #2a2a3c; /* grey background */
+            color: #fff;
+            border-collapse: separate;
+            border-spacing: 0;
         }
         thead th {
             background-color: #33334d;
             color: #fff;
             text-transform: uppercase;
             font-size: 0.9rem;
+            padding: 1rem;
+            vertical-align: middle;
+            border-bottom: 2px solid #555;
         }
         tbody tr {
             background-color: #2d2d44;
@@ -67,25 +75,17 @@
             padding: 1rem;
             vertical-align: middle;
         }
+
         h2 {
             font-weight: 700;
             text-align: center;
             margin-bottom: 2rem;
             color: #fff;
         }
+
         .btn-sm {
             padding: 6px 12px;
             font-size: 0.85rem;
-        }
-        .btn-manage {
-            background-color: #8e2de2;
-            color: white;
-            border-radius: 20px;
-            border: none;
-        }
-        .btn-manage:hover {
-            background-color: #6a11cb;
-            color: white;
         }
         .btn-action {
             background-color: #00c9ff;
@@ -93,10 +93,17 @@
             border: none;
             border-radius: 20px;
             transition: background-color 0.3s ease;
+            margin: 0 4px;
         }
         .btn-action:hover {
             background-color: #0096c7;
             color: white;
+        }
+        .btn-delete {
+            background-color: #e63946 !important;
+        }
+        .btn-delete:hover {
+            background-color: #b92a39 !important;
         }
         .add-question-btn {
             display: inline-flex;
@@ -120,6 +127,7 @@
             box-shadow: 0 6px 18px rgba(0,201,255,0.55);
             color: white;
         }
+
         footer {
             background-color: #1a1a2e;
             color: #ccc;
@@ -142,9 +150,6 @@
             color: #00c9ff;
         }
         @media (max-width: 768px) {
-            .table-container {
-                padding: 1rem;
-            }
             th, td {
                 padding: 0.75rem 0.5rem;
                 font-size: 0.9rem;
@@ -154,8 +159,6 @@
                 justify-content: center;
             }
         }
-
-        /* Modal Custom Styles */
         .modal-content {
             background: #2a2a3c;
             color: white;
@@ -188,6 +191,46 @@
             background-color: #5a6268;
             color: white;
         }
+        .action-buttons {
+            display: flex;
+            gap: 8px; /* space between buttons */
+            justify-content: center; /* center horizontally */
+            align-items: center;
+        }
+        /* Header container */
+        .header-row {
+            position: relative;
+            margin-bottom: 2rem;
+            color: #fff;
+            height: 48px;
+        }
+        .header-row h2 {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 0;
+            line-height: 48px;
+        }
+        .back-btn {
+            position: absolute;
+            right: 0;
+            top: 0;
+            padding: 12px 24px;
+            font-weight: 600;
+            border-radius: 30px;
+            font-size: 1rem;
+            background-color: #00c9ff;
+            color: white;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+        .back-btn:hover {
+            background-color: #0096c7;
+            color: white;
+        }
     </style>
 </head>
 
@@ -198,36 +241,28 @@
 
 <!-- Main Content -->
 <main>
-    <div style="position: relative; margin-bottom: 2rem; color: #fff; height: 48px;">
-        <h2 style="position: absolute; left: 50%; transform: translateX(-50%); margin: 0; line-height: 48px;">
-            Questions List
-        </h2>
-        <a href="javascript:history.back()"
-           class="add-question-btn"
-           style="position: absolute; right: 0; top: 0; padding: 12px 24px; font-weight: 600; border-radius: 30px; font-size: 1rem; margin-bottom: 0.5rem;">
-            &larr; Back
-        </a>
+    <div class="header-row">
+        <h2>Questions List</h2>
+        <a href="${pageContext.request.contextPath}/subjectList" class="back-btn">&larr; Back</a>
     </div>
 
-
-    <div class="table-container">
-        <table class="table table-hover text-center align-middle">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Description</th>
-                <th>Options</th>
-                <th>Correct Answer</th>
-                <th>Marks</th>
-                <th>Complexity</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach var="question" items="${subject.questions}">
-                <c:if test="${question.deleted != true}">
+    <!-- Table styled directly, no wrapper -->
+    <table class="table table-hover text-center align-middle">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Options</th>
+            <th>Correct Answer</th>
+            <th>Marks</th>
+            <th>Complexity</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach var="question" items="${subject.questions}">
+            <c:if test="${question.deleted != true}">
                 <tr>
-
                     <td>${question.id}</td>
                     <td>${question.questiondDesc}</td>
                     <td>
@@ -242,22 +277,22 @@
                     <td>${question.marks}</td>
                     <td>${question.complexity}</td>
                     <td>
-                        <a href="editQuestion?id=${question.id}" class="btn btn-sm btn-action">Edit</a>
-                        <a href="#"
-                           class="btn btn-sm btn-action btn-delete"
-                           style="background-color:#e63946;"
-                           data-delete-url="deleteQuestion?id=${question.id}&subjectId=${subject.id}">
-                            Delete
-                        </a>
+                        <div class="action-buttons">
+                            <a href="editQuestion?id=${question.id}" class="btn btn-sm btn-action">Edit</a>
+                            <a href="#"
+                               class="btn btn-sm btn-action btn-delete"
+                               data-delete-url="deleteQuestion?id=${question.id}&subjectId=${subject.id}"
+                               data-question-id="${question.id}">
+                                Delete
+                            </a>
+                        </div>
                     </td>
                 </tr>
-                </c:if>
-            </c:forEach>
-            </tbody>
-        </table>
-    </div>
+            </c:if>
+        </c:forEach>
+        </tbody>
+    </table>
 
-    <!-- Add Question Button -->
     <div class="text-center">
         <a href="addQuestionPage?subjectId=${subject.id}" class="add-question-btn mt-4">
             + Add Question
@@ -274,7 +309,7 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to delete this question?</p>
+                <p>Are you sure you want to delete the question number <span id="questionNumberSpan"></span>?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-action" data-bs-dismiss="modal">Cancel</button>
@@ -297,12 +332,17 @@
         const deleteButtons = document.querySelectorAll('.btn-delete');
         const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
         const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const questionNumberSpan = document.getElementById('questionNumberSpan');
 
         deleteButtons.forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const url = this.getAttribute('data-delete-url');
+                const questionId = this.getAttribute('data-question-id');
+
+                questionNumberSpan.textContent = questionId;
                 confirmDeleteBtn.setAttribute('href', url);
+
                 deleteModal.show();
             });
         });

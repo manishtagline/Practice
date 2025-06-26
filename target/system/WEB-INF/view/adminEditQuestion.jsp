@@ -72,6 +72,7 @@
 
   <form:form modelAttribute="question" method="post" action="${pageContext.request.contextPath}/updateQuestion" onsubmit="onSubmit()">
     <form:hidden path="id" />
+    <form:hidden path="subject.id"/>
 
     <!-- Subject is fixed; optionally display but disabled -->
     <div class="mb-3">
@@ -108,9 +109,9 @@
       <form:label path="complexity" cssClass="form-label">Complexity</form:label>
       <form:select path="complexity" cssClass="form-select" required="true">
         <form:option value="" label="--Select--" />
-        <form:option value="EASY" label="Easy" />
-        <form:option value="MEDIUM" label="Medium" />
-        <form:option value="HARD" label="Hard" />
+        <form:option value="Easy" label="Easy" />
+        <form:option value="Medium" label="Medium" />
+        <form:option value="Hard" label="Hard" />
       </form:select>
     </div>
 

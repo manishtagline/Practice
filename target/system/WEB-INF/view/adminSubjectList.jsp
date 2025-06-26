@@ -40,30 +40,38 @@
             z-index: 2;
             padding: 2rem;
         }
-        .table-container {
-            background-color: #2a2a3c;
+
+
+        table.table {
+            width: 100%;
             border-radius: 16px;
+            overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            padding: 2rem;
-            overflow-x: auto;
+            background-color: #5a5a5a; /* medium grey background */
+            color: #f0f0f0;
+            border-collapse: separate;
+            border-spacing: 0;
         }
         thead th {
-            background-color: #33334d;
-            color: #fff;
+            background-color: #3c3c3c; /* dark grey header */
+            color: #e0e0e0;
             text-transform: uppercase;
             font-size: 0.9rem;
+            padding: 1rem;
+            vertical-align: middle;
+            border-bottom: 2px solid #777;
         }
         tbody tr {
-            background-color: #2d2d44;
+            background-color: #6e6e6e; /* lighter grey rows */
             transition: 0.3s ease;
             color: #fff;
         }
         tbody tr:hover {
-            background-color: #3e3e5e;
+            background-color: #8f8f8f; /* lighter on hover */
             transform: scale(1.005);
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
-        th, td {
+        tbody td {
             padding: 1rem;
             vertical-align: middle;
         }
@@ -125,12 +133,11 @@
             z-index: 2;
         }
         @media (max-width: 768px) {
-            .table-container {
-                padding: 1rem;
-            }
-            th, td {
-                padding: 0.75rem 0.5rem;
+            table.table {
                 font-size: 0.9rem;
+            }
+            thead th, tbody td {
+                padding: 0.75rem 0.5rem;
             }
             .add-subject-btn {
                 width: 100%;
@@ -171,36 +178,35 @@
         </div>
     </div>
 
-    <div class="table-container">
-        <table class="table table-hover text-center align-middle">
-            <thead>
+
+    <table class="table table-hover text-center align-middle">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Total Questions</th>
+            <th>Total Exams</th>
+            <th>Manage Questions</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach var="subject" items="${subjects}">
             <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Total Questions</th>
-                <th>Total Exams</th>
-                <th>Manage Questions</th>
-                <th>Actions</th>
+                <td>${subject.id}</td>
+                <td>${subject.name}</td>
+                <td>${subject.questionCount}</td>
+                <td>${subject.examCount}</td>
+                <td>
+                    <a href="manageQuestions?subjectId=${subject.id}" class="btn btn-sm btn-manage">Manage</a>
+                </td>
+                <td>
+                    <a href="editSubject?id=${subject.id}" class="btn btn-sm btn-warning">Edit</a>
+                </td>
             </tr>
-            </thead>
-            <tbody>
-            <c:forEach var="subject" items="${subjects}">
-                <tr>
-                    <td>${subject.id}</td>
-                    <td>${subject.name}</td>
-                    <td>${subject.questionCount}</td>
-                    <td>${subject.examCount}</td>
-                    <td>
-                        <a href="manageQuestions?subjectId=${subject.id}" class="btn btn-sm btn-manage">Manage</a>
-                    </td>
-                    <td>
-                        <a href="editSubject?id=${subject.id}" class="btn btn-sm btn-warning">Edit</a>
-                    </td>
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
-    </div>
+        </c:forEach>
+        </tbody>
+    </table>
 
     <!-- Add Subject Button -->
     <div class="text-center">

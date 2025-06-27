@@ -115,13 +115,10 @@
 </head>
 <body>
 
-<!-- Navbar -->
 <div class="navbar">➕ Add New Question</div>
 
-<!-- Form Container -->
 <div class="form-container">
 
-    <!-- Flash Success Message -->
     <c:if test="${not empty successMsg}">
         <div class="alert alert-success text-center" role="alert">
                 ${successMsg}</div>
@@ -129,14 +126,11 @@
 
     <h2 class="text-center mb-4">Add New Question</h2>
 
-    <!-- Question Form -->
     <form:form method="post" action="${pageContext.request.contextPath}/saveQuestion" modelAttribute="question" onsubmit="submitForm()">
 
-        <!-- Hidden fields -->
         <form:hidden path="id"/>
         <input type="hidden" name="subjectId" value="${subjectId}"/>
 
-        <!-- Question Description with RichText Editor -->
         <div class="mb-3">
             <label for="div_editor1" class="form-label">Question
                 Description</label>
@@ -144,7 +138,6 @@
             <form:hidden path="questiondDesc" id="questiondDesc"/>
         </div>
 
-        <!-- Options -->
         <label class="form-label">Options</label>
         <div class="mb-2">
             <input type="text" name="options" class="form-control mb-2" placeholder="Option 1" required/>
@@ -153,21 +146,18 @@
             <input type="text" name="options" class="form-control" placeholder="Option 4"/>
         </div>
 
-        <!-- Correct Answer -->
         <div class="mb-3">
             <form:label path="correctAnswer" cssClass="form-label">Correct Answer</form:label>
             <form:input path="correctAnswer" cssClass="form-control"
                         required="true"/>
         </div>
 
-        <!-- Marks -->
         <div class="mb-3">
             <form:label path="marks" cssClass="form-label">Marks</form:label>
             <form:input path="marks" type="number" cssClass="form-control"
                         required="true"/>
         </div>
 
-        <!-- Complexity -->
         <div class="mb-3">
             <form:label path="complexity" cssClass="form-label">Complexity</form:label>
             <form:select path="complexity" cssClass="form-select"
@@ -179,10 +169,8 @@
             </form:select>
         </div>
 
-        <!-- Submit Button -->
         <button type="submit" class="btn btn-submit">Save Question</button>
 
-        <!-- Back Button -->
         <div class="text-center">
             <a href="manageQuestions?subjectId=${subjectId}" class="btn-back">←
                 Back to List</a>

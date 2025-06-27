@@ -115,13 +115,10 @@
 </head>
 <body>
 
-<!-- Navbar -->
 <div class="navbar">➕ Add New Question</div>
 
-<!-- Form Container -->
 <div class="form-container">
 
-    <!-- Flash Success Message -->
     <c:if test="${not empty successMsg}">
         <div class="alert alert-success text-center" role="alert">
                 ${successMsg}</div>

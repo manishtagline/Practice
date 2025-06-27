@@ -29,23 +29,44 @@
             padding: 0 2rem;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center; /* Center all content first */
+            position: relative;
             color: #fff;
         }
 
-        .navbar h2 {
+        /* Centered brand text */
+        .navbar-brand-center {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            user-select: none;
             font-weight: 700;
             font-size: 1.5rem;
             letter-spacing: 1px;
+            color: #fff;
+            transition: color 0.3s ease;
+            text-decoration: none;
         }
 
-        .navbar span {
+        .navbar-brand-center:hover,
+        .navbar-brand-center:focus {
+            color: #ffd700;
+            outline: none;
+        }
+
+        /* Welcome badge stays on right */
+        .welcome-badge {
+            position: absolute;
+            right: 2rem;
             font-size: 1rem;
             font-weight: 500;
             background-color: #ffd700;
             color: #4a47a3;
             padding: 6px 18px;
             border-radius: 20px;
+            user-select: none;
         }
 
         .exam-header {
@@ -143,15 +164,50 @@
             .exam-header h1 { font-size: 2rem; }
             .exam-card { width: 90%; }
         }
+
+        .username-badge {
+            position: absolute;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #ffd700;
+            color: #4a47a3;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            animation: fadeInSlide 1.5s ease-out;
+            user-select: none;
+            letter-spacing: 0.03em;
+            text-transform: capitalize;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            cursor: default;
+        }
+
+        @keyframes fadeInSlide {
+            from { opacity: 0; right: -100px; }
+            to { opacity: 1; right: 2rem; }
+        }
+
+        @media (max-width: 576px) {
+            .username-badge {
+                font-size: 1rem;
+                padding: 6px 14px;
+                right: 1rem;
+            }
+        }
     </style>
 </head>
 
 <body>
 
 <!-- Navbar -->
-<nav class="navbar">
-    <h2>📘 Exam Center</h2>
-    <span>Welcome, ${username}</span>
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="home" class="navbar-brand-center" tabindex="0" aria-label="Go to Home">📘 Exam Center</a>
+    <span class="username-badge" aria-label="Logged in username">
+        Welcome, ${username}
+    </span>
 </nav>
 
 <!-- Header -->
@@ -181,7 +237,6 @@
         ← Back to Home
     </a>
 </div>
-
 
 <!-- Footer -->
 <footer>

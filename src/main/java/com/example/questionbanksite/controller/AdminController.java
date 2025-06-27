@@ -48,6 +48,8 @@ public class AdminController {
         return "adminPage";
     }
 
+
+
     //<-------------- Authentication Method -------------->//
     private boolean Auth(Model model, HttpSession session) {
         String username = (String) session.getAttribute("username");
@@ -59,6 +61,7 @@ public class AdminController {
         }
         return false;
     }
+
 
 
     //**************************** Subject Handlers *************************//
@@ -132,8 +135,9 @@ public class AdminController {
     public String addSubjectPage() {
         return "adminAddSubject";
     }
-
     //**************************** Subject Handlers Ends *************************//
+
+
 
 
     //**************************** Question Handlers  *************************//
@@ -221,8 +225,9 @@ public class AdminController {
         questionService.updateQuestion(id, question);
         return "redirect:/manageQuestions?subjectId=" + subjectId;
     }
-
     //**************************** Question Handlers Ends *************************//
+
+
 
 
     //**************************** User Handlers  *************************//
@@ -251,8 +256,6 @@ public class AdminController {
         model.addAttribute("users", users);
         return "adminUserList";
     }
-
-
     //**************************** User Handlers Ends  *************************//
 
 
@@ -291,7 +294,7 @@ public class AdminController {
 
 
     @PostMapping("/saveExam")
-    public String addExam(@ModelAttribute("exam") Exam exam, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String saveExam(@ModelAttribute("exam") Exam exam, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         if (Auth(model, session)) return "loginPage";
 
         Long subjectId = exam.getSubject().getId();
@@ -308,24 +311,6 @@ public class AdminController {
         return "redirect:/addExamPage";
     }
 
-
-
-
-
-    @GetMapping("/getExam")
-    public ResponseEntity<GetAllExamDto> getAllExam() {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(GetAllExamDto.builder()
-                        .examList(examService.getAllExam().stream()
-                                .map(exam -> exam.getDescription())
-                                .collect(Collectors.toList()))
-                        .build()
-                );
-    }
     //**************************** Exam Handlers Ends *************************//
-
-
-
 
 }

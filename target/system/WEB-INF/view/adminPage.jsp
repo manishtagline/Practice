@@ -226,7 +226,7 @@
 
 <!-- Navbar -->
 <nav class="navbar">
-    <div class="navbar-brand-container" onclick="location.href='adminPage.jsp'">
+    <div class="navbar-brand-container" onclick="location.href='adminPage'">
         <svg class="logo-svg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
             <path d="M8 12h48v40H8z" stroke-linejoin="round"/>
             <line x1="8" y1="12" x2="56" y2="12"/>
@@ -239,7 +239,6 @@
     </div>
 </nav>
 
-<!-- Hero Section -->
 <section class="hero">
     <div class="welcome-user">
         👋 Welcome <strong>Admin</strong>, manage your system with ease!

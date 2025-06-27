@@ -6,6 +6,7 @@
         import lombok.Setter;
         import org.hibernate.annotations.Fetch;
         import org.hibernate.annotations.FetchMode;
+        import org.hibernate.annotations.Where;
 
         import javax.persistence.*;
         import java.util.List;
@@ -26,6 +27,7 @@
 
             @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
             @Fetch(FetchMode.SUBSELECT)
+            @Where(clause = "deleted = false")
             private List<Question> questions;
 
             @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)

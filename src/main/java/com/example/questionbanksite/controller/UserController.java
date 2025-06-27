@@ -33,6 +33,18 @@ public class UserController {
         return "loginPage";
     }
 
+    //<-------------- Authentication Method -------------->//
+    private boolean Auth(Model model, HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        model.addAttribute("username", username);
+        String role = (String) session.getAttribute("role");
+        if (username == null || role.equalsIgnoreCase("Admin")) {
+            model.addAttribute("error", "Please, Login first!!!");
+            return true;
+        }
+        return false;
+    }
+
 
     //Handler for login and authenticate user
     @PostMapping("/login")
@@ -61,13 +73,7 @@ public class UserController {
     @GetMapping("/home")
     public String homePage(HttpSession session, Model model) {
 
-        String username = (String) session.getAttribute("username");
-        model.addAttribute("username", username);
-        String role = (String) session.getAttribute("role");
-        if (username == null || role.equalsIgnoreCase("Admin")) {
-            model.addAttribute("error", "Please, Login first!!!");
-            return "loginPage";
-        }
+        if (Auth(model, session)) return "loginPage";
 
 
         return "home";
@@ -78,13 +84,8 @@ public class UserController {
     @GetMapping("/exam")
     public String examPage(HttpSession session, Model model) {
 
-        String username = (String) session.getAttribute("username");
-        String role = (String) session.getAttribute("role");
-        if (username == null || role.equalsIgnoreCase("Admin")) {
-            model.addAttribute("error", "Please, Login first!!!");
-            return "loginPage";
-        }
-        model.addAttribute("username", username);
+        if (Auth(model, session)) return "loginPage";
+
 
         List<Exam> examDescriptions = examService.getAllExam();
         model.addAttribute("examList", examDescriptions);
@@ -96,7 +97,9 @@ public class UserController {
 
     //Handler for opening particular question paper
     @GetMapping("/questionPaper")
-    public String questionPaper(@RequestParam("examId") Long examId, Model model) {
+    public String questionPaper(@RequestParam("examId") Long examId, Model model, HttpSession session) {
+        if (Auth(model, session)) return "loginPage";
+
         Exam exam = examService.getExamById(examId);
 
         model.addAttribute("exam", exam);
@@ -104,6 +107,8 @@ public class UserController {
 
         return "questionpaper";
     }
+
+
 
 
     //Handler for submit the question paper
@@ -140,13 +145,8 @@ public class UserController {
     @GetMapping("/result")
     public String showResult(HttpSession session, Model model) {
         String username = (String) session.getAttribute("username");
-        model.addAttribute("username", username);
 
-        String role = (String) session.getAttribute("role");
-        if (username == null || role.equalsIgnoreCase("Admin")) {
-            model.addAttribute("error", "Please, Login first!!!");
-            return "loginPage";
-        }
+        if (Auth(model, session)) return "loginPage";
 
         User user = userService.getUserByName(username);
         long userId = user.getId();

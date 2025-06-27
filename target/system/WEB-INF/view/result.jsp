@@ -8,11 +8,9 @@
     <title>Your Exam Results - Student Exam Center</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 
     <style>
         body {
@@ -23,136 +21,224 @@
             display: flex;
             flex-direction: column;
         }
+
         .navbar {
-            background: linear-gradient(90deg,#4a47a3,#6a67ce);
-            height:80px; padding: 0 2rem;
-            display:flex;align-items:center;justify-content:space-between;
-            color:#fff;
-            box-shadow:0 4px 15px rgba(74,71,163,0.6);
+            background: linear-gradient(90deg, #4a47a3, #6a67ce);
+            height: 80px;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            color: #fff;
         }
-        .navbar span.username {
-            background:#ffd700;color:#4a47a3;
-            padding:8px 20px;border-radius:30px;
-            font-weight:600;font-size:1.1rem;
-            box-shadow:0 3px 10px rgba(0,0,0,0.2);
+
+        .navbar-brand-center {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
         }
-        .hero {
-            padding:3rem 1rem; text-align:center; color:#2c3e50;
+
+        .navbar-brand-center:hover,
+        .navbar-brand-center:focus {
+            color: #ffd700;
+            outline: none;
         }
-        .hero h1 {
-            font-size:2.8rem;font-weight:700;
+
+        .username-badge {
+            position: absolute;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #ffd700;
+            color: #4a47a3;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            animation: fadeInSlide 1.5s ease-out;
+            user-select: none;
         }
-        .results-container {
-            max-width:960px; margin:2rem auto; padding:0 1rem;
-            display:flex; flex-direction:column; gap:1.5rem;
+
+        @keyframes fadeInSlide {
+            from { opacity: 0; right: -100px; }
+            to { opacity: 1; right: 2rem; }
         }
-        .result-card {
-            background:white; border-radius:1rem;
-            box-shadow:0 10px 30px rgba(74,71,163,0.15);
-            padding:2rem; transition:transform .3s ease,box-shadow .3s ease;
+
+        .exam-header {
+            text-align: center;
+            padding: 3rem 1rem 1rem;
+            color: #2c3e50;
         }
-        .result-card:hover {
-            transform:translateY(-8px);
-            box-shadow:0 15px 30px rgba(74,71,163,0.3);
+
+        .exam-header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
         }
-        .result-header {
-            display:flex; justify-content:space-between; align-items:center;
-            margin-bottom:1rem;
+
+        .exam-header p {
+            font-size: 1.2rem;
+            color: #4a47a3;
         }
-        .result-title {
-            font-weight:600; color:#4a47a3;
-            font-size:1.3rem;
+
+        .exam-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            padding: 2rem 1rem;
+            max-width: 1100px;
+            margin: 0 auto;
         }
+
+        .exam-card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(74, 71, 163, 0.15);
+            width: 300px;
+            text-align: center;
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: slideUp 0.6s ease forwards;
+            color: #2c3e50;
+            text-decoration: none;
+        }
+
+        .exam-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(74, 71, 163, 0.3);
+        }
+
+        .exam-card h4 {
+            font-size: 1.4rem;
+            color: #4a47a3;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
         .progress {
-            height:1.5rem; border-radius:30px;
+            height: 1.5rem;
+            border-radius: 30px;
+            margin-top: 1rem;
         }
+
         .progress-bar {
-            font-weight:600;
-            line-height:1.5rem;
+            font-weight: 600;
+            line-height: 1.5rem;
         }
+
+        .back-button {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .btn-back {
+            background-color: #4a47a3;
+            color: white;
+            font-weight: 600;
+            border-radius: 30px;
+            padding: 10px 25px;
+            border: none;
+        }
+
         footer {
-            text-align:center; padding:1rem;
-            background:rgba(255,255,255,0.9); color:#4a47a3;
-            box-shadow:0 -4px 10px rgba(0,0,0,0.05);
-            margin-top:auto;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.9rem;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #4a47a3;
+            margin-top: auto;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
         }
-        @media(max-width:576px){
-            .hero h1{font-size:2rem;}
-            .result-header{flex-direction:column;align-items:flex-start;gap:0.5rem;}
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .exam-header h1 { font-size: 2rem; }
+            .exam-card { width: 90%; }
+            .username-badge {
+                font-size: 1rem;
+                padding: 6px 14px;
+                right: 1rem;
+            }
         }
     </style>
 </head>
-
 <body>
+
 <!-- Navbar -->
-<nav class="navbar">
-    <div class="navbar-brand" onclick="location.href='home.jsp'" style="cursor:pointer;font-size:1.8rem;font-weight:700;user-select:none;">
-        Exam Center
-    </div>
-    <span class="username">Welcome, ${username}</span>
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="home" class="navbar-brand-center">📘 Exam Center</a>
+    <span class="username-badge">Welcome, ${username}</span>
 </nav>
 
-<!-- Hero -->
-<section class="hero">
+<!-- Header -->
+<section class="exam-header">
     <h1>Your Exam History</h1>
     <p>Review your performance below</p>
 </section>
 
-<!-- Results List -->
-<section class="results-container">
+<!-- Exam Results Grid -->
+<section class="exam-grid">
     <c:if test="${not empty resultList}">
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            <c:forEach var="res" items="${resultList}">
-                <div class="col">
-                    <a href="examResultDetails?resultId=${res.id}" style="text-decoration:none; color:inherit;">
-                        <div class="result-card h-100">
-                            <div class="result-header">
-                                <div class="result-title">
-                                        ${res.exam.description}
-                                </div>
-                                <div class="result-date">
-                                    Exam ID: #${res.exam.id}
-                                </div>
-                            </div>
-                            <div>
-                                <strong>Score:</strong> ${res.totalScore} / ${res.exam.totalMarks}
-                                <br/>
-                                <strong>Percentage:</strong>
-                                <fmt:formatNumber value="${res.percentage}" maxFractionDigits="2"/>%
-                            </div>
-                            <div class="progress mt-3">
-                                <div class="progress-bar bg-success"
-                                     role="progressbar"
-                                     style="width:${res.percentage}%"
-                                     aria-valuenow="${res.percentage}"
-                                     aria-valuemin="0" aria-valuemax="100">
-                                    <fmt:formatNumber value="${res.percentage}" maxFractionDigits="1"/>%
-                                </div>
-                            </div>
-                        </div>
-                    </a>
+        <c:forEach var="res" items="${resultList}">
+            <a href="examResultDetails?resultId=${res.id}" class="exam-card">
+                <h4>${res.exam.description}</h4>
+                <p>
+                    Exam ID: #${res.exam.id}<br/>
+                    <strong>Score:</strong> ${res.totalScore} / ${res.exam.totalMarks}<br/>
+                    <strong>Percentage:</strong> <fmt:formatNumber value="${res.percentage}" maxFractionDigits="2"/>%
+                </p>
+                <div class="progress">
+                    <div class="progress-bar bg-success"
+                         role="progressbar"
+                         style="width:${res.percentage}%"
+                         aria-valuenow="${res.percentage}"
+                         aria-valuemin="0"
+                         aria-valuemax="100">
+                        <fmt:formatNumber value="${res.percentage}" maxFractionDigits="1"/>%
+                    </div>
                 </div>
-            </c:forEach>
-        </div>
+            </a>
+        </c:forEach>
     </c:if>
 
-    <!-- Back Button -->
-    <div class="mb-3 text-start">
-        <a href="home" class="btn btn-outline-light btn-sm" style="background-color: #4a47a3; color: white; font-weight: 600; border-radius: 30px;">
-            ← Back to Home
-        </a>
-    </div>
-
-
     <c:if test="${empty resultList}">
-        <div class="alert alert-info text-center">
+        <div class="alert alert-info text-center w-100">
             You haven’t taken any exams yet. Try <a href="exam">starting one now</a>!
         </div>
     </c:if>
 </section>
 
+<!-- Back Button Centered -->
+<div class="text-center my-4">
+    <a href="home" class="btn btn-outline-light btn-sm"
+       style="background-color: #4a47a3; color: white; font-weight: 600; border-radius: 30px; padding: 10px 25px;">
+        ← Back to Home
+    </a>
+</div>
 <!-- Footer -->
-<footer>&copy; 2025 Student Exam Center. All rights reserved.</footer>
+<footer>
+    &copy; 2025 Student Exam Center. All rights reserved.
+</footer>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

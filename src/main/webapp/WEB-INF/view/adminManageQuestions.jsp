@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+update this page <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -104,6 +104,8 @@
             justify-content: center;
             gap: 8px;
         }
+
+        /* Pagination styles */
         .pagination {
             margin-top: 2rem;
             display: flex;
@@ -113,7 +115,30 @@
         .page-link {
             border-radius: 20px !important;
             padding: 6px 12px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
+        /* Normal page buttons */
+        .page-link.btn-outline-light {
+            background-color: transparent;
+            border: 1.5px solid #ccc;
+            color: #ccc;
+        }
+        .page-link.btn-outline-light:hover {
+            background-color: #00c9ff;
+            color: white;
+            border-color: #00c9ff;
+            cursor: pointer;
+        }
+        /* Current page button */
+        .page-link.btn-light {
+            background-color: #00c9ff !important; /* bright blue */
+            color: #fff !important;
+            font-weight: 700;
+            box-shadow: 0 0 10px #00c9ff;
+            cursor: default;
+            pointer-events: none; /* disable click on current page */
+        }
+
         .modal-content {
             background: #2a2a3c;
             color: white;
@@ -206,7 +231,6 @@
             <a class="btn btn-outline-light page-link" href="manageQuestions?subjectId=${subjectId}&page=${currentPage + 1}">Next &raquo;</a>
         </c:if>
     </nav>
-
 
 </main>
 

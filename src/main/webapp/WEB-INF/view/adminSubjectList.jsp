@@ -173,7 +173,7 @@
         <h2>Manage Subjects</h2>
         <div class="back-btn-container">
             <a href="adminPage" class="add-subject-btn" style="width: auto; padding: 12px 24px; margin: 0;">
-                &#8592; Back to Admin Panel
+                &#8592; Back to Dashboard
             </a>
         </div>
     </div>

@@ -24,13 +24,6 @@ public class ExamServiceImpl implements ExamService{
     private UserService userService;
 
     @Override
-    @Transactional
-    public Exam saveExam(Exam exam) {
-        entityManager.persist(exam);
-        return exam;
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public List<Exam> getAllExam() {
         return entityManager.createQuery("SELECT e FROM Exam e", Exam.class).getResultList();
@@ -48,7 +41,7 @@ public class ExamServiceImpl implements ExamService{
 
     @Override
     @Transactional
-    public Exam createExamForSubject(Long subjectId, String description, int targetTotalMarks) {
+    public int createExamForSubject(Long subjectId, String description, Long targetTotalMarks) {
         Subject subject = entityManager.find(Subject.class, subjectId);
         if (subject == null) {
             throw new IllegalArgumentException("Subject not found with ID: " + subjectId);
@@ -92,7 +85,7 @@ public class ExamServiceImpl implements ExamService{
         exam.setTotalMarks((long) accumulatedMarks);
 
         entityManager.persist(exam);
-        return exam;
+        return 1;
     }
 
     @Override

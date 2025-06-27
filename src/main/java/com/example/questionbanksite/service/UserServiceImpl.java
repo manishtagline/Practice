@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional(readOnly = true)
     public List<UserDetailsListDto> getAllUserDetails() {
-        // Step 1: Load users with exams and subject
+
         List<User> userList = entityManager.createQuery(
                 "SELECT DISTINCT u FROM User u " +
                         "WHERE u.role = 'User'", User.class)
@@ -77,9 +77,6 @@ public class UserServiceImpl implements UserService{
                     .build();
         }).collect(Collectors.toList());
     }
-
-
-
 
     @Override
     @Transactional(readOnly = true)

@@ -10,14 +10,11 @@ import java.util.Map;
 
 public interface ExamService {
 
-
-    Exam saveExam(Exam exam);
-
     List<Exam> getAllExam();
 
     Exam getExamById(Long examId);
 
-    Exam createExamForSubject(Long subjectId, String description, int targetTotalMarks);
+    int createExamForSubject(Long subjectId, String description, Long targetTotalMarks);
 
     UserResult evaluateAndSaveResult(String username, Long examId, Map<String, String> answersMap);
 

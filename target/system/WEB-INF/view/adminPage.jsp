@@ -266,7 +266,7 @@
                 <path d="M4 21v-2a4 4 0 0 1 3-3.87"/>
                 <circle cx="12" cy="7" r="4"/>
             </svg>
-            <h5 class="card-title">Manage Users</h5>
+            <h5 class="card-title">Users Details</h5>
             <p class="card-text">View all registered students and their activity.</p>
         </div>
 

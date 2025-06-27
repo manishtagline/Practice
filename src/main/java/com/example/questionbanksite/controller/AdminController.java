@@ -13,10 +13,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -57,7 +61,7 @@ public class AdminController {
     }
 
 
-    //**************************** Subject API *************************//
+    //**************************** Subject Handlers *************************//
     // Create a new subject
     @PostMapping("/saveSubject")
     public String addSubject(@ModelAttribute Subject subject, Model model, HttpSession session) {
@@ -129,10 +133,10 @@ public class AdminController {
         return "adminAddSubject";
     }
 
-    //**************************** Subject API Ends *************************//
+    //**************************** Subject Handlers Ends *************************//
 
 
-    //**************************** Question API  *************************//
+    //**************************** Question Handlers  *************************//
 
     @GetMapping("/addQuestionPage")
     public String addQuestionPage(@RequestParam Long subjectId, Model model, HttpSession session) {
@@ -218,30 +222,10 @@ public class AdminController {
         return "redirect:/manageQuestions?subjectId=" + subjectId;
     }
 
-    //**************************** Question API Ends *************************//
+    //**************************** Question Handlers Ends *************************//
 
 
-    //**************************** Exam API  *************************//
-    @PostMapping("/exam")
-    public ResponseEntity<Exam> addExam(@RequestBody Exam exam) {
-        Exam savedExam = examService.saveExam(exam);
-        return new ResponseEntity<>(savedExam, HttpStatus.CREATED);
-    }
-
-    @GetMapping("/getExam")
-    public ResponseEntity<GetAllExamDto> getAllExam() {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(GetAllExamDto.builder()
-                        .examList(examService.getAllExam().stream()
-                                .map(exam -> exam.getDescription())
-                                .collect(Collectors.toList()))
-                        .build()
-                );
-    }
-    //**************************** Exam API Ends *************************//
-
-    //**************************** User API  *************************//
+    //**************************** User Handlers  *************************//
     @PostMapping("/user")
     public ResponseEntity<User> addUser(@RequestBody User user) {
         User savedUser = userService.saveUser(user);
@@ -269,19 +253,78 @@ public class AdminController {
     }
 
 
-    //**************************** User API Ends  *************************//
+    //**************************** User Handlers Ends  *************************//
 
 
-    //This for to create exam
-    @PostMapping("/generate")
-    public ResponseEntity<?> createExam(
-            @RequestParam Long subjectId,
-            @RequestParam String description,
-            @RequestParam int totalMarks) {
+    //**************************** Exam Handlers  *************************//
 
-        examService.createExamForSubject(subjectId, description, totalMarks);
-        return new ResponseEntity<>("Exam created based on total marks.", HttpStatus.OK);
+    @GetMapping("/examList")
+    public String examList(Model model, HttpSession session){
+        if (Auth(model, session)) return "loginPage";
+
+        List<Exam> exams = examService.getAllExam();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        List<Map<String, Object>> exam = exams.stream().map(examList -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", examList.getId());
+            map.put("description", examList.getDescription());
+            map.put("totalMarks", examList.getTotalMarks());
+            map.put("totalNumberOfQuestion", examList.getTotalNumberOfQuestion());
+            map.put("subjectName", examList.getSubject().getName());
+            map.put("formattedDate", examList.getDateCreated().format(formatter));
+            return map;
+        }).collect(Collectors.toList());
+
+        model.addAttribute("exams", exam);
+        return "adminExamList";
     }
+
+    @GetMapping("/addExamPage")
+    public String addExam(Model model, HttpSession session){
+        if (Auth(model, session)) return "loginPage";
+
+        model.addAttribute("subjectList", subjectService.getAllSubjects());
+        model.addAttribute("exam", new Exam());
+        return "adminAddExam";
+    }
+
+
+    @PostMapping("/saveExam")
+    public String addExam(@ModelAttribute("exam") Exam exam, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        if (Auth(model, session)) return "loginPage";
+
+        Long subjectId = exam.getSubject().getId();
+        String description = exam.getDescription();
+        Long totalMark = exam.getTotalMarks();
+
+        int i = examService.createExamForSubject(subjectId, description, totalMark);
+        System.out.println(i);
+        if (i > 0) {
+            redirectAttributes.addFlashAttribute("successMsg", "Exam added successfully...");
+        } else {
+            redirectAttributes.addFlashAttribute("errorMsg", "Something went wrong!!!");
+        }
+        return "redirect:/addExamPage";
+    }
+
+
+
+
+
+    @GetMapping("/getExam")
+    public ResponseEntity<GetAllExamDto> getAllExam() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(GetAllExamDto.builder()
+                        .examList(examService.getAllExam().stream()
+                                .map(exam -> exam.getDescription())
+                                .collect(Collectors.toList()))
+                        .build()
+                );
+    }
+    //**************************** Exam Handlers Ends *************************//
+
 
 
 

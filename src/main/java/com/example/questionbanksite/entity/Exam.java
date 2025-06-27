@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -27,6 +29,10 @@ public class Exam {
     private Long totalMarks;
 
     private int totalNumberOfQuestion;
+
+    @CreationTimestamp
+    @Column(name = "date_created",updatable = false)
+    private LocalDateTime dateCreated;
 
     @ManyToOne
     @JoinColumn(name = "subject_id")

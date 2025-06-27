@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -193,7 +194,7 @@
         <h2>Information User</h2>
         <div class="back-btn-container">
             <a href="adminPage" class="add-subject-btn" style="width: auto; padding: 12px 24px; margin: 0;">
-                &#8592; Back to Admin Panel
+                &#8592; Back to Dashboard
             </a>
         </div>
     </div>
@@ -206,9 +207,9 @@
             <th>Name</th>
             <th>Enrolled Subjects</th>
             <th>Total Number of Exam</th>
-            <th>Average</th>
-            <th>Highest</th>
-            <th>Lowest</th>
+            <th>Average Score</th>
+            <th>Highest Score</th>
+            <th>Lowest Score</th>
         </tr>
         </thead>
         <tbody>
@@ -225,7 +226,7 @@
                 <td>
                     <c:choose>
                         <c:when test="${user.averageScore != null}">
-                            ${user.averageScore}
+                            <fmt:formatNumber value="${user.averageScore}" type="number" maxFractionDigits="2" />
                         </c:when>
                         <c:otherwise>N/A</c:otherwise>
                     </c:choose>
@@ -253,7 +254,7 @@
     </table>
 
     <!-- Add Subject Button -->
-    <div class="text-center">
+   <%-- <div class="text-center">
         <a href="addSubjectPage" class="add-subject-btn mt-4">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <line x1="12" y1="5" x2="12" y2="19"/>
@@ -261,7 +262,7 @@
             </svg>
             Add User
         </a>
-    </div>
+    </div>--%>
 </main>
 
 <!-- Footer -->

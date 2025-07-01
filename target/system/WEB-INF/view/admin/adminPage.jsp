@@ -8,9 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
-
-    <!-- Link to navbar CSS -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/adminNavbar.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/adminNavbar.css"/>
 
     <style>
         html, body {
@@ -70,7 +68,6 @@
             text-align: center;
             cursor: pointer;
             color: #fff;
-
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -120,13 +117,45 @@
                 gap: 1.5rem;
             }
         }
+        /* Custom Modal Styling */
+        .modal-content.custom-modal {
+            background: #2a2a40;
+            color: #f0f0f0;
+            border: 1px solid #444;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-header.custom-header {
+            background: #38385a;
+            border-bottom: 1px solid #555;
+            color: #00c9ff;
+        }
+
+        .modal-footer .btn-danger {
+            background-color: #ff4d4d;
+            border: none;
+        }
+
+        .modal-footer .btn-danger:hover {
+            background-color: #e60000;
+        }
+
+        .modal-footer .btn-secondary {
+            background-color: #444;
+            border: none;
+        }
+
+        .modal-footer .btn-secondary:hover {
+            background-color: #666;
+        }
     </style>
 </head>
 
 <body>
 
 <!-- Navbar -->
-<jsp:include page="/WEB-INF/view/navbar/adminNavbar.jsp" />
+<jsp:include page="/WEB-INF/view/navbar/adminNavbar.jsp"/>
 
 <main>
     <div class="welcome-user">👋 Welcome <strong>${empty sessionScope.username ? 'Admin' : sessionScope.username}</strong>, manage your system with ease!</div>
@@ -135,6 +164,7 @@
     <p class="text-center text-light mb-4">Access and control users, subjects, and exams efficiently.</p>
 
     <div class="card-container">
+
         <!-- Manage Subjects -->
         <div class="card" onclick="location.href='subjectList'">
             <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -173,7 +203,7 @@
         </div>
 
         <!-- Logout -->
-        <div class="card" onclick="location.href='logout'">
+        <div class="card" onclick="showLogoutModal()">
             <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M16 17l5-5-5-5"/>
@@ -186,11 +216,42 @@
     </div>
 </main>
 
+<!-- Logout Confirmation Modal -->
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header custom-header">
+                <h5 class="modal-title" id="logoutModalLabel">🔒 Confirm Logout</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to log out from the admin dashboard?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" onclick="confirmLogout()">Yes, Logout</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Footer -->
 <footer>
     &copy; 2025 Admin Panel | Exam Center. All rights reserved.
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    function showLogoutModal() {
+        const modal = new bootstrap.Modal(document.getElementById('logoutModal'));
+        modal.show();
+    }
+
+    function confirmLogout() {
+        window.location.href = 'logout';
+    }
+</script>
+
 </body>
 </html>

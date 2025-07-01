@@ -3,7 +3,6 @@
 
 <nav class="navbar">
 
-
     <!-- Centered Logo + Brand -->
     <div class="navbar-brand-container" onclick="location.href='adminPage'">
         <svg class="logo-svg" viewBox="0 0 64 64">
@@ -42,7 +41,7 @@
                     <line x1="3" y1="10" x2="21" y2="10"/>
                 </svg> Exams
             </div>
-            <div class="nav-item" onclick="location.href='logout'">
+            <div class="nav-item" onclick="showLogoutModal()">
                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M16 17l5-5-5-5"/>
@@ -51,7 +50,35 @@
                 </svg> Logout
             </div>
         </div>
-
     </div>
-
 </nav>
+
+<!-- Logout Confirmation Modal -->
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background: linear-gradient(to right, #1f1c2c, #928dab); color: #fff; border: none;">
+            <div class="modal-header" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <h5 class="modal-title" id="logoutModalLabel">🔒 Confirm Logout</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to log out from the admin dashboard?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" onclick="confirmLogout()">Yes, Logout</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showLogoutModal() {
+        const modal = new bootstrap.Modal(document.getElementById('logoutModal'));
+        modal.show();
+    }
+
+    function confirmLogout() {
+        window.location.href = 'logout';
+    }
+</script>

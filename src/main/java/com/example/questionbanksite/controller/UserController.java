@@ -108,11 +108,6 @@ public class UserController {
         return "user/result";
     }
 
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/";
-    }
 
 
     //Handler for checking

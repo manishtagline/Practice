@@ -39,36 +39,15 @@ public class AdminController {
 
 
     @GetMapping("/adminPage")
-    public String adminPage(HttpSession session, Model model) {
-        String username = (String) session.getAttribute("username");
-        model.addAttribute("username", username);
-        String role = (String) session.getAttribute("role");
-        if (username == null || role.equalsIgnoreCase("User")) {
-            model.addAttribute("error", "Please, Login first, as a Admin...");
-            return "loginPage";
-        }
+    public String adminPage() {
+
         return "admin/adminPage";
-    }
-
-
-
-    //<-------------- Authentication Method -------------->//
-    private boolean Auth(Model model, HttpSession session) {
-        String username = (String) session.getAttribute("username");
-        model.addAttribute("username", username);
-        String role = (String) session.getAttribute("role");
-        if (username == null || role.equalsIgnoreCase("User")) {
-            model.addAttribute("error", "Please, Login first!!!");
-            return true;
-        }
-        return false;
     }
 
     //**************************** Subject Handlers *************************//
     // Create a new subject
     @PostMapping("/saveSubject")
     public String addSubject(@ModelAttribute Subject subject, Model model, HttpSession session) {
-        if (Auth(model, session)) return "loginPage";
 
         int i = subjectService.saveSubject(subject);
         if (i > 0) {
@@ -83,8 +62,6 @@ public class AdminController {
     @GetMapping("/editSubject")
     public String getSubjectById(@RequestParam Long id, Model model, HttpSession session) {
 
-        if (Auth(model, session)) return "loginPage";
-
         Subject subject = subjectService.getSubjectById(id);
         model.addAttribute("subject", subject);
         return "admin/editSubject";
@@ -94,8 +71,6 @@ public class AdminController {
     @GetMapping("/subjectList")
     @Transactional(readOnly = true)
     public String showSubjectList(Model model, HttpSession session) {
-
-        if (Auth(model, session)) return "loginPage";
 
         List<Subject> subjects = subjectService.getAllSubjects();
 
@@ -144,7 +119,6 @@ public class AdminController {
 
     @GetMapping("/addQuestionPage")
     public String addQuestionPage(@RequestParam Long subjectId, Model model, HttpSession session) {
-        if (Auth(model, session)) return "loginPage";
 
         model.addAttribute("subjectId", subjectId);
         model.addAttribute("question", new Question());
@@ -163,26 +137,16 @@ public class AdminController {
 
         question.setOptions(options);
 
-        // Map A-D to actual option string
         String correctOptionLetter = question.getCorrectAnswer();
         String correctAnswer = "";
 
-        switch (correctOptionLetter) {
-            case "A":
-                correctAnswer = options.get(0);
-                break;
-            case "B":
-                correctAnswer = options.get(1);
-                break;
-            case "C":
-                correctAnswer = options.get(2);
-                break;
-            case "D":
-                correctAnswer = options.get(3);
-                break;
-            default:
-                correctAnswer = "";
-        }
+        correctAnswer = switch (correctOptionLetter) {
+            case "A" -> options.get(0);
+            case "B" -> options.get(1);
+            case "C" -> options.get(2);
+            case "D" -> options.get(3);
+            default -> "";
+        };
 
         question.setCorrectAnswer(correctAnswer);
 
@@ -200,8 +164,6 @@ public class AdminController {
     public String manageQuestions(
             @RequestParam Long subjectId, @RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String sortBy,
             @RequestParam(required = false) String complexity, Model model, HttpSession session) {
-
-        if (Auth(model, session)) return "loginPage";
 
         int pageSize = 10;
 
@@ -232,8 +194,6 @@ public class AdminController {
 
     @GetMapping("/editQuestion")
     public String editQuestionPage(@RequestParam Long id, Model model, HttpSession session) {
-
-        if (Auth(model, session)) return "loginPage";
 
         Question question = questionService.getQuestionById(id);
 
@@ -269,23 +229,8 @@ public class AdminController {
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
-    @GetMapping("/getUser")
-    public ResponseEntity<GetAllUserDto> getAllUser() {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(GetAllUserDto.builder()
-                        .userList(userService.getAllUser().stream()
-                                .map(user -> user.getUsername())
-                                .collect(Collectors.toList()))
-                        .build()
-                );
-    }
-
-
     @GetMapping("/userList")
     public String userList(Model model, HttpSession session){
-        if (Auth(model, session)) return "loginPage";
-
         List<UserDetailsListDto> users = userService.getAllUserDetails();
         model.addAttribute("users", users);
         return "admin/userList";
@@ -297,29 +242,13 @@ public class AdminController {
 
     @GetMapping("/examList")
     public String examList(Model model, HttpSession session){
-        if (Auth(model, session)) return "loginPage";
-
-        List<Exam> exams = examService.getAllExam();
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        List<Map<String, Object>> exam = exams.stream().map(examList -> {
-            Map<String, Object> map = new HashMap<>();
-            map.put("id", examList.getId());
-            map.put("description", examList.getDescription());
-            map.put("totalMarks", examList.getTotalMarks());
-            map.put("totalNumberOfQuestion", examList.getTotalNumberOfQuestion());
-            map.put("subjectName", examList.getSubject().getName());
-            map.put("formattedDate", examList.getDateCreated().format(formatter));
-            return map;
-        }).collect(Collectors.toList());
-
+        List<ExamDto> exam = examService.getAllExam();
         model.addAttribute("exams", exam);
         return "admin/examList";
     }
 
     @GetMapping("/addExamPage")
     public String addExam(Model model, HttpSession session){
-        if (Auth(model, session)) return "loginPage";
 
         model.addAttribute("subjectList", subjectService.getAllSubjects());
         model.addAttribute("exam", new Exam());
@@ -329,8 +258,6 @@ public class AdminController {
 
     @PostMapping("/saveExam")
     public String saveExam(@ModelAttribute("exam") Exam exam, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        if (Auth(model, session)) return "loginPage";
-
         Long subjectId = exam.getSubject().getId();
         String description = exam.getDescription();
         Long totalMark = exam.getTotalMarks();
@@ -353,7 +280,6 @@ public class AdminController {
 
     @GetMapping("/viewExamDetails")
     public String viewExamDetails(@RequestParam Long id, Model model, HttpSession session){
-        if (Auth(model, session)) return "loginPage";
 
         Exam exam = examService.getExamById(id);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");

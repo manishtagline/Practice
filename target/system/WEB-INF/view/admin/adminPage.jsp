@@ -8,215 +8,116 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+
+    <!-- Link to navbar CSS -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/adminNavbar.css" />
+
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+        html, body {
+            height: 100%;
             margin: 0;
         }
 
-        .navbar {
-            background: linear-gradient(90deg, #4a47a3, #6a67ce);
-            box-shadow: 0 4px 15px rgba(74, 71, 163, 0.6);
-            height: 80px;
-            padding: 0 2rem;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .navbar-brand-container {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .navbar-brand {
-            font-weight: 700;
-            font-size: 1.8rem;
-            color: #f0f0f5;
-            letter-spacing: 2px;
-            margin-left: 0.5rem;
-            transition: color 0.3s ease;
-        }
-
-        .navbar-brand-container:hover .navbar-brand {
-            color: #ffd700;
-        }
-
-        .logo-svg {
-            width: 40px;
-            height: 40px;
-            stroke: #f0f0f5;
-            stroke-width: 2;
-            fill: none;
-            animation: logo-spin 3s linear infinite;
-        }
-
-        @keyframes logo-spin {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .username-badge {
-            position: absolute;
-            right: 2rem;
-            top: 50%;
-            transform: translateY(-50%);
-            background: #ffd700;
-            color: #4a47a3;
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-            animation: fadeInSlide 1.5s ease-out;
-            user-select: none;
-            letter-spacing: 0.03em;
-            text-transform: capitalize;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            cursor: default;
-        }
-
-        @keyframes fadeInSlide {
-            from {
-                opacity: 0;
-                right: -100px;
-            }
-            to {
-                opacity: 1;
-                right: 2rem;
-            }
-        }
-
-        .hero {
-            flex-grow: 1;
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #1f1c2c, #928dab);
+            color: #f0f0f0;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 4rem 1rem;
-            text-align: center;
-            color: #2c3e50;
-            max-width: 960px;
-            margin: 0 auto;
         }
 
-        .hero h1 {
-            font-weight: 700;
-            font-size: 3rem;
-            margin-bottom: 1rem;
+        main {
+            flex: 1;
+            padding: 2rem;
+            z-index: 2;
         }
 
-        .hero .welcome-user {
-            font-size: 1.5rem;
-            color: #4a47a3;
-            background: #ffffffcc;
+        .welcome-user {
+            font-size: 1.4rem;
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
             padding: 12px 30px;
             border-radius: 30px;
             font-weight: 600;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 10px rgba(74, 71, 163, 0.2);
-            user-select: none;
+            margin: 0 auto 1.5rem auto;
+            max-width: fit-content;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 1rem;
         }
 
         .card-container {
             display: flex;
-            gap: 2rem;
             flex-wrap: wrap;
             justify-content: center;
-            margin-top: 2rem;
-            max-width: 900px;
-            width: 100%;
+            gap: 2rem;
+            max-width: 1000px;
+            margin: auto;
         }
 
         .card {
-            flex: 1 1 280px;
+            background: #3c3c3c;
+            padding: 2rem 1.5rem;
             border-radius: 1rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            transition: 0.3s;
+            flex: 1 1 280px;
+            text-align: center;
             cursor: pointer;
-            background: white;
-            box-shadow: 0 8px 20px rgba(74, 71, 163, 0.15);
+            color: #fff;
+
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 2rem 1.5rem;
         }
 
         .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(74, 71, 163, 0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            background-color: #505050;
         }
 
         .card-icon {
             width: 80px;
             height: 80px;
             margin-bottom: 1rem;
-            fill: #4a47a3;
-            animation: bounce 2s infinite ease-in-out;
+            stroke: #00c9ff;
+            animation: bounce 2s infinite;
         }
 
         @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-15px);
-            }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .card-title {
+            font-size: 1.2rem;
             font-weight: 600;
-            font-size: 1.3rem;
-            margin-bottom: 0.75rem;
-            color: #4a47a3;
-            user-select: none;
+            color: #00c9ff;
+            margin-bottom: 0.5rem;
         }
 
         .card-text {
-            color: #666;
-            font-size: 1rem;
-            text-align: center;
-            user-select: none;
+            color: #ccc;
         }
 
         footer {
+            background-color: #1a1a2e;
+            color: #ccc;
             text-align: center;
             padding: 1rem;
             font-size: 0.9rem;
-            background-color: rgba(255, 255, 255, 0.9);
-            color: #4a47a3;
-            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
-            user-select: none;
         }
 
-        @media (max-width: 576px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
-
+        @media (max-width: 768px) {
             .card-container {
                 flex-direction: column;
                 gap: 1.5rem;
-            }
-
-            .username-badge {
-                font-size: 1rem;
-                padding: 6px 14px;
-                right: 1rem;
             }
         }
     </style>
@@ -225,31 +126,19 @@
 <body>
 
 <!-- Navbar -->
-<nav class="navbar">
-    <div class="navbar-brand-container" onclick="location.href='adminPage'">
-        <svg class="logo-svg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8 12h48v40H8z" stroke-linejoin="round"/>
-            <line x1="8" y1="12" x2="56" y2="12"/>
-            <line x1="32" y1="12" x2="32" y2="52"/>
-        </svg>
-        <span class="navbar-brand">Admin Panel</span>
-    </div>
-    <div class="username-badge">
-        Admin
-    </div>
-</nav>
+<jsp:include page="/WEB-INF/view/navbar/adminNavbar.jsp" />
 
-<section class="hero">
-    <div class="welcome-user">
-        👋 Welcome <strong>Admin</strong>, manage your system with ease!
-    </div>
+<main>
+    <div class="welcome-user">👋 Welcome <strong>${empty sessionScope.username ? 'Admin' : sessionScope.username}</strong>, manage your system with ease!</div>
+
     <h1>Admin Dashboard</h1>
-    <p>Access and control users, subjects, and exams efficiently.</p>
+    <p class="text-center text-light mb-4">Access and control users, subjects, and exams efficiently.</p>
 
     <div class="card-container">
-        <div class="card" onclick="location.href='subjectList'" role="listitem" tabindex="0">
-            <svg class="card-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Manage Subjects -->
+        <div class="card" onclick="location.href='subjectList'">
+            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                 <polyline points="17 8 12 3 7 8"/>
                 <line x1="12" y1="3" x2="12" y2="15"/>
@@ -258,9 +147,10 @@
             <p class="card-text">View, add, update or delete subjects offered.</p>
         </div>
 
-        <div class="card" onclick="location.href='userList'" role="listitem" tabindex="0">
-            <svg class="card-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <!-- User Details -->
+        <div class="card" onclick="location.href='userList'">
+            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-3-3.87"/>
                 <path d="M4 21v-2a4 4 0 0 1 3-3.87"/>
                 <circle cx="12" cy="7" r="4"/>
@@ -269,9 +159,10 @@
             <p class="card-text">View all registered students and their activity.</p>
         </div>
 
-        <div class="card" onclick="location.href='examList'" role="listitem" tabindex="0">
-            <svg class="card-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Manage Exams -->
+        <div class="card" onclick="location.href='examList'">
+            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
                 <line x1="16" y1="2" x2="16" y2="6"/>
                 <line x1="8" y1="2" x2="8" y2="6"/>
@@ -281,9 +172,10 @@
             <p class="card-text">Create, edit or delete exams for various subjects.</p>
         </div>
 
-        <div class="card" onclick="location.href='logout'" role="listitem" tabindex="0">
-            <svg class="card-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Logout -->
+        <div class="card" onclick="location.href='logout'">
+            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M16 17l5-5-5-5"/>
                 <path d="M21 12H9"/>
                 <path d="M12 19H9a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h3"/>
@@ -292,7 +184,7 @@
             <p class="card-text">Sign out from the admin dashboard securely.</p>
         </div>
     </div>
-</section>
+</main>
 
 <!-- Footer -->
 <footer>
@@ -300,6 +192,5 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>

@@ -221,7 +221,7 @@
     <c:forEach var="exam" items="${examList}">
         <div class="exam-card">
             <h4>${exam.description}</h4>
-            <p>Subject: ${exam.subject.name} <br/> Total Marks: ${exam.totalMarks} <br/> Total Question : ${exam.totalNumberOfQuestion}</p>
+            <p>Subject: ${exam.subjectName} <br/> Total Marks: ${exam.totalMarks} <br/> Total Question : ${exam.totalNumberOfQuestion}</p>
             <form method="get" action="questionPaper">
                 <input type="hidden" name="examId" value="${exam.id}" />
                 <button type="submit" class="btn btn-start">Start</button>

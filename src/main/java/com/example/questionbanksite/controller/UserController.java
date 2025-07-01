@@ -1,5 +1,6 @@
 package com.example.questionbanksite.controller;
 
+import com.example.questionbanksite.dto.ExamDto;
 import com.example.questionbanksite.entity.Exam;
 import com.example.questionbanksite.entity.Question;
 import com.example.questionbanksite.entity.User;
@@ -28,52 +29,10 @@ public class UserController {
     private final UserResultService userResultService;
 
 
-    @GetMapping("/")
-    public String index() {
-        return "loginPage";
-    }
-
-    //<-------------- Authentication Method -------------->//
-    private boolean Auth(Model model, HttpSession session) {
-        String username = (String) session.getAttribute("username");
-        model.addAttribute("username", username);
-        String role = (String) session.getAttribute("role");
-        if (username == null || role.equalsIgnoreCase("Admin")) {
-            model.addAttribute("error", "Please, Login first!!!");
-            return true;
-        }
-        return false;
-    }
-
-
-    //Handler for login and authenticate user
-    @PostMapping("/login")
-    public String authenticateUser(@RequestParam String username, @RequestParam String password, Model model, HttpSession session) {
-
-        User user = userService.getUserByName(username);
-
-        if (user == null || !user.getPassword().equals(password)) {
-            model.addAttribute("error", "Invalid username or password");
-            return "loginPage";
-        }
-
-        session.setAttribute("username", user.getUsername());
-        session.setAttribute("role", user.getRole());
-
-        // Set session attributes based on role
-        if ("ADMIN".equalsIgnoreCase(user.getRole())) {
-            return "admin/adminPage";
-        } else {
-            return "user/home";
-        }
-    }
-
 
     //Handler for hom page
     @GetMapping("/home")
     public String homePage(HttpSession session, Model model) {
-        if (Auth(model, session)) return "loginPage";
-
         return "user/home";
     }
 
@@ -81,9 +40,8 @@ public class UserController {
     //Handler for opening exam available for user
     @GetMapping("/exam")
     public String examPage(HttpSession session, Model model) {
-        if (Auth(model, session)) return "loginPage";
 
-        List<Exam> examDescriptions = examService.getAllExam();
+        List<ExamDto> examDescriptions = examService.getAllExam();
         model.addAttribute("examList", examDescriptions);
 
         return "user/exam";
@@ -93,7 +51,6 @@ public class UserController {
     //Handler for opening particular question paper
     @GetMapping("/questionPaper")
     public String questionPaper(@RequestParam("examId") Long examId, Model model, HttpSession session) {
-        if (Auth(model, session)) return "loginPage";
 
         Exam exam = examService.getExamById(examId);
 
@@ -132,7 +89,6 @@ public class UserController {
 
     @GetMapping("/submissionMessage")
     public String submission(Model model, HttpSession session) {
-        if (Auth(model, session)) return "loginPage";
 
         return "user/submissionMessage";
     }
@@ -142,7 +98,6 @@ public class UserController {
     @GetMapping("/result")
     public String showResult(HttpSession session, Model model) {
         String username = (String) session.getAttribute("username");
-        if (Auth(model, session)) return "loginPage";
 
         User user = userService.getUserByName(username);
         long userId = user.getId();
@@ -164,8 +119,6 @@ public class UserController {
     @GetMapping("/examResultDetails")
     public String examResultDetails(@RequestParam("resultId") Long resultId, Model model, HttpSession session) {
         UserResult userResult = userResultService.getResultDetailsById(resultId);
-
-        if (Auth(model, session)) return "loginPage";
 
         if (userResult == null) {
             model.addAttribute("errorMessage", "Result not found");

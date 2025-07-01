@@ -29,12 +29,14 @@ public class UserServiceImpl implements UserService{
         entityManager.persist(user);
         return user;
     }
+/*
 
     @Override
     @Transactional(readOnly = true)
     public List<User> getAllUser() {
         return entityManager.createQuery("SELECT u FROM User u WHERE u.role = 'User'", User.class).getResultList();
     }
+*/
 
     @Override
     @Transactional(readOnly = true)

@@ -11,8 +11,6 @@ public interface UserService {
 
     User saveUser(User user);
 
-    List<User> getAllUser();
-
     List<UserDetailsListDto> getAllUserDetails();
 
     User getUserByName(String username);

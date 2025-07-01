@@ -149,8 +149,7 @@
         <div class="mb-3">
             <form:label path="correctAnswer" cssClass="form-label">Correct Answer</form:label>
             <form:select path="correctAnswer" cssClass="form-select" required="true">
-                <form:option value="" label="<-- Select Correct Option -->.
-"/>
+                <form:option value="" label="<-- Select Correct Option -->"/>
                 <form:option value="A" label="A"/>
                 <form:option value="B" label="B"/>
                 <form:option value="C" label="C"/>

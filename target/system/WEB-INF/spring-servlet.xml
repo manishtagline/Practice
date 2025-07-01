@@ -24,6 +24,24 @@
     <!-- Static Resource Handler -->
     <mvc:resources mapping="/static/**" location="/resources/static/" />
 
+    <mvc:interceptors>
+        <!-- Interceptor for user pages -->
+       <!-- <mvc:interceptor>
+            <mvc:mapping path="/user/**" />
+            <mvc:mapping path="/exam/**" />
+            <mvc:mapping path="/home" />
+            <mvc:mapping path="/submitExam" />
+            <mvc:mapping path="/result/**" />
+            <bean class="com.example.questionbanksite.interceptor.AuthInterceptor" />
+        </mvc:interceptor>-->
+
+        <!-- Interceptor for admin pages -->
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <bean class="com.example.questionbanksite.interceptor.AuthInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
+
     <!-- View Resolver -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/view/" />

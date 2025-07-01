@@ -1,5 +1,6 @@
 package com.example.questionbanksite.service;
 
+import com.example.questionbanksite.dto.ExamDto;
 import com.example.questionbanksite.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,10 +10,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -26,8 +29,21 @@ public class ExamServiceImpl implements ExamService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<Exam> getAllExam() {
-        return entityManager.createQuery("SELECT e FROM Exam e", Exam.class).getResultList();
+    public List<ExamDto> getAllExam() {
+        List<Exam> exams = entityManager.createQuery("SELECT e FROM Exam e", Exam.class).getResultList();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+        return exams.stream()
+                .map(exam -> new ExamDto(
+                        exam.getId(),
+                        exam.getDescription(),
+                        exam.getTotalMarks(),
+                        exam.getTotalNumberOfQuestion(),
+                        exam.getSubject().getName(),
+                        exam.getDateCreated().format(formatter)
+                ))
+                .collect(Collectors.toList());
     }
 
 

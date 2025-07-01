@@ -100,7 +100,6 @@
 <div class="login-container shadow">
     <h2>Student Exam Center</h2>
 
-    <!-- Show error alert if error attribute is set -->
     <c:if test="${not empty error}">
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 ${error}
@@ -138,7 +137,6 @@
     </form>
 </div>
 
-<!-- Bootstrap JS Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

@@ -46,12 +46,12 @@ public class UserServiceImpl implements UserService{
                 .getResultList();
 
         return userList.stream().map(user -> {
-            Set<String> examNames = user.getExams().stream()
+            Set<String> examNames = user.getCompletedExams().stream()
                     .map(Exam::getDescription)
                     .collect(Collectors.toSet());
 
 
-            Integer totalExams = user.getExams().size();
+            Integer totalExams = user.getCompletedExams().size();
 
             List<Integer> scores = user.getResults().stream()
                     .map(UserResult::getTotalScore)

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -83,6 +84,10 @@ public class ExamServiceImpl implements ExamService{
         exam.setQuestions(selectedQuestions);
         exam.setTotalNumberOfQuestion(numberOfQuestion);
         exam.setTotalMarks((long) accumulatedMarks);
+//        exam.setEnrolledStartDate(enrolledStartDate);
+//        exam.setEnrolledEndDate(enrolledEndDate);
+//        exam.setExamStartDate(examStartDate);
+//        exam.setExamEndDate(examEndDate);
 
         entityManager.persist(exam);
         return 1;
@@ -124,8 +129,8 @@ public class ExamServiceImpl implements ExamService{
         result.setAnswer(answerLog.toString());
 
         entityManager.persist(result);
-        user.getExams().add(exam);
-        exam.getUsers().add(user);
+        user.getCompletedExams().add(exam);
+        exam.getCompletedUsers().add(user);
 
         entityManager.merge(exam);
         entityManager.merge(user);

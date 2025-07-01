@@ -62,9 +62,9 @@ public class UserController {
 
         // Set session attributes based on role
         if ("ADMIN".equalsIgnoreCase(user.getRole())) {
-            return "adminPage";
+            return "admin/adminPage";
         } else {
-            return "redirect:/home";
+            return "user/home";
         }
     }
 
@@ -72,26 +72,21 @@ public class UserController {
     //Handler for hom page
     @GetMapping("/home")
     public String homePage(HttpSession session, Model model) {
-
         if (Auth(model, session)) return "loginPage";
 
-
-        return "home";
+        return "user/home";
     }
 
 
     //Handler for opening exam available for user
     @GetMapping("/exam")
     public String examPage(HttpSession session, Model model) {
-
         if (Auth(model, session)) return "loginPage";
-
 
         List<Exam> examDescriptions = examService.getAllExam();
         model.addAttribute("examList", examDescriptions);
 
-
-        return "exam";
+        return "user/exam";
     }
 
 
@@ -105,7 +100,7 @@ public class UserController {
         model.addAttribute("exam", exam);
         model.addAttribute("questions", exam.getQuestions());
 
-        return "questionpaper";
+        return "user/questionpaper";
     }
 
 
@@ -131,13 +126,15 @@ public class UserController {
 
         session.setAttribute("result", result);
 
-        return "submissionMessage";
+        return "user/submissionMessage";
     }
 
 
     @GetMapping("/submissionMessage")
-    public String submission() {
-        return "submissionMessage";
+    public String submission(Model model, HttpSession session) {
+        if (Auth(model, session)) return "loginPage";
+
+        return "user/submissionMessage";
     }
 
 
@@ -145,7 +142,6 @@ public class UserController {
     @GetMapping("/result")
     public String showResult(HttpSession session, Model model) {
         String username = (String) session.getAttribute("username");
-
         if (Auth(model, session)) return "loginPage";
 
         User user = userService.getUserByName(username);
@@ -154,7 +150,7 @@ public class UserController {
         List<UserResult> resultList = userResultService.getResultsByUserId(userId);
         model.addAttribute("resultList", resultList);
 
-        return "result";
+        return "user/result";
     }
 
     @GetMapping("/logout")
@@ -166,12 +162,14 @@ public class UserController {
 
     //Handler for checking
     @GetMapping("/examResultDetails")
-    public String examResultDetails(@RequestParam("resultId") Long resultId, Model model) {
+    public String examResultDetails(@RequestParam("resultId") Long resultId, Model model, HttpSession session) {
         UserResult userResult = userResultService.getResultDetailsById(resultId);
+
+        if (Auth(model, session)) return "loginPage";
 
         if (userResult == null) {
             model.addAttribute("errorMessage", "Result not found");
-            return "errorPage";
+            return "user/errorPage";
         }
 
         Exam exam = userResult.getExam();
@@ -198,7 +196,7 @@ public class UserController {
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("errorMessage", "Failed to parse stored answers.");
-            return "errorPage";
+            return "user/errorPage";
         }
 
         Map<String, String> correctAnswers = new HashMap<>();
@@ -211,12 +209,12 @@ public class UserController {
         model.addAttribute("userAnswers", userAnswers);
         model.addAttribute("correctAnswers", correctAnswers);
 
-        return "resultDetails";
+        return "user/resultDetails";
     }
 
     @GetMapping("/errorPage")
     public String errorPage() {
-        return "errorPage";
+        return "user/errorPage";
     }
 
 }

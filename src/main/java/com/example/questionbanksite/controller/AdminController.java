@@ -7,6 +7,7 @@ import com.example.questionbanksite.entity.Subject;
 import com.example.questionbanksite.entity.User;
 import com.example.questionbanksite.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -45,7 +47,7 @@ public class AdminController {
             model.addAttribute("error", "Please, Login first, as a Admin...");
             return "loginPage";
         }
-        return "adminPage";
+        return "admin/adminPage";
     }
 
 
@@ -62,8 +64,6 @@ public class AdminController {
         return false;
     }
 
-
-
     //**************************** Subject Handlers *************************//
     // Create a new subject
     @PostMapping("/saveSubject")
@@ -76,7 +76,7 @@ public class AdminController {
         } else {
             model.addAttribute("errorMsg", "Something went wrong!!!");
         }
-        return "adminAddSubject";
+        return "admin/addSubject";
     }
 
     // Get subject by id
@@ -87,7 +87,7 @@ public class AdminController {
 
         Subject subject = subjectService.getSubjectById(id);
         model.addAttribute("subject", subject);
-        return "adminEditSubject";
+        return "admin/editSubject";
     }
 
 
@@ -112,7 +112,7 @@ public class AdminController {
         )).collect(Collectors.toList());
 
         model.addAttribute("subjects", subjectDto);
-        return "adminSubjectList";
+        return "admin/subjectList";
     }
 
 
@@ -128,12 +128,12 @@ public class AdminController {
     @GetMapping("/deleteSubject/{id}")
     public String deleteSubject(@PathVariable Long id) {
         subjectService.deleteSubject(id);
-        return "adminSubjectList";
+        return "subjectList";
     }
 
     @GetMapping("/addSubjectPage")
     public String addSubjectPage() {
-        return "adminAddSubject";
+        return "admin/addSubject";
     }
     //**************************** Subject Handlers Ends *************************//
 
@@ -148,7 +148,7 @@ public class AdminController {
 
         model.addAttribute("subjectId", subjectId);
         model.addAttribute("question", new Question());
-        return "adminAddQuestionPage";
+        return "admin/addQuestionPage";
     }
 
     @PostMapping("/saveQuestion")
@@ -163,6 +163,29 @@ public class AdminController {
 
         question.setOptions(options);
 
+        // Map A-D to actual option string
+        String correctOptionLetter = question.getCorrectAnswer();
+        String correctAnswer = "";
+
+        switch (correctOptionLetter) {
+            case "A":
+                correctAnswer = options.get(0);
+                break;
+            case "B":
+                correctAnswer = options.get(1);
+                break;
+            case "C":
+                correctAnswer = options.get(2);
+                break;
+            case "D":
+                correctAnswer = options.get(3);
+                break;
+            default:
+                correctAnswer = "";
+        }
+
+        question.setCorrectAnswer(correctAnswer);
+
         Subject subject = subjectService.getSubjectById(subjectId);
         question.setSubject(subject);
 
@@ -174,13 +197,18 @@ public class AdminController {
 
     @GetMapping("/manageQuestions")
     @Transactional(readOnly = true)
-    public String manageQuestions(@RequestParam Long subjectId, @RequestParam(defaultValue = "1") int page, Model model, HttpSession session) {
+    public String manageQuestions(
+            @RequestParam Long subjectId, @RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String complexity, Model model, HttpSession session) {
+
         if (Auth(model, session)) return "loginPage";
 
         int pageSize = 10;
 
-        List<Question> questions = questionService.getQuestionBySubjectWithPagination(subjectId, page, pageSize);
-        int totalQuestions = questionService.countQuestionBySubject(subjectId);
+        List<Question> questions = questionService.getFilteredAndSortedQuestions(
+                subjectId, complexity, sortBy, page, pageSize);
+
+        int totalQuestions = questionService.countFilteredQuestions(subjectId, complexity);
         int totalPages = (int) Math.ceil((double) totalQuestions / pageSize);
 
         Subject subject = subjectService.getSubjectById(subjectId);
@@ -190,8 +218,10 @@ public class AdminController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("subjectId", subjectId);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("complexity", complexity);
 
-        return "adminManageQuestions";
+        return "admin/manageQuestions";
     }
 
     @GetMapping("/deleteQuestion")
@@ -201,7 +231,9 @@ public class AdminController {
     }
 
     @GetMapping("/editQuestion")
-    public String editQuestionPage(@RequestParam Long id, Model model) {
+    public String editQuestionPage(@RequestParam Long id, Model model, HttpSession session) {
+
+        if (Auth(model, session)) return "loginPage";
 
         Question question = questionService.getQuestionById(id);
 
@@ -212,7 +244,7 @@ public class AdminController {
         question.setOptions(options);
 
         model.addAttribute("question", question);
-        return "adminEditQuestion";
+        return "admin/editQuestion";
     }
 
     @PostMapping("/updateQuestion")
@@ -251,10 +283,12 @@ public class AdminController {
 
 
     @GetMapping("/userList")
-    public String userList(Model model){
+    public String userList(Model model, HttpSession session){
+        if (Auth(model, session)) return "loginPage";
+
         List<UserDetailsListDto> users = userService.getAllUserDetails();
         model.addAttribute("users", users);
-        return "adminUserList";
+        return "admin/userList";
     }
     //**************************** User Handlers Ends  *************************//
 
@@ -280,7 +314,7 @@ public class AdminController {
         }).collect(Collectors.toList());
 
         model.addAttribute("exams", exam);
-        return "adminExamList";
+        return "admin/examList";
     }
 
     @GetMapping("/addExamPage")
@@ -289,7 +323,7 @@ public class AdminController {
 
         model.addAttribute("subjectList", subjectService.getAllSubjects());
         model.addAttribute("exam", new Exam());
-        return "adminAddExam";
+        return "admin/addExam";
     }
 
 
@@ -301,14 +335,33 @@ public class AdminController {
         String description = exam.getDescription();
         Long totalMark = exam.getTotalMarks();
 
+//        ZonedDateTime enrolledStartDate = exam.getEnrolledStartDate();
+//        ZonedDateTime enrolledEndDate = exam.getEnrolledEndDate();
+//        ZonedDateTime examStartDate = exam.getExamStartDate();
+//        ZonedDateTime examEndDate = exam.getExamEndDate();
+
         int i = examService.createExamForSubject(subjectId, description, totalMark);
-        System.out.println(i);
+
         if (i > 0) {
             redirectAttributes.addFlashAttribute("successMsg", "Exam added successfully...");
         } else {
             redirectAttributes.addFlashAttribute("errorMsg", "Something went wrong!!!");
         }
         return "redirect:/addExamPage";
+    }
+
+
+    @GetMapping("/viewExamDetails")
+    public String viewExamDetails(@RequestParam Long id, Model model, HttpSession session){
+        if (Auth(model, session)) return "loginPage";
+
+        Exam exam = examService.getExamById(id);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String formattedDate = exam.getDateCreated().format(formatter);
+
+        model.addAttribute("exam", exam);
+        model.addAttribute("formattedDate", formattedDate);
+        return "admin/viewExamDetails";
     }
 
     //**************************** Exam Handlers Ends *************************//

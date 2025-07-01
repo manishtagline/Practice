@@ -14,8 +14,9 @@ public interface QuestionService {
 
     void softDeleteQuestion(Long id);
 
-    List<Question> getQuestionBySubjectWithPagination(Long subjectId, int page, int size);
+    List<Question> getFilteredAndSortedQuestions(Long subjectId, String complexity, String sortBy, int page, int size);
 
-    int countQuestionBySubject(Long subjectId);
+    int countFilteredQuestions(Long subjectId, String complexity);
+
 
 }

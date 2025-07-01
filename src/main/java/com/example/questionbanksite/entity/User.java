@@ -28,12 +28,18 @@ public class User {
 
     private String role;
 
-    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
-    @Fetch(FetchMode.SUBSELECT)
-    private List<Exam> exams;
-
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Fetch(FetchMode.SUBSELECT)
     private List<UserResult> results;
+
+    //This field is completedExam, which is completed by the user.
+    @ManyToMany(mappedBy = "completedUsers", fetch = FetchType.LAZY)
+    @Fetch(FetchMode.SUBSELECT)
+    private List<Exam> completedExams;
+
+    //This is show how many exam enrolled by user.
+    @ManyToMany(mappedBy = "enrolledUsers", fetch = FetchType.LAZY)
+    @Fetch(FetchMode.SUBSELECT)
+    private List<Exam> enrolledExams;
 
 }

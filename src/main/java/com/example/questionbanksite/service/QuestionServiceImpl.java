@@ -57,24 +57,57 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Question> getQuestionBySubjectWithPagination(Long subjectId, int page, int size) {
-        return entityManager.createQuery(
-                "SELECT q FROM Question q WHERE q.subject.id = :subjectId AND q.deleted = false ORDER BY q.id",
-                Question.class
-        ).setParameter("subjectId", subjectId)
-         .setFirstResult((page - 1) * size)
-         .setMaxResults(size)
-         .getResultList();
+    public List<Question> getFilteredAndSortedQuestions(Long subjectId, String complexity, String sortBy, int page, int size) {
+        StringBuilder queryBuilder = new StringBuilder("SELECT q FROM Question q WHERE q.subject.id = :subjectId AND q.deleted = false");
+
+        if (complexity != null && !complexity.isEmpty()) {
+            queryBuilder.append(" AND q.complexity = :complexity");
+        }
+
+        if (sortBy != null) {
+            switch (sortBy) {
+                case "marks":
+                case "complexity":
+                    queryBuilder.append(" ORDER BY q.").append(sortBy);
+                    break;
+                default:
+                    queryBuilder.append(" ORDER BY q.id");
+            }
+        } else {
+            queryBuilder.append(" ORDER BY q.id");
+        }
+
+        var query = entityManager.createQuery(queryBuilder.toString(), Question.class);
+        query.setParameter("subjectId", subjectId);
+
+        if (complexity != null && !complexity.isEmpty()) {
+            query.setParameter("complexity", complexity);
+        }
+
+        query.setFirstResult((page - 1) * size);
+        query.setMaxResults(size);
+
+        return query.getResultList();
     }
 
     @Override
-    public int countQuestionBySubject(Long subjectId) {
-        Long count = entityManager.createQuery(
-            "SELECT COUNT(q) FROM Question q WHERE q.subject.id = :subjectId AND q.deleted = false ",
-                Long.class
-        ).setParameter("subjectId",subjectId)
-         .getSingleResult();
-        return count.intValue();
+    @Transactional(readOnly = true)
+    public int countFilteredQuestions(Long subjectId, String complexity) {
+        StringBuilder queryBuilder = new StringBuilder("SELECT COUNT(q) FROM Question q WHERE q.subject.id = :subjectId AND q.deleted = false");
+
+        if (complexity != null && !complexity.isEmpty()) {
+            queryBuilder.append(" AND q.complexity = :complexity");
+        }
+
+        var query = entityManager.createQuery(queryBuilder.toString(), Long.class);
+        query.setParameter("subjectId", subjectId);
+
+        if (complexity != null && !complexity.isEmpty()) {
+            query.setParameter("complexity", complexity);
+        }
+
+        return query.getSingleResult().intValue();
     }
+
 
 }

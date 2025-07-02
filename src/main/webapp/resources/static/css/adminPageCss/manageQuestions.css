@@ -1,0 +1,90 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #1f1c2c, #928dab);
+}
+main {
+    padding: 6rem 2rem 2rem; /* Leave space for fixed navbar */
+}
+.table {
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: #2a2a3c;
+    color: #fff;
+}
+th, td {
+    padding: 1rem;
+    vertical-align: middle;
+}
+thead th {
+    background-color: #33334d;
+}
+tbody tr:hover {
+    background-color: #3e3e5e;
+}
+h2 {
+    color: #fff;
+    font-weight: 700;
+    text-align: center;
+}
+.btn-sm {
+    font-size: 0.85rem;
+}
+.btn-action {
+    background-color: #00c9ff;
+    color: white;
+    border-radius: 20px;
+    margin: 0 4px;
+}
+.btn-delete {
+    background-color: #e63946 !important;
+}
+.btn-delete:hover {
+    background-color: #b92a39 !important;
+}
+.add-question-btn, .back-btn {
+    background-color: #00c9ff;
+    color: white;
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: 30px;
+    text-decoration: none;
+}
+.pagination {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.page-link {
+    border-radius: 20px !important;
+    padding: 6px 12px;
+}
+.page-link.btn-light {
+    background-color: #00c9ff !important;
+    color: #fff !important;
+    pointer-events: none;
+}
+.filter-form {
+    width: 100%;
+    margin-bottom: 2rem;
+    color: #fff;
+}
+.filter-form label {
+    font-weight: 600;
+    min-width: max-content;
+}
+.filter-form select.form-select-sm {
+    background-color: #1a1a2e !important;
+    border: 2px solid #00c9ff !important;
+    color: #00c9ff !important;
+    border-radius: 10px !important;
+}
+footer {
+    text-align: center;
+    background-color: #1a1a2e;
+    color: #ccc;
+    padding: 1rem;
+}

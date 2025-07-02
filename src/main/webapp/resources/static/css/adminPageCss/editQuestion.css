@@ -1,0 +1,41 @@
+html, body { height:100%; margin:0; font-family:'Poppins', sans-serif; background:linear-gradient(to right,#1f1c2c,#928dab); color:white; }
+.navbar {
+    background: linear-gradient(to right, #4a00e0, #8e2de2);
+    padding:1rem 2rem; box-shadow:0 4px 20px rgba(0,0,0,0.3);
+    color:white; font-size:1.5rem; font-weight:600;
+    display:flex; justify-content:center; align-items:center;
+}
+.form-container {
+    background-color:#2a2a3c; padding:2rem; border-radius:20px;
+    max-width:600px; margin:3rem auto; box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+.form-container h2 { text-align:center; margin-bottom:1.5rem; }
+label, .form-label { color:#ccc; }
+input.form-control, select.form-select, textarea.form-control {
+    background-color:#3e3e5e; color:white; border:1px solid #555;
+}
+.btn-submit {
+    background-color: #00c9ff; color:white; font-weight:600;
+    padding:10px 20px; border:none; border-radius:30px; width:100%;
+    margin-top:1.5rem;
+}
+.btn-submit:hover { background-color:#0096c7; }
+.btn-back {
+    display:inline-block;
+    margin-top:1rem;
+    padding:8px 16px;
+    border:1px solid #ccc; color:#ccc;
+    border-radius:20px;
+    text-decoration:none;
+    transition:0.3s;
+}
+.btn-back:hover { background-color:rgba(255,255,255,0.1); color:white; border-color:white; }
+footer {
+    background-color:#1a1a2e; color:#ccc; text-align:center;
+    padding:1rem; font-size:0.9rem;
+}
+#div_editor1 { min-height:150px; border:1px solid #555; border-radius:6px; background:white; color:black; }
+#div_editor1 .rte-editor { min-height:150px; }
+.message { text-align:center; margin-bottom:1rem; font-weight:600; }
+.success-msg { color:#39ff14; }
+.error-msg { color:#ff4c4c; }

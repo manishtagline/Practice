@@ -28,6 +28,8 @@ public class User {
 
     private String role;
 
+//    private Long zoneId;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Fetch(FetchMode.SUBSELECT)
     private List<UserResult> results;

@@ -16,22 +16,26 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+      background: linear-gradient(135deg, #1f1c2c, #928dab);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       margin: 0;
+      color: #f1f1f1;
     }
 
     .navbar {
-      background: linear-gradient(90deg, #4a47a3, #6a67ce);
-      box-shadow: 0 4px 15px rgba(74, 71, 163, 0.6);
+      background: rgba(31, 38, 135, 0.8);
+      box-shadow: 0 4px 15px rgba(31, 38, 135, 0.6);
       height: 80px;
       padding: 0 2rem;
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .navbar-brand-container {
@@ -48,20 +52,22 @@
     .navbar-brand {
       font-weight: 700;
       font-size: 1.8rem;
-      color: #f0f0f5;
+      color: #00c9ff;
       letter-spacing: 2px;
       margin-left: 0.5rem;
       transition: color 0.3s ease;
+      text-shadow: 0 0 8px #00c9ffaa;
     }
 
     .navbar-brand-container:hover .navbar-brand {
-      color: #ffd700;
+      color: #92fe9d;
+      text-shadow: 0 0 12px #92fe9daa;
     }
 
     .logo-svg {
       width: 40px;
       height: 40px;
-      stroke: #f0f0f5;
+      stroke: #00c9ff;
       stroke-width: 2;
       fill: none;
       animation: logo-spin 3s linear infinite;
@@ -77,19 +83,22 @@
       right: 2rem;
       top: 50%;
       transform: translateY(-50%);
-      background: #ffd700;
-      color: #4a47a3;
+      background: rgba(255, 255, 255, 0.1);
+      color: #00c9ff;
       padding: 8px 20px;
       border-radius: 30px;
       font-weight: 600;
       font-size: 1.1rem;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 3px 10px rgba(0, 201, 255, 0.4);
       animation: fadeInSlide 1.5s ease-out;
       user-select: none;
       letter-spacing: 0.03em;
       text-transform: capitalize;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       cursor: default;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(0, 201, 255, 0.3);
     }
 
     @keyframes fadeInSlide {
@@ -105,7 +114,6 @@
       align-items: center;
       padding: 4rem 1rem;
       text-align: center;
-      color: #2c3e50;
       max-width: 960px;
       margin: 0 auto;
     }
@@ -114,18 +122,30 @@
       font-weight: 700;
       font-size: 3rem;
       margin-bottom: 1rem;
+      color: #00c9ff;
+      text-shadow: 0 0 10px #00c9ffbb;
     }
 
     .hero .welcome-user {
       font-size: 1.5rem;
-      color: #4a47a3;
-      background: #ffffffcc;
+      color: #92fe9d;
+      background: rgba(255, 255, 255, 0.1);
       padding: 12px 30px;
       border-radius: 30px;
       font-weight: 600;
       margin-bottom: 2rem;
-      box-shadow: 0 4px 10px rgba(74, 71, 163, 0.2);
+      box-shadow: 0 4px 10px rgba(146, 254, 157, 0.3);
       user-select: none;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(146, 254, 157, 0.4);
+    }
+
+    .hero p {
+      color: #ccc;
+      font-size: 1.1rem;
+      user-select: none;
+      text-shadow: 0 0 5px rgba(0,0,0,0.5);
     }
 
     .card-container {
@@ -143,24 +163,32 @@
       border-radius: 1rem;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       cursor: pointer;
-      background: white;
-      box-shadow: 0 8px 20px rgba(74, 71, 163, 0.15);
+      background: rgba(255, 255, 255, 0.07);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 2rem 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #e0e0ff;
+      user-select: none;
     }
 
     .card:hover {
       transform: translateY(-10px);
-      box-shadow: 0 15px 30px rgba(74, 71, 163, 0.3);
+      box-shadow: 0 15px 40px rgba(0, 201, 255, 0.6);
+      border-color: #00c9ff;
+      background: rgba(255, 255, 255, 0.15);
     }
 
     .card-icon {
       width: 80px;
       height: 80px;
       margin-bottom: 1rem;
-      fill: #4a47a3;
+      stroke: #00c9ff;
+      fill: none;
       animation: bounce 2s infinite ease-in-out;
     }
 
@@ -173,25 +201,26 @@
       font-weight: 600;
       font-size: 1.3rem;
       margin-bottom: 0.75rem;
-      color: #4a47a3;
-      user-select: none;
+      color: #92fe9d;
     }
 
     .card-text {
-      color: #666;
+      color: #bbb;
       font-size: 1rem;
       text-align: center;
-      user-select: none;
     }
 
     footer {
       text-align: center;
       padding: 1rem;
       font-size: 0.9rem;
-      background-color: rgba(255, 255, 255, 0.9);
-      color: #4a47a3;
-      box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+      background: rgba(31, 38, 135, 0.8);
+      color: #00c9ff;
+      box-shadow: 0 -4px 10px rgba(0, 201, 255, 0.3);
       user-select: none;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     @media (max-width: 576px) {
@@ -210,7 +239,7 @@
 
 <!-- Navbar -->
 <nav class="navbar">
-  <div class="navbar-brand-container" onclick="location.href='home'">
+  <div class="navbar-brand-container" onclick="location.href='home'" role="button" tabindex="0" aria-label="Go to Home">
     <svg class="logo-svg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-label="Exam Center Logo" role="img">
       <path d="M8 12h48v40H8z" stroke-linejoin="round" />
       <line x1="8" y1="12" x2="56" y2="12" />
@@ -232,7 +261,7 @@
   <p>Your gateway to manage and take exams easily and securely.</p>
 
   <div class="card-container" role="list">
-    <div class="card" onclick="location.href='exam'" role="listitem" tabindex="0" aria-label="Start Exam">
+    <div class="card" onclick="location.href='exam'" role="listitem" tabindex="0" aria-label="Start Exam" onkeypress="if(event.key==='Enter'){location.href='exam'}">
       <svg class="card-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"
            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <circle cx="12" cy="12" r="10" />
@@ -242,7 +271,7 @@
       <p class="card-text">Begin your scheduled exams with just a click.</p>
     </div>
 
-    <div class="card" onclick="location.href='result'" role="listitem" tabindex="0" aria-label="View Results">
+    <div class="card" onclick="location.href='result'" role="listitem" tabindex="0" aria-label="View Results" onkeypress="if(event.key==='Enter'){location.href='result'}">
       <svg class="card-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"
            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M12 20h9" />
@@ -255,7 +284,8 @@
       <p class="card-text">Check your exam scores and performance history.</p>
     </div>
 
-    <div class="card" onclick="location.href='logout'" role="listitem" tabindex="0" aria-label="Logout">
+    <div class="card" role="listitem" tabindex="0" aria-label="Logout"
+         onclick="showLogoutModal()" onkeypress="if(event.key==='Enter'){showLogoutModal()}">
       <svg class="card-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"
            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M16 17l5-5-5-5" />
@@ -273,8 +303,40 @@
   &copy; 2025 Student Exam Center. All rights reserved.
 </footer>
 
+<!-- Logout Confirmation Modal -->
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background: rgba(31, 38, 135, 0.9); border-radius: 1rem; border: 1px solid #00c9ff;">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="logoutModalLabel" style="color: #92fe9d; font-weight: 700;">Confirm Logout</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="color: #e0e0ff; font-size: 1.1rem;">
+        Are you sure you want to logout?
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal" style="border-radius: 30px;">Cancel</button>
+        <button type="button" id="confirmLogoutBtn" class="btn" style="background: #00c9ff; color: #1f1c2c; border-radius: 30px;">Logout</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Bootstrap JS Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // Show the Bootstrap logout modal
+  function showLogoutModal() {
+    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+    logoutModal.show();
+  }
+
+  // Logout button click handler inside modal
+  document.getElementById('confirmLogoutBtn').addEventListener('click', () => {
+    location.href = 'logout';
+  });
+</script>
 
 </body>
 </html>

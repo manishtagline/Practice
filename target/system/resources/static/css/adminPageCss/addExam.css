@@ -134,19 +134,62 @@ label, .form-label {
     color: #ddd;
 }
 
-.message {
-    text-align: center;
+.flash-msg {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1.2rem;
     margin-bottom: 1.5rem;
-    font-size: 1rem;
-    font-weight: 600;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    animation: fadeInDown 0.5s ease forwards;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    user-select: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.flash-msg:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.flash-msg .icon {
+    margin-right: 16px;
+    font-size: 2rem;
+    flex-shrink: 0;
+    animation: iconBounce 1.5s infinite;
+}
+
+/* Bounce animation for icons */
+@keyframes iconBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+/* Success message style */
 .success-msg {
-    color: #39ff14;
-    text-shadow: 0 0 6px #39ff14, 0 0 12px #39ff14;
+    background: linear-gradient(135deg, #28a745 0%, #85d993 100%);
+    color: #f0f9f5;
+    border: 2px solid #1e7e34;
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.6);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
+/* Error message style */
 .error-msg {
-    color: #ff4c4c;
-    text-shadow: 0 0 6px #ff4c4c, 0 0 12px #ff4c4c;
+    background: linear-gradient(135deg, #dc3545 0%, #f7837f 100%);
+    color: #fff5f5;
+    border: 2px solid #a71d2a;
+    box-shadow: 0 6px 20px rgba(220, 53, 69, 0.7);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }

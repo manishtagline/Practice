@@ -25,12 +25,15 @@ public class HomeController {
     @PostMapping("/login")
     public String authenticateUser(@RequestParam String username,
                                    @RequestParam String password,
+                                   @RequestParam String zoneId,
                                    Model model,
                                    HttpSession session) {
 
         User user = userService.getUserByName(username);
 
         String interceptorError = (String) session.getAttribute("error");
+
+        session.setAttribute("zoneId", zoneId);
 
         if (user == null) {
             if (interceptorError != null && !interceptorError.isEmpty()) {
@@ -62,7 +65,5 @@ public class HomeController {
         session.invalidate();
         return "redirect:/";
     }
-
-
 
 }

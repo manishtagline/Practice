@@ -25,11 +25,30 @@
 
 <div class="page-wrapper">
     <div class="form-container">
+
+
+
         <div class="form-header">
             <i class="fas fa-clipboard-list"></i>
             <h2>Create Exam</h2>
             <p class="exam-tip">"Exams are not just tests, they're milestones. Make it count!"</p>
         </div>
+
+        <!-- Success Message -->
+        <c:if test="${not empty successMsg}">
+            <div class="flash-msg success-msg">
+                <i class="fas fa-check-circle icon"></i>
+                <span>${successMsg}</span>
+            </div>
+        </c:if>
+
+        <!-- Error Message -->
+        <c:if test="${not empty errorMsg}">
+            <div class="flash-msg error-msg">
+                <i class="fas fa-exclamation-triangle icon"></i>
+                <span>${errorMsg}</span>
+            </div>
+        </c:if>
 
         <form:form modelAttribute="exam" method="post" action="${pageContext.request.contextPath}/saveExam">
 
@@ -44,8 +63,8 @@
             </div>
 
             <div class="mb-3">
-                <form:label path="subject.id" cssClass="form-label">Subject</form:label>
-                <form:select path="subject.id" cssClass="form-select" required="true">
+                <form:label path="subjectId" cssClass="form-label">Subject</form:label>
+                <form:select path="subjectId" cssClass="form-select" required="true">
                     <form:option value="" label="<-- Select Subject -->"/>
                     <c:forEach var="subject" items="${subjectList}">
                         <form:option value="${subject.id}" label="${subject.name}"/>
@@ -54,7 +73,7 @@
             </div>
 
             <!-- Enrollment Row -->
-           <%-- <div class="row">
+            <div class="row">
                 <div class="col-md-6 mb-3">
                     <form:label path="enrolledStartDate" cssClass="form-label">Enrollment Start Date</form:label>
                     <form:input path="enrolledStartDate" type="datetime-local" cssClass="form-control" required="true"/>
@@ -75,7 +94,7 @@
                     <form:label path="examEndDate" cssClass="form-label">Exam End Date</form:label>
                     <form:input path="examEndDate" type="datetime-local" cssClass="form-control" required="true"/>
                 </div>
-            </div>--%>
+            </div>
             <!-- Submit -->
             <button type="submit" class="btn btn-submit"><i class="fas fa-save me-2"></i>Save Exam</button>
 

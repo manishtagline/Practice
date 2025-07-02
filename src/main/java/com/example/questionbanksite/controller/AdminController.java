@@ -13,10 +13,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -251,23 +255,58 @@ public class AdminController {
     public String addExam(Model model, HttpSession session){
 
         model.addAttribute("subjectList", subjectService.getAllSubjects());
-        model.addAttribute("exam", new Exam());
+        model.addAttribute("exam", new ExamDto());
         return "admin/addExam";
     }
 
 
     @PostMapping("/saveExam")
-    public String saveExam(@ModelAttribute("exam") Exam exam, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        Long subjectId = exam.getSubject().getId();
-        String description = exam.getDescription();
-        Long totalMark = exam.getTotalMarks();
+    public String saveExam(@ModelAttribute("exam") ExamDto exam,
+                           Model model,
+                           HttpSession session,
+                           RedirectAttributes redirectAttributes) {
 
-//        ZonedDateTime enrolledStartDate = exam.getEnrolledStartDate();
-//        ZonedDateTime enrolledEndDate = exam.getEnrolledEndDate();
-//        ZonedDateTime examStartDate = exam.getExamStartDate();
-//        ZonedDateTime examEndDate = exam.getExamEndDate();
+        String zoneIdStr = (String) session.getAttribute("zoneId");
+        ZoneId zoneId = (zoneIdStr != null) ? ZoneId.of(zoneIdStr) : ZoneId.systemDefault();
 
-        int i = examService.createExamForSubject(subjectId, description, totalMark);
+        ZonedDateTime now = ZonedDateTime.now(zoneId);
+
+        if(!exam.getEnrolledStartDate().atZone(zoneId).isAfter(now)){
+
+            redirectAttributes.addFlashAttribute("errorMsg", "Enrollment start date must be future.");
+            return "redirect:/addExamPage";
+        } else if(!exam.getEnrolledEndDate().atZone(zoneId).isAfter(now)){
+
+            redirectAttributes.addFlashAttribute("errorMsg", "Enrollment end date must be future.");
+            return "redirect:/addExamPage";
+        } else if(!exam.getExamStartDate().atZone(zoneId).isAfter(now)){
+
+            redirectAttributes.addFlashAttribute("errorMsg", "Exam start date must be future.");
+            return "redirect:/addExamPage";
+        } else if(!exam.getExamEndDate().atZone(zoneId).isAfter(now)){
+
+            redirectAttributes.addFlashAttribute("errorMsg", "Exam end date must be future.");
+            return "redirect:/addExamPage";
+        }
+
+        if (exam.getEnrolledStartDate().isAfter(exam.getEnrolledEndDate())) {
+            redirectAttributes.addFlashAttribute("errorMsg", "Enrollment start date must be before enrollment end date.");
+            return "redirect:/addExamPage";
+        }
+
+        if (exam.getExamStartDate().isAfter(exam.getExamEndDate())) {
+            redirectAttributes.addFlashAttribute("errorMsg", "Exam start date must be before exam end date.");
+            return "redirect:/addExamPage";
+        }
+
+        int i = examService.createExamForSubject(exam.getSubjectId(),
+                exam.getDescription(),
+                exam.getTotalMarks(),
+                exam.getEnrolledStartDate(),
+                exam.getEnrolledEndDate(),
+                exam.getExamStartDate(),
+                exam.getExamEndDate(),
+                zoneId);
 
         if (i > 0) {
             redirectAttributes.addFlashAttribute("successMsg", "Exam added successfully...");

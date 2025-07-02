@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -35,14 +37,10 @@ public class ExamServiceImpl implements ExamService{
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         return exams.stream()
-                .map(exam -> new ExamDto(
-                        exam.getId(),
-                        exam.getDescription(),
-                        exam.getTotalMarks(),
-                        exam.getTotalNumberOfQuestion(),
-                        exam.getSubject().getName(),
-                        exam.getDateCreated().format(formatter)
-                ))
+                .map(exam -> ExamDto.builder().id(exam.getId()).description( exam.getDescription()).totalMarks(exam.getTotalMarks())
+                                .totalNumberOfQuestion(exam.getTotalNumberOfQuestion())
+                        .subjectName(exam.getSubject().getName()).formattedDate( exam.getDateCreated().format(formatter)).build()
+                )
                 .collect(Collectors.toList());
     }
 
@@ -58,7 +56,14 @@ public class ExamServiceImpl implements ExamService{
 
     @Override
     @Transactional
-    public int createExamForSubject(Long subjectId, String description, Long targetTotalMarks) {
+    public int createExamForSubject(Long subjectId, String description, Long targetTotalMarks, LocalDateTime enrolledStartDate, LocalDateTime enrolledEndDate,
+                                    LocalDateTime examStartDate, LocalDateTime examEndDate, ZoneId zoneId) {
+
+        ZonedDateTime enrolledStart = enrolledStartDate.atZone(zoneId);
+        ZonedDateTime enrolledEnd = enrolledEndDate.atZone(zoneId);
+        ZonedDateTime examStart = examStartDate.atZone(zoneId);
+        ZonedDateTime examEnd = examEndDate.atZone(zoneId);
+
         Subject subject = entityManager.find(Subject.class, subjectId);
         if (subject == null) {
             throw new IllegalArgumentException("Subject not found with ID: " + subjectId);
@@ -100,10 +105,10 @@ public class ExamServiceImpl implements ExamService{
         exam.setQuestions(selectedQuestions);
         exam.setTotalNumberOfQuestion(numberOfQuestion);
         exam.setTotalMarks((long) accumulatedMarks);
-//        exam.setEnrolledStartDate(enrolledStartDate);
-//        exam.setEnrolledEndDate(enrolledEndDate);
-//        exam.setExamStartDate(examStartDate);
-//        exam.setExamEndDate(examEndDate);
+        exam.setEnrolledStartDate(enrolledStart);
+        exam.setEnrolledEndDate(enrolledEnd);
+        exam.setExamStartDate(examStart);
+        exam.setExamEndDate(examEnd);
 
         entityManager.persist(exam);
         return 1;

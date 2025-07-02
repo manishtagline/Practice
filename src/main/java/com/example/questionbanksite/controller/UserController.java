@@ -110,6 +110,8 @@ public class UserController {
 
 
 
+
+
     //Handler for checking
     @GetMapping("/examResultDetails")
     public String examResultDetails(@RequestParam("resultId") Long resultId, Model model, HttpSession session) {

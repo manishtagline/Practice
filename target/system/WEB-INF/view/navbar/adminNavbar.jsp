@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+
+
 <nav class="navbar">
 
     <!-- Centered Logo + Brand -->
@@ -16,6 +18,16 @@
     <!-- Right side nav menu + username -->
     <div class="right-side">
         <div class="nav-menu">
+            <!-- Home Icon -->
+            <div class="nav-item" onclick="location.href='adminPage'">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7"/>
+                    <path d="M9 22V12H15V22"/>
+                </svg> Home
+            </div>
+
+            <!-- Subjects -->
             <div class="nav-item" onclick="location.href='subjectList'">
                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -24,6 +36,8 @@
                     <line x1="12" y1="3" x2="12" y2="15"/>
                 </svg> Subjects
             </div>
+
+            <!-- Users -->
             <div class="nav-item" onclick="location.href='userList'">
                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -32,6 +46,8 @@
                     <circle cx="12" cy="7" r="4"/>
                 </svg> Users
             </div>
+
+            <!-- Exams -->
             <div class="nav-item" onclick="location.href='examList'">
                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -41,6 +57,8 @@
                     <line x1="3" y1="10" x2="21" y2="10"/>
                 </svg> Exams
             </div>
+
+            <!-- Logout -->
             <div class="nav-item" onclick="showLogoutModal()">
                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -71,6 +89,9 @@
         </div>
     </div>
 </div>
+
+<!-- Bootstrap JS Bundle (with Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
     function showLogoutModal() {

@@ -56,6 +56,16 @@
                 </svg> Exams
             </div>
 
+
+            <!-- Faculty -->
+            <div class="nav-item" onclick="location.href='teacherList'">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/>
+                    <path d="M6 20v-2c0-2.21 3.58-4 6-4s6 1.79 6 4v2"/>
+                </svg> Faculty
+            </div>
+
             <!-- Logout -->
             <div class="nav-item" onclick="showLogoutModal()">
                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"

@@ -9,9 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/adminNavbar.css"/>
-
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/adminPageCss/adminPage.css"/>
-
 </head>
 
 <body>
@@ -62,6 +60,20 @@
             </svg>
             <h5 class="card-title">Manage Exams</h5>
             <p class="card-text">Create, edit or delete exams for various subjects.</p>
+        </div>
+
+        <!-- Manage Faculty -->
+        <div class="card" onclick="location.href='facultyList'">
+            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M4 21v-2a4 4 0 0 1 3-3.87"/>
+                <circle cx="12" cy="7" r="4"/>
+                <line x1="12" y1="11" x2="12" y2="15"/>
+                <line x1="9" y1="15" x2="15" y2="15"/>
+            </svg>
+            <h5 class="card-title">Manage Faculty</h5>
+            <p class="card-text">View faculty members and assign the subject.</p>
         </div>
 
         <!-- Logout -->

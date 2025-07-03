@@ -41,6 +41,8 @@ public class AdminController {
 
     private final UserService userService;
 
+    private final TeacherService teacherService;
+
 
     @GetMapping("/adminPage")
     public String adminPage() {
@@ -235,6 +237,23 @@ public class AdminController {
         return "admin/userList";
     }
     //**************************** User Handlers Ends  *************************//
+
+
+
+
+    //**************************** Teacher Handlers  *************************//
+
+    @GetMapping("/teacherList")
+    public String viewTeacherList(Model model){
+        List<TeacherDto> teachers =  teacherService.getAllTeachers();
+
+        model.addAttribute("teachers", teachers);
+        return "admin/teacherList";
+    }
+
+    //**************************** Teacher Handlers Ends  *************************//
+
+
 
 
     //**************************** Exam Handlers  *************************//

@@ -63,7 +63,7 @@
         </div>
 
         <!-- Manage Faculty -->
-        <div class="card" onclick="location.href='facultyList'">
+        <div class="card" onclick="location.href='teacherList'">
             <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-3-3.87"/>

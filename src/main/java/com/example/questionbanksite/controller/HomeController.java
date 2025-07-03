@@ -2,6 +2,7 @@
 
     import com.example.questionbanksite.dto.BaseUserRegisterDto;
     import com.example.questionbanksite.entity.User;
+    import com.example.questionbanksite.service.TeacherService;
     import com.example.questionbanksite.service.UserService;
     import lombok.RequiredArgsConstructor;
     import org.springframework.stereotype.Controller;
@@ -21,6 +22,8 @@
     public class HomeController {
 
         private final UserService userService;
+
+        private final TeacherService teacherService;
 
         @GetMapping("/")
         public String index() {
@@ -99,11 +102,13 @@
             }
 
             if ("Teacher".equalsIgnoreCase(userDto.getRole())) {
+                int i = teacherService.saveTeacher(userDto);
+                if(i > 0){
+                    redirectAttributes.addFlashAttribute("successMsg","Teacher Register Successfully...");
+                    return "redirect:/baseUserRegistration?role="+ userDto.getRole();
+                }
 
-
-                return "/login";
             } else if("User".equalsIgnoreCase(userDto.getRole())) {
-                System.out.println("saving");
                 int i = userService.saveUser(userDto);
                 if(i > 0){
                     redirectAttributes.addFlashAttribute("successMsg","User Register Successfully...");

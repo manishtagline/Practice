@@ -26,9 +26,11 @@ public class User {
     private String username;
     private String password;
 
+    private String email;
+
     private String role;
 
-//    private Long zoneId;
+    private Long zoneId;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Fetch(FetchMode.SUBSELECT)

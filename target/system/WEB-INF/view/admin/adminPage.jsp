@@ -97,7 +97,6 @@
     </div>
 </div>
 
-<!-- Footer -->
 <footer>
     &copy; 2025 Admin Panel | Exam Center. All rights reserved.
 </footer>

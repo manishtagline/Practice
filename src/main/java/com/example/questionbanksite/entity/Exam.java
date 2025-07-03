@@ -30,6 +30,10 @@ public class Exam {
     @Column(name = "total_marks")
     private Long totalMarks;
 
+    private boolean isCreatedByAdmin;
+
+    private boolean isCreatedByTeacher;
+
     private int totalNumberOfQuestion;
 
     @CreationTimestamp
@@ -65,6 +69,10 @@ public class Exam {
 
     @OneToMany(mappedBy = "exam")
     private List<UserResult> result;
+
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")
+    private Teacher teacher;
 
     //This field is completed user, who submit there exam.
     @ManyToMany

@@ -34,9 +34,9 @@
             @Fetch(FetchMode.SUBSELECT)
             private List<Exam> exams;
 
-//            @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
-//            @Fetch(FetchMode.SUBSELECT)
-//            private List<Teacher> teachers;
+            @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
+            @Fetch(FetchMode.SUBSELECT)
+            private List<Teacher> teachers;
 
 
         }

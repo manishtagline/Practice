@@ -1,6 +1,7 @@
 package com.example.questionbanksite.service;
 
 
+import com.example.questionbanksite.dto.BaseUserRegisterDto;
 import com.example.questionbanksite.dto.UserDetailsListDto;
 import com.example.questionbanksite.entity.Exam;
 import com.example.questionbanksite.entity.User;
@@ -25,18 +26,17 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public User saveUser(User user) {
-        entityManager.persist(user);
-        return user;
-    }
-/*
+    public int saveUser(BaseUserRegisterDto baseUser) {
+        User user = new User();
+        user.setUsername(baseUser.getUsername());
+        user.setPassword(baseUser.getPassword());
+        user.setEmail(baseUser.getEmail());
+        user.setRole(baseUser.getRole());
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<User> getAllUser() {
-        return entityManager.createQuery("SELECT u FROM User u WHERE u.role = 'User'", User.class).getResultList();
+        entityManager.persist(user);
+
+        return 1;
     }
-*/
 
     @Override
     @Transactional(readOnly = true)

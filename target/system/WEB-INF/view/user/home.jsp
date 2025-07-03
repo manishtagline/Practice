@@ -326,13 +326,12 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-  // Show the Bootstrap logout modal
+
   function showLogoutModal() {
     const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
     logoutModal.show();
   }
 
-  // Logout button click handler inside modal
   document.getElementById('confirmLogoutBtn').addEventListener('click', () => {
     location.href = 'logout';
   });

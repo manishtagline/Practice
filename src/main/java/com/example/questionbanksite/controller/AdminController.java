@@ -227,11 +227,6 @@ public class AdminController {
 
 
     //**************************** User Handlers  *************************//
-    @PostMapping("/user")
-    public ResponseEntity<User> addUser(@RequestBody User user) {
-        User savedUser = userService.saveUser(user);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
-    }
 
     @GetMapping("/userList")
     public String userList(Model model, HttpSession session){

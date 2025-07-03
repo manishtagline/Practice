@@ -16,7 +16,8 @@ public class AuthInterceptor implements HandlerInterceptor {
         String uri = request.getRequestURI();
         String contextPath = request.getContextPath();
 
-        if(uri.equals(contextPath + "/") || uri.equals(contextPath + "/login")){
+        if(uri.equals(contextPath + "/") || uri.equals(contextPath + "/login") || uri.equals(contextPath + "/baseUserRegister")
+            || uri.equals(contextPath + "/baseUserRegistration")){
             return true;
         }
 
@@ -27,6 +28,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         String username = (String) session.getAttribute("username");
         String role = (String) session.getAttribute("role");
+
 
         if (username == null || role == null) {
             session.setAttribute("error", "Please, Login first!!!");

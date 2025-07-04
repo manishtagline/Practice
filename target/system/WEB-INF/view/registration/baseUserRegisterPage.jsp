@@ -8,8 +8,16 @@
     <meta charset="UTF-8" />
     <title>User Registration</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Toastify CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -78,28 +86,6 @@
             display: block;
         }
 
-        /* Advanced success message styling */
-        .alert-success {
-            background: rgba(0, 201, 255, 0.15);
-            border: 1px solid rgba(0, 201, 255, 0.4);
-            color: #00c9ff;
-            font-weight: 600;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 201, 255, 0.25);
-            transition: all 0.3s ease;
-        }
-
-        .alert-success button.btn-close {
-            filter: invert(1);
-        }
-
-        .alert-success:hover {
-            box-shadow: 0 12px 32px rgba(0, 201, 255, 0.4);
-        }
-
-        /* Back button styling */
         .btn-back {
             margin-top: 1rem;
             background: transparent;
@@ -125,13 +111,7 @@
 <div class="register-container">
     <h2 class="header-title">${role} Registration</h2>
 
-    <c:if test="${not empty successMsg}">
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                ${successMsg}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    </c:if>
-
+    <!-- Registration Form -->
     <form:form method="post" action="baseUserRegister" modelAttribute="user">
 
         <div class="mb-3 text-start">
@@ -167,16 +147,44 @@
     <button class="btn-back" onclick="window.location.href='${pageContext.request.contextPath}/'">Back to Login</button>
 </div>
 
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const zoneIdInput = document.querySelector('input[name="zoneId"]');
-        if (zoneIdInput) {
-            zoneIdInput.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    document.addEventListener('DOMContentLoaded', function () {
+        const successMsg = "${successMsg}";
+        const errorMsg = "${errorMsg}";
+
+        if (successMsg && successMsg.trim() !== "") {
+            Toastify({
+                text: successMsg,
+                duration: 2000,
+                gravity: "top",
+                position: "right",
+                close: true,
+                stopOnFocus: false,
+                style: {
+                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                }
+            }).showToast();
+        }
+
+        if (errorMsg && errorMsg.trim() !== "") {
+            Toastify({
+                text: errorMsg,
+                duration: 2000,
+                gravity: "top",
+                position: "right",
+                close: true,
+                stopOnFocus: false,
+                style: {
+                    background: "linear-gradient(to right, #ff416c, #ff4b2b)",
+                }
+            }).showToast();
         }
     });
 </script>
 
 </body>
-
 </html>

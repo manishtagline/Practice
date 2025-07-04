@@ -63,7 +63,7 @@
                 session.setAttribute("username", user.getUsername());
                 session.setAttribute("role", user.getRole());
 
-                if("ADIMN".equalsIgnoreCase(user.getRole())){
+                if("ADMIN".equalsIgnoreCase(user.getRole())){
                     return "admin/adminPage";
                 }else if("USER".equalsIgnoreCase(user.getRole())){
                     return "user/home";
@@ -85,41 +85,41 @@
             model.addAttribute("error", "Something went wrong!!!");
             return "loginPage";
 
-//            User user = userService.getUserByName(username);
-//
-//            Teacher teacher = teacherService.getTeacherByName(username);
-//
-//            String interceptorError = (String) session.getAttribute("error");
-//
-//            session.setAttribute("zoneId", zoneId);
-//
-//            if (user == null || teacher == null) {
-//                if (interceptorError != null && !interceptorError.isEmpty()) {
-//                    model.addAttribute("error", interceptorError);
-//                    session.removeAttribute("error");
-//                } else {
-//                    model.addAttribute("error", "Invalid  credentials!!!!");
-//                }
-//                return "loginPage";
-//            } else if (!user.getPassword().equals(password) || !teacher.getPassword().equals(password)) {
-//                model.addAttribute("error", "Invalid  password!!!!");
-//                return "loginPage";
-//            }
-//
-//            session.removeAttribute("error");
-//
-//            session.setAttribute("username", user.getUsername());
-//            session.setAttribute("role", user.getRole());
-//            session.setAttribute("teacher", teacher.getUsername());
-//
-//
-//            if ("ADMIN".equalsIgnoreCase(user.getRole())) {
-//                return "admin/adminPage";
-//            } else if("USER".equalsIgnoreCase(user.getRole())) {
-//                return "user/home";
-//            } else{
-//                return "teacher/home";
-//            }
+            /*User user = userService.getUserByName(username);
+
+            Teacher teacher = teacherService.getTeacherByName(username);
+
+            String interceptorError = (String) session.getAttribute("error");
+
+            session.setAttribute("zoneId", zoneId);
+
+            if (user == null || teacher == null) {
+                if (interceptorError != null && !interceptorError.isEmpty()) {
+                    model.addAttribute("error", interceptorError);
+                    session.removeAttribute("error");
+                } else {
+                    model.addAttribute("error", "Invalid  credentials!!!!");
+                }
+                return "loginPage";
+            } else if (!user.getPassword().equals(password) || !teacher.getPassword().equals(password)) {
+                model.addAttribute("error", "Invalid  password!!!!");
+                return "loginPage";
+            }
+
+            session.removeAttribute("error");
+
+            session.setAttribute("username", user.getUsername());
+            session.setAttribute("role", user.getRole());
+            session.setAttribute("teacher", teacher.getUsername());
+
+
+            if ("ADMIN".equalsIgnoreCase(user.getRole())) {
+                return "admin/adminPage";
+            } else if("USER".equalsIgnoreCase(user.getRole())) {
+                return "user/home";
+            } else{
+                return "teacher/home";
+            }*/
         }
 
         @GetMapping("/logout")
@@ -145,28 +145,61 @@
                 Model model,
                 RedirectAttributes redirectAttributes) {
 
+            model.addAttribute("role", userDto.getRole());
+
             if (bindingResult.hasErrors()) {
                 return "registration/baseUserRegisterPage";
             }
 
-            if(!userDto.getConfirmPassword().equals(userDto.getPassword())){
-                bindingResult.rejectValue("confirmPassword", "ConfirmPassword.Error","Passwords do not match");
-                model.addAttribute("role", userDto.getRole());
+            if (!userDto.getConfirmPassword().equals(userDto.getPassword())) {
+                bindingResult.rejectValue("confirmPassword", "ConfirmPassword.Error", "Passwords do not match");
                 return "registration/baseUserRegisterPage";
             }
 
             if ("Teacher".equalsIgnoreCase(userDto.getRole())) {
-                int i = teacherService.saveTeacher(userDto);
-                if(i > 0){
-                    redirectAttributes.addFlashAttribute("successMsg","Teacher Register Successfully...");
-                    return "redirect:/baseUserRegistration?role="+ userDto.getRole();
+                Teacher teacherByName = teacherService.getTeacherByName(userDto.getUsername());
+                Teacher teacherByEmail = teacherService.getTeacherByEmail(userDto.getEmail());
+
+                if (teacherByName != null) {
+                    bindingResult.rejectValue("username", "Username.Invalid", "Username already exists!!!");
+                    return "registration/baseUserRegisterPage";
                 }
 
-            } else if("User".equalsIgnoreCase(userDto.getRole())) {
-                int i = userService.saveUser(userDto);
-                if(i > 0){
-                    redirectAttributes.addFlashAttribute("successMsg","User Register Successfully...");
-                    return "redirect:/baseUserRegistration?role="+ userDto.getRole();
+                if (teacherByEmail != null) {
+                    bindingResult.rejectValue("email", "Email.Invalid", "Email already exists!!!");
+                    return "registration/baseUserRegisterPage";
+                }
+
+                int result = teacherService.saveTeacher(userDto);
+                if (result > 0) {
+                    redirectAttributes.addFlashAttribute("successMsg", "Teacher registered successfully.");
+                    return "redirect:/baseUserRegistration?role=" + userDto.getRole();
+                } else {
+                    model.addAttribute("errorMsg", "Registration failed. Please try again.");
+                    return "registration/baseUserRegisterPage";
+                }
+
+            } else if ("User".equalsIgnoreCase(userDto.getRole())) {
+                User userByName = userService.getUserByName(userDto.getUsername());
+                User userByEmail = userService.getUserByEmail(userDto.getEmail());
+
+                if(userByName != null){
+                    bindingResult.rejectValue("username", "Username.Invalid", "Username already exists!!!");
+                    return "registration/baseUserRegisterPage";
+                }
+
+                if(userByEmail != null){
+                    bindingResult.rejectValue("email", "Email.Invalid", "Email already exists!!!");
+                    return "registration/baseUserRegisterPage";
+                }
+
+                int result = userService.saveUser(userDto);
+                if (result > 0) {
+                    redirectAttributes.addFlashAttribute("successMsg", "User registered successfully.");
+                    return "redirect:/baseUserRegistration?role=" + userDto.getRole();
+                } else {
+                    model.addAttribute("errorMsg", "Registration failed. Please try again.");
+                    return "registration/baseUserRegisterPage";
                 }
             }
 

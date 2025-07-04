@@ -118,4 +118,18 @@ public class UserServiceImpl implements UserService{
             entityManager.remove(user);
         }
     }
+
+    @Override
+    public User getUserByEmail(String email) {
+        try {
+            return entityManager.createQuery(
+                    "SELECT u FROM User u WHERE u.email = :email", User.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+
 }

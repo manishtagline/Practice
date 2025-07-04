@@ -14,4 +14,7 @@ public interface TeacherService {
     List<TeacherDto> getAllTeachers();
 
     Teacher getTeacherByName(String username);
+
+    Teacher getTeacherByEmail(String email);
+
 }

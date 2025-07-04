@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,9 +51,26 @@ public class TeacherServiceImpl implements TeacherService{
 
     @Override
     public Teacher getTeacherByName(String username) {
-        return entityManager.createQuery("SELECT t FROM Teacher t WHERE t.username = :username", Teacher.class)
-                .setParameter("username", username)
-                .getSingleResult();
+        try{
+            return entityManager.createQuery("SELECT t FROM Teacher t WHERE t.username = :username", Teacher.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+        }catch (NoResultException e){
+            return null;
+        }
     }
+
+    @Override
+    public Teacher getTeacherByEmail(String email) {
+        try{
+            return entityManager.createQuery("SELECT t FROM Teacher t WHERE t.email = :email", Teacher.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+        }catch (NoResultException e){
+            return null;
+        }
+    }
+
+
 
 }

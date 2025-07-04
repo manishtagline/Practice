@@ -4,6 +4,7 @@ import com.example.questionbanksite.dto.BaseUserRegisterDto;
 import com.example.questionbanksite.dto.TeacherDto;
 import com.example.questionbanksite.entity.Subject;
 import com.example.questionbanksite.entity.Teacher;
+import com.example.questionbanksite.entity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +46,13 @@ public class TeacherServiceImpl implements TeacherService{
                     subjectName
             );
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public Teacher getTeacherByName(String username) {
+        return entityManager.createQuery("SELECT t FROM Teacher t WHERE t.username = :username", Teacher.class)
+                .setParameter("username", username)
+                .getSingleResult();
     }
 
 }

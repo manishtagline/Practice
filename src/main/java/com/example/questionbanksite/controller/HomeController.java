@@ -1,6 +1,7 @@
     package com.example.questionbanksite.controller;
 
     import com.example.questionbanksite.dto.BaseUserRegisterDto;
+    import com.example.questionbanksite.entity.Teacher;
     import com.example.questionbanksite.entity.User;
     import com.example.questionbanksite.service.TeacherService;
     import com.example.questionbanksite.service.UserService;
@@ -37,35 +38,88 @@
                                        Model model,
                                        HttpSession session) {
 
-            User user = userService.getUserByName(username);
-
-            String interceptorError = (String) session.getAttribute("error");
-
             session.setAttribute("zoneId", zoneId);
 
-            if (user == null) {
-                if (interceptorError != null && !interceptorError.isEmpty()) {
-                    model.addAttribute("error", interceptorError);
-                    session.removeAttribute("error");
-                } else {
-                    model.addAttribute("error", "Invalid credentials!!!!");
+            String interceptorError = (String) session.getAttribute("error");
+            if(interceptorError != null){
+                model.addAttribute("error", interceptorError);
+                session.removeAttribute("error");
+            }
+
+            User user = userService.getUserByName(username);
+            Teacher teacher = teacherService.getTeacherByName(username);
+
+            if(user == null && teacher == null){
+                model.addAttribute("error", "Invalid credentials!!!");
+                return "loginPage";
+            }
+
+            if(user != null){
+                if(!user.getPassword().equals(password)){
+                    model.addAttribute("error", "Invalid Password!!!");
+                    return "loginPage";
                 }
-                return "loginPage";
-            } else if (!user.getPassword().equals(password)) {
-                model.addAttribute("error", "Invalid credentials!!!!");
-                return "loginPage";
+
+                session.setAttribute("username", user.getUsername());
+                session.setAttribute("role", user.getRole());
+
+                if("ADIMN".equalsIgnoreCase(user.getRole())){
+                    return "admin/adminPage";
+                }else if("USER".equalsIgnoreCase(user.getRole())){
+                    return "user/home";
+                }
             }
 
-            session.removeAttribute("error");
+            if(teacher != null){
+                if(!teacher.getPassword().equals(password)){
+                    model.addAttribute("error", "Invalid Password!!!");
+                    return "loginPage";
+                }
 
-            session.setAttribute("username", user.getUsername());
-            session.setAttribute("role", user.getRole());
+                session.setAttribute("teacher", teacher.getUsername());
+                session.setAttribute("role", teacher.getRole());
 
-            if ("ADMIN".equalsIgnoreCase(user.getRole())) {
-                return "admin/adminPage";
-            } else {
-                return "user/home";
+                return "teacher/home";
             }
+
+            model.addAttribute("error", "Something went wrong!!!");
+            return "loginPage";
+
+//            User user = userService.getUserByName(username);
+//
+//            Teacher teacher = teacherService.getTeacherByName(username);
+//
+//            String interceptorError = (String) session.getAttribute("error");
+//
+//            session.setAttribute("zoneId", zoneId);
+//
+//            if (user == null || teacher == null) {
+//                if (interceptorError != null && !interceptorError.isEmpty()) {
+//                    model.addAttribute("error", interceptorError);
+//                    session.removeAttribute("error");
+//                } else {
+//                    model.addAttribute("error", "Invalid  credentials!!!!");
+//                }
+//                return "loginPage";
+//            } else if (!user.getPassword().equals(password) || !teacher.getPassword().equals(password)) {
+//                model.addAttribute("error", "Invalid  password!!!!");
+//                return "loginPage";
+//            }
+//
+//            session.removeAttribute("error");
+//
+//            session.setAttribute("username", user.getUsername());
+//            session.setAttribute("role", user.getRole());
+//            session.setAttribute("teacher", teacher.getUsername());
+//
+//
+//            if ("ADMIN".equalsIgnoreCase(user.getRole())) {
+//                return "admin/adminPage";
+//            } else if("USER".equalsIgnoreCase(user.getRole())) {
+//                return "user/home";
+//            } else{
+//                return "teacher/home";
+//            }
         }
 
         @GetMapping("/logout")

@@ -56,7 +56,7 @@
             </div>
           </div>
           <div class="card-footer">
-            <a href="assignSubject?facultyId=${teacher.id}" class="btn btn-sm btn-outline-primary">Assign Subject</a>
+            <a href="assignSubjectPage?facultyId=${teacher.id}" class="btn btn-sm btn-outline-primary">Assign Subject</a>
             <a href="viewExam?facultyId=${teacher.id}" class="btn btn-sm btn-outline-success">View Exams</a>
           </div>
         </div>

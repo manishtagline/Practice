@@ -34,5 +34,4 @@ public class Teacher {
     private List<Exam> createdExam;
 
 
-
 }

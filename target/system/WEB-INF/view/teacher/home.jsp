@@ -159,7 +159,7 @@
 <jsp:include page="/WEB-INF/view/navbar/teacherNavbar.jsp"/>
 
 <main>
-    <div class="welcome-user">👋 Welcome <strong>${empty sessionScope.username ? 'Teacher' : sessionScope.username}</strong>, manage your classes and exams!</div>
+    <div class="welcome-user">👋 Welcome <strong>${teacher}</strong>, manage your classes and exams!</div>
 
     <h1>Teacher Dashboard</h1>
     <p class="text-center text-light mb-4">Manage your assigned subjects, exams, and students efficiently.</p>

@@ -17,4 +17,7 @@ public interface TeacherService {
 
     Teacher getTeacherByEmail(String email);
 
+    Teacher getTeacherById(Long teacherId);
+
+    void updateTeacher(Teacher teacher);
 }

@@ -54,12 +54,7 @@
                 return "loginPage";
             }
 
-            if(user != null){
-                if(!user.getPassword().equals(password)){
-                    model.addAttribute("error", "Invalid Password!!!");
-                    return "loginPage";
-                }
-
+            if(user != null && user.getPassword().equals(password)){
                 session.setAttribute("username", user.getUsername());
                 session.setAttribute("role", user.getRole());
 
@@ -70,19 +65,14 @@
                 }
             }
 
-            if(teacher != null){
-                if(!teacher.getPassword().equals(password)){
-                    model.addAttribute("error", "Invalid Password!!!");
-                    return "loginPage";
-                }
-
+            if(teacher != null && teacher.getPassword().equals(password)){
                 session.setAttribute("teacher", teacher.getUsername());
                 session.setAttribute("role", teacher.getRole());
 
                 return "teacher/home";
             }
 
-            model.addAttribute("error", "Something went wrong!!!");
+            model.addAttribute("error", "Invalid password!!!");
             return "loginPage";
 
             /*User user = userService.getUserByName(username);

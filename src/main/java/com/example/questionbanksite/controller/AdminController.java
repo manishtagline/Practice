@@ -1,10 +1,7 @@
 package com.example.questionbanksite.controller;
 
 import com.example.questionbanksite.dto.*;
-import com.example.questionbanksite.entity.Exam;
-import com.example.questionbanksite.entity.Question;
-import com.example.questionbanksite.entity.Subject;
-import com.example.questionbanksite.entity.User;
+import com.example.questionbanksite.entity.*;
 import com.example.questionbanksite.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -249,6 +246,27 @@ public class AdminController {
 
         model.addAttribute("teachers", teachers);
         return "admin/teacherList";
+    }
+
+    @GetMapping("/assignSubjectPage")
+    public String assignSubjectPage(@RequestParam("facultyId") Long  teacherId, Model model){
+        List<Subject> subjects = subjectService.getAllSubjects();
+        Teacher teacher = teacherService.getTeacherById(teacherId);
+
+        model.addAttribute("teacher", teacher);
+        model.addAttribute("subjects", subjects);
+        return "admin/assignSubject";
+    }
+
+    @PostMapping("/assignSubject")
+    public String assignSubject(@ModelAttribute("teacher") Teacher teacherForm){
+        Teacher teacher = teacherService.getTeacherById(teacherForm.getId());
+        Subject subject = subjectService.getSubjectById(teacherForm.getSubject().getId());
+
+        teacher.setSubject(subject);
+        teacherService.updateTeacher(teacher);
+
+        return "admin/assignSubject";
     }
 
     //**************************** Teacher Handlers Ends  *************************//

@@ -1,10 +1,12 @@
 package com.example.questionbanksite.service;
 
 import com.example.questionbanksite.entity.Subject;
+import com.example.questionbanksite.entity.Teacher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
@@ -24,7 +26,13 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     @Transactional(readOnly = true)
     public Subject getSubjectById(Long id) {
-        return entityManager.find(Subject.class, id);
+        try{
+            return entityManager.createQuery("SELECT s FROM Subject s WHERE s.id = :id", Subject.class)
+                    .setParameter("id", id)
+                    .getSingleResult();
+        }catch (NoResultException e){
+            return null;
+        }
     }
 
     @Override

@@ -34,6 +34,7 @@ public class TeacherServiceImpl implements TeacherService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<TeacherDto> getAllTeachers() {
         List<Teacher> teachers = entityManager.createQuery("SELECT t FROM Teacher t", Teacher.class).getResultList();
 
@@ -50,6 +51,7 @@ public class TeacherServiceImpl implements TeacherService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Teacher getTeacherByName(String username) {
         try{
             return entityManager.createQuery("SELECT t FROM Teacher t WHERE t.username = :username", Teacher.class)
@@ -61,6 +63,7 @@ public class TeacherServiceImpl implements TeacherService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Teacher getTeacherByEmail(String email) {
         try{
             return entityManager.createQuery("SELECT t FROM Teacher t WHERE t.email = :email", Teacher.class)
@@ -71,6 +74,23 @@ public class TeacherServiceImpl implements TeacherService{
         }
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Teacher getTeacherById(Long teacherId) {
+        try{
+            return entityManager.createQuery("SELECT t FROM Teacher t WHERE t.id = :teacherId", Teacher.class)
+                    .setParameter("teacherId", teacherId)
+                    .getSingleResult();
+        }catch (NoResultException e){
+            return null;
+        }
+    }
+
+    @Override
+    @Transactional
+    public void updateTeacher(Teacher teacher) {
+        entityManager.merge(teacher);
+    }
 
 
 }

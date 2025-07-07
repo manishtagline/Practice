@@ -167,15 +167,30 @@
     <div class="card-container">
 
         <!-- View Subjects -->
-        <div class="card" onclick="location.href='teacherSubjectList'">
+        <!-- View Subject with Single Collapse -->
+        <div class="card" data-bs-toggle="collapse" data-bs-target="#assignedSubjectCollapse" aria-expanded="false" aria-controls="assignedSubjectCollapse">
             <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                 <polyline points="17 8 12 3 7 8"/>
                 <line x1="12" y1="3" x2="12" y2="15"/>
             </svg>
-            <h5 class="card-title">My Subjects</h5>
-            <p class="card-text">View subjects assigned to you.</p>
+            <h5 class="card-title">My Subject</h5>
+            <p class="card-text">Click to see your assigned subject.</p>
+
+            <!-- Collapsible subject detail -->
+            <div class="collapse mt-3 w-100" id="assignedSubjectCollapse">
+                <div class="bg-dark text-light p-2 rounded">
+                    <c:choose>
+                        <c:when test="${not empty subject}">
+                            <strong>Subject:</strong> ${subject.name}
+                        </c:when>
+                        <c:otherwise>
+                            <span class="text-warning">No subject assigned yet.</span>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+            </div>
         </div>
 
         <!-- My Students -->

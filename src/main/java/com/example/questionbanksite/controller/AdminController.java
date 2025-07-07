@@ -249,7 +249,7 @@ public class AdminController {
     }
 
     @GetMapping("/assignSubjectPage")
-    public String assignSubjectPage(@RequestParam("facultyId") Long  teacherId, Model model){
+    public String assignSubjectPage(@RequestParam("facultyId") Long teacherId, Model model) {
         List<Subject> subjects = subjectService.getAllSubjects();
         Teacher teacher = teacherService.getTeacherById(teacherId);
 
@@ -259,15 +259,27 @@ public class AdminController {
     }
 
     @PostMapping("/assignSubject")
-    public String assignSubject(@ModelAttribute("teacher") Teacher teacherForm){
-        Teacher teacher = teacherService.getTeacherById(teacherForm.getId());
-        Subject subject = subjectService.getSubjectById(teacherForm.getSubject().getId());
+    public String assignSubject(
+            @RequestParam("teacherId") Long teacherId,
+            @RequestParam("subjectId") Long subjectId,
+            RedirectAttributes redirectAttributes,
+            Model model) {
 
-        teacher.setSubject(subject);
-        teacherService.updateTeacher(teacher);
+        Teacher teacher = teacherService.getTeacherById(teacherId);
+        Subject subject = subjectService.getSubjectById(subjectId);
 
-        return "admin/assignSubject";
+        if (teacher != null && subject != null) {
+            teacher.setSubject(subject);
+            teacherService.updateTeacher(teacher);
+            redirectAttributes.addFlashAttribute("successMsg", "Subject assigned successfully!");
+        } else {
+            redirectAttributes.addFlashAttribute("errorMsg", "Invalid teacher or subject.");
+        }
+
+        return "redirect:/assignSubjectPage?facultyId=" + teacherId;
     }
+
+
 
     //**************************** Teacher Handlers Ends  *************************//
 

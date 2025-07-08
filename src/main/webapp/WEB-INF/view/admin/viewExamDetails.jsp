@@ -19,7 +19,7 @@
 </div>
 
 <div class="back-button-container">
-    <a href="examList" class="btn-back">&#8592; Back to Exam List</a>
+    <a href="${pageContext.request.contextPath}/admin/examList" class="btn-back">&#8592; Back to Exam List</a>
 </div>
 
 <div class="container">

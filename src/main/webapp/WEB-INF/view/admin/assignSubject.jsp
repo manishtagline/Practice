@@ -131,7 +131,7 @@
 <main>
   <div class="assign-container position-relative">
 
-    <a href="${pageContext.request.contextPath}/teacherList"
+    <a href="${pageContext.request.contextPath}/admin/teacherList"
        class="btn-back"> <i class="bi bi-arrow-left-circle"></i> Back
     </a>
 
@@ -146,7 +146,7 @@
       Assign Subject to <span style="color: #66aaff;">${teacher.username}</span>
     </h5>
 
-    <form method="post" action="assignSubject">
+    <form method="post" action="admin/assignSubject">
       <input type="hidden" name="teacherId" value="${teacher.id}" />
 
       <div class="mb-3">

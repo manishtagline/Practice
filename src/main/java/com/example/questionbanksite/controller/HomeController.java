@@ -70,8 +70,8 @@
             }
 
             if(teacher != null && teacher.getPassword().equals(password)){
-                session.setAttribute("teacher", teacher);  // Store whole object
-                session.setAttribute("username", teacher.getUsername()); // Also set username here for consistency
+                session.setAttribute("teacher", teacher);
+                session.setAttribute("username", teacher.getUsername());
                 session.setAttribute("role", teacher.getRole());
 
                 return "teacher/home";
@@ -79,7 +79,6 @@
 
             model.addAttribute("error", "Invalid password!!!");
             return "loginPage";
-
 
         }
 

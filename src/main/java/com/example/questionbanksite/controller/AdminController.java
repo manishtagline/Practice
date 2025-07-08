@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
+@RequestMapping("/admin")
 @RequiredArgsConstructor
 public class AdminController {
 
@@ -91,7 +92,7 @@ public class AdminController {
     @PostMapping("/updateSubject")
     public String updateSubjectForm(@ModelAttribute Subject subject) {
         subjectService.updateSubject(subject.getId(), subject);
-        return "redirect:/subjectList";
+        return "redirect:/admin/subjectList";
     }
 
 
@@ -99,7 +100,7 @@ public class AdminController {
     @GetMapping("/deleteSubject/{id}")
     public String deleteSubject(@PathVariable Long id) {
         subjectService.deleteSubject(id);
-        return "subjectList";
+        return "redirect:/admin/subjectList";
     }
 
     @GetMapping("/addSubjectPage")
@@ -151,7 +152,7 @@ public class AdminController {
 
         questionService.saveQuestion(question);
 
-        return "redirect:/manageQuestions?subjectId=" + subjectId;
+        return "redirect:/admin/manageQuestions?subjectId=" + subjectId;
     }
 
 
@@ -185,7 +186,7 @@ public class AdminController {
     @GetMapping("/deleteQuestion")
     public String deleteQuestion(@RequestParam Long id, @RequestParam Long subjectId) {
         questionService.softDeleteQuestion(id);
-        return "redirect:/manageQuestions?subjectId=" + subjectId;
+        return "redirect:/admin/manageQuestions?subjectId=" + subjectId;
     }
 
     @GetMapping("/editQuestion")
@@ -211,7 +212,7 @@ public class AdminController {
         System.out.println("Subject id :" + subjectId);
 
         questionService.updateQuestion(id, question);
-        return "redirect:/manageQuestions?subjectId=" + subjectId;
+        return "redirect:/admin/manageQuestions?subjectId=" + subjectId;
     }
     //**************************** Question Handlers Ends *************************//
 
@@ -269,7 +270,7 @@ public class AdminController {
 //            redirectAttributes.addFlashAttribute("errorMsg", "Invalid teacher or subject.");
 //        }
 
-        return "redirect:/assignSubjectPage?facultyId=" + teacherId;
+        return "redirect:/admin/assignSubjectPage?facultyId=" + teacherId;
     }
 
 
@@ -311,29 +312,29 @@ public class AdminController {
         if(!exam.getEnrolledStartDate().atZone(zoneId).isAfter(now)){
 
             redirectAttributes.addFlashAttribute("errorMsg", "Enrollment start date must be future.");
-            return "redirect:/addExamPage";
+            return "redirect:/admin/addExamPage";
         } else if(!exam.getEnrolledEndDate().atZone(zoneId).isAfter(now)){
 
             redirectAttributes.addFlashAttribute("errorMsg", "Enrollment end date must be future.");
-            return "redirect:/addExamPage";
+            return "redirect:/admin/addExamPage";
         } else if(!exam.getExamStartDate().atZone(zoneId).isAfter(now)){
 
             redirectAttributes.addFlashAttribute("errorMsg", "Exam start date must be future.");
-            return "redirect:/addExamPage";
+            return "redirect:/admin/addExamPage";
         } else if(!exam.getExamEndDate().atZone(zoneId).isAfter(now)){
 
             redirectAttributes.addFlashAttribute("errorMsg", "Exam end date must be future.");
-            return "redirect:/addExamPage";
+            return "redirect:/admin/addExamPage";
         }
 
         if (exam.getEnrolledStartDate().isAfter(exam.getEnrolledEndDate())) {
             redirectAttributes.addFlashAttribute("errorMsg", "Enrollment start date must be before enrollment end date.");
-            return "redirect:/addExamPage";
+            return "redirect:/admin/addExamPage";
         }
 
         if (exam.getExamStartDate().isAfter(exam.getExamEndDate())) {
             redirectAttributes.addFlashAttribute("errorMsg", "Exam start date must be before exam end date.");
-            return "redirect:/addExamPage";
+            return "redirect:/admin/addExamPage";
         }
 
         int i = examService.createExamForSubject(exam.getSubjectId(),
@@ -350,7 +351,7 @@ public class AdminController {
         } else {
             redirectAttributes.addFlashAttribute("errorMsg", "Something went wrong!!!");
         }
-        return "redirect:/addExamPage";
+        return "redirect:/admin/addExamPage";
     }
 
 

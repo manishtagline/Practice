@@ -31,7 +31,7 @@
 
     <h2 class="text-center mb-4">Add New Question</h2>
 
-    <form:form method="post" action="${pageContext.request.contextPath}/saveQuestion" modelAttribute="question" onsubmit="submitForm()">
+    <form:form method="post" action="${pageContext.request.contextPath}/admin/saveQuestion" modelAttribute="question" onsubmit="submitForm()">
 
         <form:hidden path="id"/>
         <input type="hidden" name="subjectId" value="${subjectId}"/>
@@ -82,7 +82,7 @@
         <button type="submit" class="btn btn-submit">Save Question</button>
 
         <div class="text-center">
-            <a href="manageQuestions?subjectId=${subjectId}" class="btn-back">←
+            <a href="${pageContext.request.contextPath}/admin/manageQuestions?subjectId=${subjectId}" class="btn-back">←
                 Back to List</a>
         </div>
 

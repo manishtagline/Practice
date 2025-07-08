@@ -53,7 +53,7 @@
         <td>${exam.totalNumberOfQuestion}</td>
         <td>${exam.formattedDate}</td>
         <td>
-          <a href="viewExamDetails?id=${exam.id}" class="btn-action">View</a>
+          <a href="${pageContext.request.contextPath}/admin/viewExamDetails?id=${exam.id}" class="btn-action">View</a>
         </td>
       </tr>
     </c:forEach>
@@ -62,7 +62,7 @@
 
   <!-- Add Exam Button -->
   <div class="text-center">
-    <a href="addExamPage" class="add-subject-btn mt-4">
+    <a href="${pageContext.request.contextPath}/admin/addExamPage" class="add-subject-btn mt-4">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <line x1="12" y1="5" x2="12" y2="19"/>
         <line x1="5" y1="12" x2="19" y2="12"/>

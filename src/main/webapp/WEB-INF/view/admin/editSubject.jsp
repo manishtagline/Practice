@@ -32,7 +32,7 @@
     <div class="form-container">
         <h2>Edit Subject</h2>
 
-        <form action="${pageContext.request.contextPath}/updateSubject" method="post">
+        <form action="${pageContext.request.contextPath}/admin/updateSubject" method="post">
             <!-- Hidden ID field -->
             <input type="hidden" name="id" value="${subject.id}" />
 
@@ -48,7 +48,7 @@
 
         <!-- Back Button -->
         <div class="text-center mt-3">
-            <a href="${pageContext.request.contextPath}/subjectList" class="btn-back">← Back to Subject List</a>
+            <a href="${pageContext.request.contextPath}/admin/subjectList" class="btn-back">← Back to Subject List</a>
         </div>
     </div>
 </main>

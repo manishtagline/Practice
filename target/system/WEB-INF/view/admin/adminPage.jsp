@@ -25,7 +25,7 @@
     <div class="card-container">
 
         <!-- Manage Subjects -->
-        <div class="card" onclick="location.href='subjectList'">
+        <div class="card" onclick="location.href='${pageContext.request.contextPath}/admin/subjectList'">
             <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -37,7 +37,7 @@
         </div>
 
         <!-- User Details -->
-        <div class="card" onclick="location.href='userList'">
+        <div class="card" onclick="location.href='${pageContext.request.contextPath}/admin/userList'">
             <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-3-3.87"/>
@@ -49,7 +49,7 @@
         </div>
 
         <!-- Manage Exams -->
-        <div class="card" onclick="location.href='examList'">
+        <div class="card" onclick="location.href='${pageContext.request.contextPath}/admin/examList'">
             <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
@@ -62,7 +62,7 @@
         </div>
 
         <!-- Manage Faculty -->
-        <div class="card" onclick="location.href='teacherList'">
+        <div class="card" onclick="location.href='${pageContext.request.contextPath}/admin/teacherList'">
             <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-3-3.87"/>
@@ -121,7 +121,7 @@
     }
 
     function confirmLogout() {
-        window.location.href = 'logout';
+        window.location.href = '${pageContext.request.contextPath}/logout';
     }
 </script>
 

@@ -55,10 +55,10 @@
                 <td>${subject.questionCount}</td>
                 <td>${subject.examCount}</td>
                 <td>
-                    <a href="manageQuestions?subjectId=${subject.id}" class="btn btn-sm btn-manage">Manage</a>
+                    <a href="${pageContext.request.contextPath}/admin/manageQuestions?subjectId=${subject.id}" class="btn btn-sm btn-manage">Manage</a>
                 </td>
                 <td>
-                    <a href="editSubject?id=${subject.id}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="${pageContext.request.contextPath}/admin/editSubject?id=${subject.id}" class="btn btn-sm btn-warning">Edit</a>
                 </td>
             </tr>
         </c:forEach>
@@ -67,7 +67,7 @@
 
     <!-- Add Subject Button -->
     <div class="text-center">
-        <a href="addSubjectPage" class="add-subject-btn mt-4">
+        <a href="admin/addSubjectPage" class="add-subject-btn mt-4">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <line x1="12" y1="5" x2="12" y2="19"/>
                 <line x1="5" y1="12" x2="19" y2="12"/>

@@ -17,8 +17,9 @@ public class AuthInterceptor implements HandlerInterceptor {
         String uri = request.getRequestURI();
         String contextPath = request.getContextPath();
 
-        // Public endpoints, no auth needed
+        // Public endpoints — no login needed
         if (uri.equals(contextPath + "/") ||
+                uri.equals(contextPath + "/logout") ||
                 uri.equals(contextPath + "/login") ||
                 uri.equals(contextPath + "/baseUserRegister") ||
                 uri.equals(contextPath + "/baseUserRegistration")) {
@@ -33,66 +34,62 @@ public class AuthInterceptor implements HandlerInterceptor {
         String username = (String) session.getAttribute("username");
         String role = (String) session.getAttribute("role");
 
-
         if (username == null || role == null) {
             session.setAttribute("error", "Please, Login first!!!");
             response.sendRedirect(contextPath + "/");
             return false;
         }
 
-// Specific role check for teacher
+        // TEACHER must have a teacher attribute in session
         if (role.equalsIgnoreCase("TEACHER") && session.getAttribute("teacher") == null) {
             session.setAttribute("error", "Please, Login first!!!");
             response.sendRedirect(contextPath + "/");
             return false;
         }
 
-        // USER role restrictions — prevent access to admin URLs
-        if (role.equalsIgnoreCase("USER")) {
-            if (uri.startsWith(contextPath + "/admin") ||
-                    uri.startsWith(contextPath + "/subjectList") ||
-                    uri.startsWith(contextPath + "/addSubjectPage") ||
-                    uri.startsWith(contextPath + "/addExamPage") ||
-                    uri.startsWith(contextPath + "/examList") ||
-                    uri.startsWith(contextPath + "/userList") ||
-                    uri.startsWith(contextPath + "/manageQuestions") ||
-                    uri.startsWith(contextPath + "/addQuestionPage") ||
-                    uri.startsWith(contextPath + "/editSubject") ||
-                    uri.startsWith(contextPath + "/editQuestion") ||
-                    uri.startsWith(contextPath + "/viewExamDetails") ||
-                    uri.startsWith(contextPath + "/deleteSubject") ||
-                    uri.startsWith(contextPath + "/deleteQuestion") ||
-                    uri.startsWith(contextPath + "/updateSubject") ||
-                    uri.startsWith(contextPath + "/updateQuestion")) {
+        // Define role-specific URL prefixes
+        boolean isAdminUrl = uri.startsWith(contextPath + "/admin") ;
 
-                session.setAttribute("error", "Unauthorized Access!");
+        boolean isUserUrl = uri.startsWith(contextPath + "/user") ||
+                uri.startsWith(contextPath + "/exam") ||
+                uri.startsWith(contextPath + "/result") ||
+                uri.startsWith(contextPath + "/home") ||
+                uri.startsWith(contextPath + "/submitExam");
+
+        boolean isTeacherUrl = uri.startsWith(contextPath + "/teacher") ||
+                uri.startsWith(contextPath + "/teacherExamList") ||
+                uri.startsWith(contextPath + "/teacherDashboard");
+
+        // Restrict access based on role
+        switch (role.toUpperCase()) {
+            case "ADMIN":
+                if (isUserUrl || isTeacherUrl) {
+                    session.setAttribute("error", "Unauthorized Access!");
+                    response.sendRedirect(contextPath + "/");
+                    return false;
+                }
+                break;
+
+            case "USER":
+                if (isAdminUrl || isTeacherUrl) {
+                    session.setAttribute("error", "Unauthorized Access!");
+                    response.sendRedirect(contextPath + "/");
+                    return false;
+                }
+                break;
+
+            case "TEACHER":
+                if (isAdminUrl || isUserUrl) {
+                    session.setAttribute("error", "Unauthorized Access!");
+                    response.sendRedirect(contextPath + "/");
+                    return false;
+                }
+                break;
+
+            default:
+                session.setAttribute("error", "Unknown role!");
                 response.sendRedirect(contextPath + "/");
                 return false;
-            }
-        }
-
-        // ADMIN role restrictions — block user-only URLs
-        if (role.equalsIgnoreCase("ADMIN")) {
-            boolean blockedForAdmin = (uri.startsWith(contextPath + "/user") && !uri.equals(contextPath + "/userList"))
-                    || (uri.startsWith(contextPath + "/exam") && !uri.equals(contextPath + "/examList"))
-                    || uri.startsWith(contextPath + "/result")
-                    || uri.startsWith(contextPath + "/home")
-                    || uri.startsWith(contextPath + "/submitExam");
-
-            if (blockedForAdmin) {
-                session.setAttribute("error", "Unauthorized Access!");
-                response.sendRedirect(contextPath + "/");
-                return false;
-            }
-        }
-
-        // TEACHER role restrictions — example, allow only teacher exam list and block admin-only pages
-        if (role.equalsIgnoreCase("TEACHER")) {
-            if (!uri.startsWith(contextPath + "/teacherExamList")) {
-                session.setAttribute("error", "Unauthorized Access!");
-                response.sendRedirect(contextPath + "/");
-                return false;
-            }
         }
 
         return true;

@@ -23,13 +23,13 @@
 <div class="container-fluid">
     <main>
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <a href="${pageContext.request.contextPath}/subjectList" class="back-btn">&larr; Back</a>
+            <a href="${pageContext.request.contextPath}/admin/subjectList" class="back-btn">&larr; Back</a>
             <h2>Questions List</h2>
-            <a href="addQuestionPage?subjectId=${subjectId}" class="add-question-btn">+ Add Question</a>
+            <a href="${pageContext.request.contextPath}/admin/addQuestionPage?subjectId=${subjectId}" class="add-question-btn">+ Add Question</a>
         </div>
 
         <!-- Filter & Sort -->
-        <form method="get" action="manageQuestions" class="filter-form d-flex align-items-center gap-4 flex-wrap">
+        <form method="get" action="admin/manageQuestions" class="filter-form d-flex align-items-center gap-4 flex-wrap">
             <input type="hidden" name="subjectId" value="${subjectId}" />
             <div class="d-flex align-items-center gap-2">
                 <label for="complexity" class="mb-0 fw-semibold text-white">Filter by Complexity:</label>
@@ -81,9 +81,9 @@
                     <td>${question.complexity}</td>
                     <td>
                         <div class="d-flex justify-content-center">
-                            <a href="editQuestion?id=${question.id}&subjectId=${subjectId}" class="btn btn-sm btn-action">Edit</a>
-                            <a href="#" class="btn btn-sm btn-action btn-delete"
-                               data-delete-url="deleteQuestion?id=${question.id}&subjectId=${subjectId}"
+                            <a href="${pageContext.request.contextPath}/admin/editQuestion?id=${question.id}&subjectId=${subjectId}" class="btn btn-sm btn-action">Edit</a>
+                            <a href="${pageContext.request.contextPath}/admin/deleteQuestion?id=${question.id}&subjectId=${subjectId}" class="btn btn-sm btn-action btn-delete"
+                               data-delete-url="admin/deleteQuestion?id=${question.id}&subjectId=${subjectId}"
                                data-question-id="${question.id}">
                                 Delete
                             </a>
@@ -98,15 +98,15 @@
         <nav class="pagination">
             <c:if test="${currentPage > 1}">
                 <a class="btn btn-outline-light page-link"
-                   href="manageQuestions?subjectId=${subjectId}&complexity=${complexity}&sortBy=${sortBy}&page=${currentPage - 1}">&laquo; Prev</a>
+                   href="${pageContext.request.contextPath}/admin/manageQuestions?subjectId=${subjectId}&complexity=${complexity}&sortBy=${sortBy}&page=${currentPage - 1}">&laquo; Prev</a>
             </c:if>
             <c:forEach var="i" begin="1" end="${totalPages}">
                 <a class="btn ${i == currentPage ? 'btn-light' : 'btn-outline-light'} page-link"
-                   href="manageQuestions?subjectId=${subjectId}&complexity=${complexity}&sortBy=${sortBy}&page=${i}">${i}</a>
+                   href="${pageContext.request.contextPath}/admin/manageQuestions?subjectId=${subjectId}&complexity=${complexity}&sortBy=${sortBy}&page=${i}">${i}</a>
             </c:forEach>
             <c:if test="${currentPage < totalPages}">
                 <a class="btn btn-outline-light page-link"
-                   href="manageQuestions?subjectId=${subjectId}&complexity=${complexity}&sortBy=${sortBy}&page=${currentPage + 1}">Next &raquo;</a>
+                   href="${pageContext.request.contextPath}/admin/manageQuestions?subjectId=${subjectId}&complexity=${complexity}&sortBy=${sortBy}&page=${currentPage + 1}">Next &raquo;</a>
             </c:if>
         </nav>
     </main>

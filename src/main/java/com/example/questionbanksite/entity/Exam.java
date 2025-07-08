@@ -36,24 +36,18 @@ public class Exam {
 
     private int totalNumberOfQuestion;
 
-    @CreationTimestamp
     @Column(name = "date_created", updatable = false)
-    private LocalDateTime dateCreated;
+    private ZonedDateTime dateCreated;
 
-
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @Column(name = "enrolledStartDate", updatable = false)
     private ZonedDateTime enrolledStartDate;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @Column(name = "enrolledEndDate", updatable = false)
     private ZonedDateTime enrolledEndDate;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @Column(name = "examStartDate", updatable = false)
     private ZonedDateTime examStartDate;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @Column(name = "examEndDate", updatable = false)
     private ZonedDateTime examEndDate;
 

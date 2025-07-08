@@ -26,12 +26,14 @@ public class Teacher {
     private String email;
     private String role;
 
-    @ManyToOne
-    @JoinColumn(name = "subject_id")
-    private Subject subject;
+   @ManyToMany(fetch = FetchType.EAGER)
+   @JoinTable(name = "teachers_subjects",
+           joinColumns = @JoinColumn(name = "teacher_id"),
+           inverseJoinColumns = @JoinColumn(name = "subejct_id"))
+   private List<Subject> subjects;
 
-    @OneToMany(mappedBy = "teacher")
-    private List<Exam> createdExam;
+   @OneToMany(mappedBy = "teacher")
+   private List<Exam> createdExam;
 
 
 }

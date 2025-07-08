@@ -13,8 +13,7 @@
     <link
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
             rel="stylesheet"/>
-    <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/static/richtexteditor/rte_theme_default.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/richtexteditor/rte_theme_default.css"/>
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/adminPageCss/addQuestionPage.css"/>
 

@@ -131,34 +131,9 @@
 <main>
   <div class="assign-container position-relative">
 
-    <a href="${pageContext.request.contextPath}/teacherList" class="btn-back">
-      <i class="bi bi-arrow-left-circle"></i> Back
+    <a href="${pageContext.request.contextPath}/teacherList"
+       class="btn-back"> <i class="bi bi-arrow-left-circle"></i> Back
     </a>
-
-    <h5>
-      Assign Subject to <span style="color:#66aaff;">${teacher.username}</span>
-    </h5>
-
-    <form:form method="post" action="assignSubject" modelAttribute="teacher">
-      <input type="hidden" name="teacherId" value="${teacher.id}" />
-
-      <div class="mb-3">
-        <label for="subjectId" class="form-label text-light">Select Subject</label>
-        <form:select path="subject" cssClass="form-select" id="subjectId" required="required">
-          <form:option value="" label="-- Select a Subject --" />
-          <c:forEach var="subjectId" items="${subjects}">
-            <form:option value="${subjectId.id}" label="${subjectId.name}" />
-          </c:forEach>
-        </form:select>
-        <form:errors path="subject" cssClass="text-danger mt-1" />
-      </div>
-
-      <div class="text-center mt-4">
-        <button type="submit" class="btn btn-primary px-4">
-          <i class="bi bi-bookmark-check"></i> Assign Subject
-        </button>
-      </div>
-    </form:form>
 
     <c:if test="${not empty successMsg}">
       <div class="alert alert-success">${successMsg}</div>
@@ -166,6 +141,32 @@
     <c:if test="${not empty errorMsg}">
       <div class="alert alert-danger">${errorMsg}</div>
     </c:if>
+
+    <h5>
+      Assign Subject to <span style="color: #66aaff;">${teacher.username}</span>
+    </h5>
+
+    <form method="post" action="assignSubject">
+      <input type="hidden" name="teacherId" value="${teacher.id}" />
+
+      <div class="mb-3">
+        <label for="subjectId" class="form-label text-light">Select
+          Subject</label> <select name="subjectId" class="form-select"
+                                  id="subjectId" required>
+        <option value="">-- Select a Subject --</option>
+        <c:forEach var="subject" items="${subjects}">
+          <option value="${subject.id}">${subject.name}</option>
+        </c:forEach>
+      </select>
+      </div>
+
+      <div class="text-center mt-4">
+        <button type="submit" class="btn btn-primary px-4">
+          <i class="bi bi-bookmark-check"></i> Assign Subject
+        </button>
+      </div>
+    </form>
+
 
   </div>
 </main>

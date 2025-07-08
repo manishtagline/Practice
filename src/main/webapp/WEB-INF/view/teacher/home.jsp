@@ -182,8 +182,8 @@
             <div class="collapse mt-3 w-100" id="assignedSubjectCollapse">
                 <div class="bg-dark text-light p-2 rounded">
                     <c:choose>
-                        <c:when test="${not empty subject}">
-                            <strong>Subject:</strong> ${subject.name}
+                        <c:when test="${not empty subjects}">
+                            <strong>Subject:</strong> ${subjects.name}
                         </c:when>
                         <c:otherwise>
                             <span class="text-warning">No subject assigned yet.</span>

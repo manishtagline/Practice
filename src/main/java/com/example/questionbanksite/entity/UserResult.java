@@ -23,7 +23,6 @@ public class UserResult {
 
     private int totalScore;
 
-
     private String answer;
 
     private double percentage;

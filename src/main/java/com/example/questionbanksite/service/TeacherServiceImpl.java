@@ -38,16 +38,17 @@ public class TeacherServiceImpl implements TeacherService{
     public List<TeacherDto> getAllTeachers() {
         List<Teacher> teachers = entityManager.createQuery("SELECT t FROM Teacher t", Teacher.class).getResultList();
 
-        return teachers.stream().map(teacher -> {
-            String subjectName = (teacher.getSubject() != null) ? teacher.getSubject().getName() : null;
-            return new TeacherDto(
-                    teacher.getId(),
-                    teacher.getUsername(),
-                    teacher.getEmail(),
-                    teacher.getRole(),
-                    subjectName
-            );
-        }).collect(Collectors.toList());
+        return null;
+//        return teachers.stream().map(teacher -> {
+//            String subjectName = (teacher.getSubjects() != null) ? teacher.getSubjects() : null;
+//            return new TeacherDto(
+//                    teacher.getId(),
+//                    teacher.getUsername(),
+//                    teacher.getEmail(),
+//                    teacher.getRole(),
+//                    subjectName
+//            );
+//        }).collect(Collectors.toList());
     }
 
     @Override

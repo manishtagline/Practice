@@ -4,26 +4,18 @@ import com.example.questionbanksite.dto.*;
 import com.example.questionbanksite.entity.*;
 import com.example.questionbanksite.service.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -39,6 +31,7 @@ public class AdminController {
     private final UserService userService;
 
     private final TeacherService teacherService;
+
 
 
     @GetMapping("/adminPage")
@@ -241,7 +234,7 @@ public class AdminController {
     //**************************** Teacher Handlers  *************************//
 
     @GetMapping("/teacherList")
-    public String viewTeacherList(Model model){
+    public String viewTeacherList(Model model,HttpSession session){
         List<TeacherDto> teachers =  teacherService.getAllTeachers();
 
         model.addAttribute("teachers", teachers);
@@ -265,16 +258,16 @@ public class AdminController {
             RedirectAttributes redirectAttributes,
             Model model) {
 
-        Teacher teacher = teacherService.getTeacherById(teacherId);
-        Subject subject = subjectService.getSubjectById(subjectId);
-
-        if (teacher != null && subject != null) {
-            teacher.setSubject(subject);
-            teacherService.updateTeacher(teacher);
-            redirectAttributes.addFlashAttribute("successMsg", "Subject assigned successfully!");
-        } else {
-            redirectAttributes.addFlashAttribute("errorMsg", "Invalid teacher or subject.");
-        }
+//        Teacher teacher = teacherService.getTeacherById(teacherId);
+//        List<Subject> subject = subjectService.getSubjectById(subjectId);
+//
+//        if (teacher != null && subject != null) {
+//            teacher.setSubjects(subject);
+//            teacherService.updateTeacher(teacher);
+//            redirectAttributes.addFlashAttribute("successMsg", "Subject assigned successfully!");
+//        } else {
+//            redirectAttributes.addFlashAttribute("errorMsg", "Invalid teacher or subject.");
+//        }
 
         return "redirect:/assignSubjectPage?facultyId=" + teacherId;
     }

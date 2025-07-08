@@ -64,6 +64,8 @@ public class ExamServiceImpl implements ExamService{
         ZonedDateTime examStart = examStartDate.atZone(zoneId);
         ZonedDateTime examEnd = examEndDate.atZone(zoneId);
 
+        ZonedDateTime now = ZonedDateTime.now(zoneId);
+
         Subject subject = entityManager.find(Subject.class, subjectId);
         if (subject == null) {
             throw new IllegalArgumentException("Subject not found with ID: " + subjectId);
@@ -109,6 +111,7 @@ public class ExamServiceImpl implements ExamService{
         exam.setEnrolledEndDate(enrolledEnd);
         exam.setExamStartDate(examStart);
         exam.setExamEndDate(examEnd);
+        exam.setDateCreated(now);
 
         entityManager.persist(exam);
         return 1;

@@ -1,8 +1,10 @@
     package com.example.questionbanksite.controller;
 
     import com.example.questionbanksite.dto.BaseUserRegisterDto;
+    import com.example.questionbanksite.entity.Subject;
     import com.example.questionbanksite.entity.Teacher;
     import com.example.questionbanksite.entity.User;
+    import com.example.questionbanksite.service.SubjectService;
     import com.example.questionbanksite.service.TeacherService;
     import com.example.questionbanksite.service.UserService;
     import lombok.RequiredArgsConstructor;
@@ -23,6 +25,8 @@
     public class HomeController {
 
         private final UserService userService;
+
+        private final SubjectService subjectService;
 
         private final TeacherService teacherService;
 
@@ -66,7 +70,8 @@
             }
 
             if(teacher != null && teacher.getPassword().equals(password)){
-                session.setAttribute("teacher", teacher.getUsername());
+                session.setAttribute("teacher", teacher);  // Store whole object
+                session.setAttribute("username", teacher.getUsername()); // Also set username here for consistency
                 session.setAttribute("role", teacher.getRole());
 
                 return "teacher/home";
@@ -75,41 +80,7 @@
             model.addAttribute("error", "Invalid password!!!");
             return "loginPage";
 
-            /*User user = userService.getUserByName(username);
 
-            Teacher teacher = teacherService.getTeacherByName(username);
-
-            String interceptorError = (String) session.getAttribute("error");
-
-            session.setAttribute("zoneId", zoneId);
-
-            if (user == null || teacher == null) {
-                if (interceptorError != null && !interceptorError.isEmpty()) {
-                    model.addAttribute("error", interceptorError);
-                    session.removeAttribute("error");
-                } else {
-                    model.addAttribute("error", "Invalid  credentials!!!!");
-                }
-                return "loginPage";
-            } else if (!user.getPassword().equals(password) || !teacher.getPassword().equals(password)) {
-                model.addAttribute("error", "Invalid  password!!!!");
-                return "loginPage";
-            }
-
-            session.removeAttribute("error");
-
-            session.setAttribute("username", user.getUsername());
-            session.setAttribute("role", user.getRole());
-            session.setAttribute("teacher", teacher.getUsername());
-
-
-            if ("ADMIN".equalsIgnoreCase(user.getRole())) {
-                return "admin/adminPage";
-            } else if("USER".equalsIgnoreCase(user.getRole())) {
-                return "user/home";
-            } else{
-                return "teacher/home";
-            }*/
         }
 
         @GetMapping("/logout")

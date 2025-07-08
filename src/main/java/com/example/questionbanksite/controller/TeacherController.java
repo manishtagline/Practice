@@ -40,28 +40,35 @@ public class TeacherController{
 
         if (teacherName == null) {
             model.addAttribute("errorMsg", "Session expired or invalid.");
-            return "errorPage";
+            model.addAttribute("subjects", List.of());  // empty list so JSP handles it
+            return "teacher/teacherSubject";
         }
 
         Teacher teacher = teacherService.getTeacherByName(teacherName);
         if (teacher == null) {
             model.addAttribute("errorMsg", "Teacher not found.");
-            return "errorPage";
+            model.addAttribute("subjects", List.of());
+            return "teacher/teacherSubject";
         }
 
         List<Subject> subjects = teacher.getSubjects();
         if (subjects == null || subjects.isEmpty()) {
             model.addAttribute("errorMsg", "No subjects assigned to this teacher.");
-            return "errorPage";
+            model.addAttribute("subjects", List.of());
+            return "teacher/teacherSubject";
         }
 
-        // Now fetch subjects with their teachers fully initialized
         List<SubjectDto> loadedSubjects = subjects.stream()
                 .map(s -> subjectService.getSubjectWithTeachers(s.getId()))
                 .toList();
 
         model.addAttribute("subjects", loadedSubjects);
         return "teacher/teacherSubject";
+    }
+
+    @GetMapping("/viewQuestions")
+    public String viewSubjectQuestions(){
+        return "teacher/";
     }
 
 }

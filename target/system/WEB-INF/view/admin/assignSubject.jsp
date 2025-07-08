@@ -150,19 +150,23 @@
       <input type="hidden" name="teacherId" value="${teacher.id}" />
 
       <div class="mb-3">
-        <label for="subjectId" class="form-label text-light">Select
-          Subject</label> <select name="subjectId" class="form-select"
-                                  id="subjectId" required>
-        <option value="">-- Select a Subject --</option>
-        <c:forEach var="subject" items="${subjects}">
-          <option value="${subject.id}">${subject.name}</option>
-        </c:forEach>
-      </select>
+        <label for="subjectIds" class="form-label text-light">Select Subjects</label>
+
+        <!-- Multi-select dropdown -->
+        <select name="subjectIds" class="form-select" id="subjectIds" multiple required size="6">
+          <c:forEach var="subject" items="${subjects}">
+            <option value="${subject.id}"
+                    <c:if test="${teacher.subjects != null && teacher.subjects.contains(subject)}">selected</c:if>>
+                ${subject.name}
+            </option>
+          </c:forEach>
+        </select>
+        <small class="form-text text-light">Hold Ctrl (Cmd on Mac) to select multiple subjects.</small>
       </div>
 
       <div class="text-center mt-4">
         <button type="submit" class="btn btn-primary px-4">
-          <i class="bi bi-bookmark-check"></i> Assign Subject
+          <i class="bi bi-bookmark-check"></i> Assign Subjects
         </button>
       </div>
     </form>

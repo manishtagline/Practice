@@ -82,4 +82,11 @@ public class SubjectServiceImpl implements SubjectService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
+    public List<Subject> getSubjectsByIds(List<Long> ids) {
+        return entityManager.createQuery("SELECT s FROM Subject s WHERE s.id IN :ids", Subject.class)
+                .setParameter("ids", ids)
+                .getResultList();
+    }
+
 }

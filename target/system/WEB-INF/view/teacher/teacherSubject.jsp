@@ -140,6 +140,7 @@
             <i class="fas fa-arrow-left"></i> Back to Dashboard
         </a>
     </div>
+    
     <c:choose>
         <c:when test="${not empty subjects}">
             <div class="subject-grid">
@@ -147,7 +148,8 @@
                     <div class="subject-card">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <div class="subject-title">Assign Subject: ${subject.name}</div>
-                            <a href="viewQuestions?subjectId=${subject.id}" class="btn btn-sm btn-outline-info" title="View Questions">
+                            <a href="${pageContext.request.contextPath}/teacher/viewQuestions?subjectId=${subject.id}"
+                               class="btn btn-sm btn-outline-info" title="View Questions">
                                 <i class="fas fa-eye"></i> View Questions
                             </a>
                         </div>

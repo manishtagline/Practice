@@ -29,7 +29,7 @@ public class Teacher {
    @ManyToMany(fetch = FetchType.EAGER)
    @JoinTable(name = "teachers_subjects",
            joinColumns = @JoinColumn(name = "teacher_id"),
-           inverseJoinColumns = @JoinColumn(name = "subejct_id"))
+           inverseJoinColumns = @JoinColumn(name = "subject_id"))
    private List<Subject> subjects;
 
    @OneToMany(mappedBy = "teacher")

@@ -20,4 +20,6 @@ public interface SubjectService {
 
     SubjectDto getSubjectWithTeachers(Long subjectId);
 
+    List<Subject> getSubjectsByIds(List<Long> ids);
+
 }

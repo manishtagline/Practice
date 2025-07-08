@@ -56,9 +56,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                 uri.startsWith(contextPath + "/home") ||
                 uri.startsWith(contextPath + "/submitExam");
 
-        boolean isTeacherUrl = uri.startsWith(contextPath + "/teacher") ||
-                uri.startsWith(contextPath + "/teacherExamList") ||
-                uri.startsWith(contextPath + "/teacherDashboard");
+        boolean isTeacherUrl = uri.startsWith(contextPath + "/teacher");
 
         // Restrict access based on role
         switch (role.toUpperCase()) {

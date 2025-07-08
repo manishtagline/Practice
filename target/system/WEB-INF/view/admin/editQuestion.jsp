@@ -30,7 +30,7 @@
     <div class="message error-msg">${errorMsg}</div>
   </c:if>
 
-  <form:form modelAttribute="question" method="post" action="${pageContext.request.contextPath}/updateQuestion" onsubmit="onSubmit()">
+  <form:form modelAttribute="question" method="post" action="${pageContext.request.contextPath}/admin/updateQuestion" onsubmit="onSubmit()">
     <form:hidden path="id" />
     <form:hidden path="subject.id"/>
 
@@ -80,7 +80,7 @@
 
   <!-- Back Button -->
   <div class="text-center">
-    <a href="manageQuestions?subjectId=${question.subject.id}" class="btn-back">← Back to List</a>
+    <a href="${pageContext.request.contextPath}/admin/manageQuestions?subjectId=${question.subject.id}" class="btn-back">← Back to List</a>
   </div>
 </div>
 

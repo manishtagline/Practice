@@ -50,7 +50,7 @@
             </div>
         </c:if>
 
-        <form:form modelAttribute="exam" method="post" action="${pageContext.request.contextPath}/saveExam">
+        <form:form modelAttribute="exam" method="post" action="${pageContext.request.contextPath}/admin/saveExam">
 
             <div class="mb-3">
                 <form:label path="description" cssClass="form-label">Description</form:label>
@@ -100,7 +100,7 @@
 
             <!-- Back -->
             <div class="text-center">
-                <a href="examList" class="btn-back"><i class="fas fa-arrow-left me-1"></i>Back to Exams</a>
+                <a href="${pageContext.request.contextPath}/admin/examList" class="btn-back"><i class="fas fa-arrow-left me-1"></i>Back to Exams</a>
             </div>
         </form:form>
     </div>

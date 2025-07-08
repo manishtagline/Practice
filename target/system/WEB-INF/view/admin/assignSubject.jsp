@@ -146,7 +146,7 @@
       Assign Subject to <span style="color: #66aaff;">${teacher.username}</span>
     </h5>
 
-    <form method="post" action="admin/assignSubject">
+    <form method="post" action="${pageContext.request.contextPath}/admin/assignSubject">
       <input type="hidden" name="teacherId" value="${teacher.id}" />
 
       <div class="mb-3">

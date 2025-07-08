@@ -1,6 +1,7 @@
 package com.example.questionbanksite.service;
 
 
+import com.example.questionbanksite.dto.SubjectDto;
 import com.example.questionbanksite.entity.Subject;
 
 import java.util.List;
@@ -16,5 +17,7 @@ public interface SubjectService {
     Subject updateSubject(Long id, Subject subject);
 
     void deleteSubject(Long id);
+
+    SubjectDto getSubjectWithTeachers(Long subjectId);
 
 }

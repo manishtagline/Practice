@@ -1,5 +1,6 @@
 package com.example.questionbanksite.service;
 
+import com.example.questionbanksite.dto.SubjectDto;
 import com.example.questionbanksite.entity.Subject;
 import com.example.questionbanksite.entity.Teacher;
 import org.springframework.stereotype.Service;
@@ -63,4 +64,22 @@ public class SubjectServiceImpl implements SubjectService {
             entityManager.remove(subject);
         }
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public SubjectDto getSubjectWithTeachers(Long subjectId) {
+        Subject subject = entityManager.createQuery(
+                "SELECT s FROM Subject s " +
+                        "WHERE s.id = :subjectId", Subject.class)
+                .setParameter("subjectId", subjectId)
+                .getSingleResult();
+
+        return SubjectDto.builder()
+                .id(subject.getId())
+                .name(subject.getName())
+                .questionCount(subject.getQuestions() != null ? subject.getQuestions().size() : 0)
+                .examCount(subject.getExams() != null ? subject.getExams().size() : 0)
+                .build();
+    }
+
 }

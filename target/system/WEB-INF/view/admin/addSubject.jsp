@@ -40,7 +40,7 @@
       <div class="message error-msg">${errorMsg}</div>
     </c:if>
 
-    <form action="saveSubject" method="post">
+    <form action="admin/saveSubject" method="post">
       <div class="mb-3">
         <label for="subjectName" class="form-label">Subject Name</label>
         <input type="text" class="form-control" id="subjectName" name="name" required placeholder="Enter subject name" />
@@ -52,7 +52,7 @@
 
     <!-- Back Button -->
     <div class="text-center mt-3">
-      <a href="subjectList" class="btn-back">← Back to Subject List</a>
+      <a href="admin/subjectList" class="btn-back">← Back to Subject List</a>
     </div>
   </div>
 </main>

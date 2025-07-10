@@ -312,7 +312,7 @@
             </div>
         </div>
 
-        <!-- Toast positioned above back button -->
+
         <c:if test="${not empty successToast}">
             <div class="custom-toast-wrapper" id="toastWrapper">
                 <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" id="successToast">

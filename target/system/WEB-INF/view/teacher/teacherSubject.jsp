@@ -43,24 +43,13 @@
             box-shadow: none;
             position: relative;
             z-index: 10;
-            flex-wrap: wrap;
-            gap: 0.5rem;
         }
 
-        /* Position toast below the back button */
-        .btn-back-wrapper {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start; /* left align */
-            gap: 0.5rem;
-        }
-
+        /* Toast container positioned above back button */
         .custom-toast-wrapper {
             position: absolute;
-            top: 100%; /* right below the back button */
-            left: 0;
-            margin-top: 8px;
+            top: -80px; /* above header-container */
+            right: 1rem;
             z-index: 9999;
             width: 320px;
         }
@@ -160,12 +149,12 @@
         }
 
         .header-container h2 {
-            flex: 1 1 100%;
+            flex: 1;
             text-align: center;
             color: #00c9ff;
             font-weight: 600;
             font-size: 2rem;
-            margin: 0.5rem 0 0;
+            margin: 0;
             user-select: none;
         }
 
@@ -323,25 +312,21 @@
             </div>
         </div>
 
+        <!-- Toast positioned above back button -->
+        <c:if test="${not empty successToast}">
+            <div class="custom-toast-wrapper" id="toastWrapper">
+                <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" id="successToast">
+                    <div>${successToast}</div>
+                    <button type="button" class="btn-close btn-close-white" aria-label="Close" id="toastCloseBtn"></button>
+                </div>
+            </div>
+        </c:if>
+
         <h2>My Assigned Subjects</h2>
 
-        <div class="btn-back-wrapper">
-            <a href="teacherDashboard" class="btn-back" title="Back to Dashboard">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
-            </a>
-
-            <c:if test="${not empty successToast}">
-                <div id="toastWrapper" class="custom-toast-wrapper">
-                    <div id="successToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-body">
-                                ${successToast}
-                        </div>
-                        <button type="button" id="toastCloseBtn" class="btn-close btn-close-white" aria-label="Close"></button>
-                    </div>
-                </div>
-            </c:if>
-        </div>
-
+        <a href="teacherDashboard" class="btn-back" title="Back to Dashboard">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
     </div>
 
     <c:choose>

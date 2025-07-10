@@ -82,7 +82,7 @@
     <button type="submit" class="btn btn-submit">Save Question</button>
 
     <div class="text-center">
-      <a href="${pageContext.request.contextPath}/teacher/viewQuestions?subjectId=${subjectId}" class="btn-back">←
+      <a href="${pageContext.request.contextPath}/teacher/teacherSubject" class="btn-back">←
         Back to List</a>
     </div>
 

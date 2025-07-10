@@ -3,13 +3,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>My Subjects - Teacher Panel</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <style>
         html, body {
@@ -24,7 +24,7 @@
 
         main {
             flex: 1;
-            padding: 2rem 1rem;
+            padding: 2rem 1.5rem;
             max-width: 1000px;
             margin: auto;
         }
@@ -32,7 +32,7 @@
         .header-container {
             display: flex;
             align-items: center;
-            justify-content: space-between; /* space between left, center, right */
+            justify-content: space-between;
             margin-bottom: 2rem;
             border-bottom: 2px solid rgba(0,201,255,0.25);
             padding-bottom: 0.5rem;
@@ -48,9 +48,8 @@
             flex: 1;
         }
 
-        /* back button style remains same but remove absolute */
         a.btn-back {
-            position: static; /* remove absolute */
+            position: static;
             color: #ccc;
             font-weight: 600;
             padding: 0.4rem 1rem;
@@ -75,16 +74,20 @@
 
         .subject-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
         }
 
         .subject-card {
             background: rgba(60, 60, 60, 0.9);
-            padding: 1.5rem;
-            border-radius: 12px;
+            padding: 1.8rem 2rem;
+            border-radius: 14px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.4);
             transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 210px;
         }
 
         .subject-card:hover {
@@ -93,29 +96,65 @@
         }
 
         .subject-title {
-            font-size: 1.4rem;
-            font-weight: 600;
+            font-size: 1.6rem;
+            font-weight: 700;
             color: #00c9ff;
-            margin-bottom: 0.8rem;
+            margin-bottom: 1.2rem;
         }
 
         .subject-detail {
-            font-size: 0.95rem;
+            font-size: 1.1rem;
             color: #ccc;
-            margin-bottom: 0.4rem;
+            margin-bottom: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
         }
 
         .subject-detail i {
             color: #00c9ff;
-            margin-right: 8px;
+            font-size: 1.3rem;
+        }
+
+        /* Big wide View Questions button */
+        .btn-view-questions {
+            background-color: #00c9ff;
+            color: #fff !important;
+            font-weight: 600;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 1.1rem;
+            letter-spacing: 0.03em;
+            box-shadow: 0 5px 14px rgba(0,201,255,0.6);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            user-select: none;
+            display: block;
+            width: 100%;
+            line-height: 1.3;
+        }
+        .btn-view-questions:hover,
+        .btn-view-questions:focus {
+            background-color: #008dbf;
+            box-shadow: 0 6px 18px rgba(0,141,191,0.85);
+            color: #fff !important;
+            text-decoration: none;
+            outline: none;
+        }
+
+        .btn-view-questions i {
+            margin-right: 0.6rem;
+            font-size: 1.2rem;
         }
 
         .no-subjects {
             text-align: center;
-            font-size: 1.2rem;
-            margin-top: 3rem;
+            font-size: 1.3rem;
+            margin-top: 3.5rem;
             color: #ddd;
             font-style: italic;
+            user-select: none;
         }
 
         footer {
@@ -124,8 +163,8 @@
             text-align: center;
             padding: 1rem;
             font-size: 0.9rem;
+            user-select: none;
         }
-
     </style>
 </head>
 <body>
@@ -140,21 +179,29 @@
             <i class="fas fa-arrow-left"></i> Back to Dashboard
         </a>
     </div>
-    
+
     <c:choose>
         <c:when test="${not empty subjects}">
             <div class="subject-grid">
                 <c:forEach var="subject" items="${subjects}">
                     <div class="subject-card">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div class="subject-title">Assign Subject: ${subject.name}</div>
+                        <div class="card-top">
+                            <div class="subject-title">${subject.name}</div>
+                            <div class="subject-detail">
+                                <i class="fas fa-book-open"></i> Total Questions: ${subject.questionCount}
+                            </div>
+                        </div>
+
+                        <div class="card-buttons d-flex justify-content-between gap-2 mt-3">
                             <a href="${pageContext.request.contextPath}/teacher/viewQuestions?subjectId=${subject.id}"
-                               class="btn btn-sm btn-outline-info" title="View Questions">
+                               class="btn-view-questions" title="View Questions for ${subject.name}" style="flex: 1;">
                                 <i class="fas fa-eye"></i> View Questions
                             </a>
-                        </div>
-                        <div class="subject-detail mt-2">
-                            <i class="fas fa-book-open"></i> Total Question: ${subject.questionCount}
+
+                            <a href="${pageContext.request.contextPath}/teacher/addQuestionPage?subjectId=${subject.id}"
+                               class="btn-view-questions" title="Add Question for ${subject.name}" style="flex: 1; background-color: #28a745; box-shadow: 0 5px 14px rgba(40,167,69,0.6);">
+                                <i class="fas fa-plus-circle"></i> Add Question
+                            </a>
                         </div>
                     </div>
                 </c:forEach>

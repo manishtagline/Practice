@@ -26,7 +26,7 @@
   <div class="header-row">
     <h2>👨‍🏫 Faculty Members</h2>
     <div class="back-btn-container">
-      <a href="adminPage" class="add-subject-btn">&#8592; Back to Dashboard</a>
+      <a href="adminPage" class="back-btn">&#8592; Back to Dashboard</a>
     </div>
   </div>
 

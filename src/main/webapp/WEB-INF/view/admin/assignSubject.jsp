@@ -153,7 +153,7 @@
         <label for="subjectIds" class="form-label text-light">Select Subjects</label>
 
         <!-- Multi-select dropdown -->
-        <select name="subjectIds" class="form-select" id="subjectIds" multiple required size="6">
+        <select name="subjectId" class="form-select" id="subjectIds" multiple required size="6">
           <c:forEach var="subject" items="${subjects}">
             <option value="${subject.id}"
                     <c:if test="${teacher.subjects != null && teacher.subjects.contains(subject)}">selected</c:if>>

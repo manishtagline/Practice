@@ -255,15 +255,14 @@ public class AdminController {
     @PostMapping("/assignSubject")
     public String assignSubject(
             @RequestParam("teacherId") Long teacherId,
-            @RequestParam("subjectId") Long subjectId,
-            RedirectAttributes redirectAttributes,
-            Model model) {
+            @RequestParam("subjectId") List<Long> subjectId,
+            RedirectAttributes redirectAttributes) {
 
         Teacher teacher = teacherService.getTeacherById(teacherId);
-        Subject subject = subjectService.getSubjectById(subjectId);
+        List<Subject> subjects = subjectService.getSubjectByListOfId(subjectId);
 
-        if (teacher != null && subject != null) {
-            teacher.setSubjects(List.of(subject));
+        if (teacher != null && subjects != null) {
+            teacher.setSubjects(subjects);
             teacherService.updateTeacher(teacher);
             redirectAttributes.addFlashAttribute("successMsg", "Subject assigned successfully!");
         } else {

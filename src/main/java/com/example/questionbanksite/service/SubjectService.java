@@ -22,4 +22,5 @@ public interface SubjectService {
 
     List<Subject> getSubjectsByIds(List<Long> ids);
 
+    List<Subject> getSubjectByListOfId(List<Long> subjectId);
 }

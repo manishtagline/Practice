@@ -37,6 +37,18 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
+    public List<Subject> getSubjectByListOfId(List<Long> subjectId) {
+        try {
+            return entityManager.createQuery("SELECT s FROM Subject s WHERE  s.id IN :ids", Subject.class)
+                    .setParameter("ids", subjectId)
+                    .getResultList();
+        }catch (NoResultException e){
+            return null;
+        }
+    }
+
+
+    @Override
     @Transactional(readOnly = true)
     public List<Subject> getAllSubjects() {
         return entityManager.createQuery("SELECT s FROM Subject s", Subject.class).getResultList();

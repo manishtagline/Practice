@@ -219,6 +219,6 @@
     }
 
     function confirmLogout() {
-        window.location.href = 'logout';
+        window.location.href = '${pageContext.request.contextPath}/logout';
     }
 </script>

@@ -12,7 +12,27 @@ body {
     color: #fff;
     min-height: 100vh;
 }
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    color: #00c9ff;
+    font-weight: 600;
+    padding: 6px 16px; /* smaller rectangle */
+    border-radius: 4px;
+    font-size: 0.95rem;
+    border: 2px solid #00c9ff; /* always visible outline */
+    transition: all 0.3s ease;
+    text-decoration: none;
+    cursor: pointer;
+}
 
+.back-btn:hover {
+    background-color: #00c9ff;
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 206, 201, 0.35);
+}
 main {
     flex: 1;
     z-index: 2;
@@ -148,7 +168,7 @@ main {
 }
 
 .btn-outline-primary {
-    border-color: #00cec9;
+    border-color: #00c9ff;
     color: #00cec9;
 }
 

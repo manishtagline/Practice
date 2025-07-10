@@ -1,11 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>My Subjects - Teacher Panel</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
@@ -24,36 +25,154 @@
 
         main {
             flex: 1;
-            padding: 2rem 1rem;
-            max-width: 1000px;
-            margin: auto;
+            padding: 0 3rem 2rem;
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
         }
 
         .header-container {
             display: flex;
             align-items: center;
-            justify-content: space-between; /* space between left, center, right */
-            margin-bottom: 2rem;
+            justify-content: space-between;
+            padding: 1rem 0;
+            margin-top: 0.5rem;
             border-bottom: 2px solid rgba(0,201,255,0.25);
-            padding-bottom: 0.5rem;
+            background: transparent;
+            min-height: 70px;
+            box-shadow: none;
             position: relative;
+            z-index: 10;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        /* Position toast below the back button */
+        .btn-back-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* left align */
+            gap: 0.5rem;
+        }
+
+        .custom-toast-wrapper {
+            position: absolute;
+            top: 100%; /* right below the back button */
+            left: 0;
+            margin-top: 8px;
+            z-index: 9999;
+            width: 320px;
+        }
+
+        /* Toast styling and animation */
+        .toast {
+            background: linear-gradient(135deg, #00c9ff, #005f99);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,201,255,0.6);
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 1rem 1.5rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation-fill-mode: forwards;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toast.show {
+            animation: fadeInDown 0.5s forwards;
+        }
+
+        .toast.fade-out {
+            animation: fadeOutUp 0.5s forwards;
+        }
+
+        .toast .btn-close {
+            filter: brightness(0.8);
+            transition: filter 0.3s ease;
+        }
+
+        .toast .btn-close:hover {
+            filter: brightness(1.2);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOutUp {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+
+        .summary-bar {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            background: rgba(0, 201, 255, 0.15);
+            border: 1px solid #00c9ff33;
+            padding: 0.7rem 1rem;
+            border-radius: 10px;
+        }
+
+        .summary-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-weight: 600;
+            color: #00c9ff;
+        }
+
+        .summary-item i {
+            font-size: 1.2rem;
+        }
+
+        .summary-item div {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
+        .summary-item div div:first-child {
+            font-size: 1.2rem;
+        }
+
+        .summary-item div div:last-child {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            white-space: nowrap;
         }
 
         .header-container h2 {
-            font-weight: 600;
-            font-size: 2.2rem;
-            color: #00c9ff;
-            margin: 0;
+            flex: 1 1 100%;
             text-align: center;
-            flex: 1;
+            color: #00c9ff;
+            font-weight: 600;
+            font-size: 2rem;
+            margin: 0.5rem 0 0;
+            user-select: none;
         }
 
-        /* back button style remains same but remove absolute */
         a.btn-back {
-            position: static; /* remove absolute */
             color: #ccc;
             font-weight: 600;
-            padding: 0.4rem 1rem;
+            padding: 0.5rem 1rem;
             border: 2px solid transparent;
             border-radius: 0.5rem;
             text-decoration: none;
@@ -63,51 +182,91 @@
             display: flex;
             align-items: center;
             gap: 0.4rem;
+            user-select: none;
+            position: relative;
+            z-index: 5;
         }
+
         a.btn-back:hover {
             color: #00c9ff;
             border-color: #00c9ff;
-            text-decoration: none;
-        }
-        a.btn-back i {
-            font-size: 1.1rem;
         }
 
         .subject-grid {
+            margin-top: 2rem;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
         }
 
         .subject-card {
-            background: rgba(60, 60, 60, 0.9);
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-            transition: 0.3s;
+            position: relative;
+            background: #2f2f2f;
+            padding: 2rem;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border: 1px solid #00c9ff33;
+            z-index: 1;
         }
 
-        .subject-card:hover {
-            transform: translateY(-6px);
-            background-color: rgba(80, 80, 80, 0.95);
+        .subject-card::before,
+        .subject-card::after {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background-image:
+                    linear-gradient(135deg, rgba(0,201,255,0.07) 1px, transparent 1px),
+                    linear-gradient(45deg, rgba(0,201,255,0.07) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        .subject-title,
+        .subject-detail,
+        .button-group {
+            position: relative;
+            z-index: 2;
         }
 
         .subject-title {
-            font-size: 1.4rem;
-            font-weight: 600;
+            font-size: 1.6rem;
+            font-weight: 700;
             color: #00c9ff;
-            margin-bottom: 0.8rem;
+            margin-bottom: 1rem;
         }
 
         .subject-detail {
-            font-size: 0.95rem;
+            font-size: 1rem;
             color: #ccc;
-            margin-bottom: 0.4rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 201, 255, 0.2);
+            padding-bottom: 0.6rem;
         }
 
         .subject-detail i {
             color: #00c9ff;
-            margin-right: 8px;
+            margin-right: 10px;
+        }
+
+        .button-group {
+            margin-top: 1.2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .button-group a.btn {
+            font-size: 0.95rem;
+            padding: 0.5rem 1.2rem;
+            font-weight: 600;
         }
 
         .no-subjects {
@@ -125,7 +284,6 @@
             padding: 1rem;
             font-size: 0.9rem;
         }
-
     </style>
 </head>
 <body>
@@ -133,28 +291,77 @@
 <jsp:include page="/WEB-INF/view/navbar/teacherNavbar.jsp"/>
 
 <main>
+
+    <c:set var="totalQuestions" value="0" />
+    <c:forEach var="subject" items="${subjects}">
+        <c:set var="totalQuestions" value="${totalQuestions + subject.questionCount}" />
+    </c:forEach>
+
     <div class="header-container">
-        <div style="width: 140px;"></div> <!-- left spacer -->
+
+        <div class="summary-bar">
+            <div class="summary-item">
+                <i class="fas fa-layer-group"></i>
+                <div>
+                    <div>${fn:length(subjects)}</div>
+                    <div>Subjects</div>
+                </div>
+            </div>
+            <div class="summary-item">
+                <i class="fas fa-book-open"></i>
+                <div>
+                    <div>${totalQuestions}</div>
+                    <div>Questions</div>
+                </div>
+            </div>
+            <div class="summary-item">
+                <i class="fas fa-clock"></i>
+                <div>
+                    <div><c:out value="${lastUpdated != null ? lastUpdated : 'N/A'}" /></div>
+                    <div>Last Updated</div>
+                </div>
+            </div>
+        </div>
+
         <h2>My Assigned Subjects</h2>
-        <a href="teacherDashboard" class="btn-back" title="Back to Dashboard">
-            <i class="fas fa-arrow-left"></i> Back to Dashboard
-        </a>
+
+        <div class="btn-back-wrapper">
+            <a href="teacherDashboard" class="btn-back" title="Back to Dashboard">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+
+            <c:if test="${not empty successToast}">
+                <div id="toastWrapper" class="custom-toast-wrapper">
+                    <div id="successToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-body">
+                                ${successToast}
+                        </div>
+                        <button type="button" id="toastCloseBtn" class="btn-close btn-close-white" aria-label="Close"></button>
+                    </div>
+                </div>
+            </c:if>
+        </div>
+
     </div>
-    
+
     <c:choose>
         <c:when test="${not empty subjects}">
             <div class="subject-grid">
                 <c:forEach var="subject" items="${subjects}">
                     <div class="subject-card">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div class="subject-title">Assign Subject: ${subject.name}</div>
+                        <div class="subject-title">Subject Name: ${subject.name}</div>
+                        <div class="subject-detail">
+                            <i class="fas fa-book-open"></i> Total Questions: ${subject.questionCount}
+                        </div>
+                        <div class="button-group">
                             <a href="${pageContext.request.contextPath}/teacher/viewQuestions?subjectId=${subject.id}"
-                               class="btn btn-sm btn-outline-info" title="View Questions">
+                               class="btn btn-sm btn-outline-info">
                                 <i class="fas fa-eye"></i> View Questions
                             </a>
-                        </div>
-                        <div class="subject-detail mt-2">
-                            <i class="fas fa-book-open"></i> Total Question: ${subject.questionCount}
+                            <a href="${pageContext.request.contextPath}/teacher/addQuestionPage?subjectId=${subject.id}"
+                               class="btn btn-sm btn-outline-success">
+                                <i class="fas fa-plus"></i> Add Question
+                            </a>
                         </div>
                     </div>
                 </c:forEach>
@@ -171,6 +378,34 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const toast = document.getElementById('successToast');
+        const toastCloseBtn = document.getElementById('toastCloseBtn');
+
+        if(toast) {
+            // Auto-hide after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('fade-out');
+
+                // Remove from DOM after animation (500ms)
+                setTimeout(() => {
+                    const wrapper = document.getElementById('toastWrapper');
+                    if(wrapper) wrapper.remove();
+                }, 500);
+            }, 3000);
+
+            // Close button click handler
+            toastCloseBtn.addEventListener('click', () => {
+                toast.classList.add('fade-out');
+                setTimeout(() => {
+                    const wrapper = document.getElementById('toastWrapper');
+                    if(wrapper) wrapper.remove();
+                }, 500);
+            });
+        }
+    });
+</script>
 
 </body>
 </html>

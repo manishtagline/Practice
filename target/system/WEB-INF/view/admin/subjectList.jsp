@@ -29,7 +29,7 @@
     <div class="header-row">
         <h2>Manage Subjects</h2>
         <div class="back-btn-container">
-            <a href="adminPage" class="add-subject-btn" style="width: auto; padding: 12px 24px; margin: 0;">
+            <a href="adminPage" class="back1-btn">
                 &#8592; Back to Dashboard
             </a>
         </div>

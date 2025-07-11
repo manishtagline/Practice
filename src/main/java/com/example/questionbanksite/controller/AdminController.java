@@ -273,6 +273,13 @@ public class AdminController {
         return "redirect:/admin/teacherList";
     }
 
+    @GetMapping("/viewTeacherQuestions")
+    public String viewTeacherQuestionList(@RequestParam("facultyId") Long teacherId, Model model){
+        List<QuestionDto> questions = teacherService.getQuestionOfTeacher(teacherId);
+
+        model.addAttribute("questions", questions);
+        return "admin/teacherQuestionList";
+    }
 
 
     //**************************** Teacher Handlers Ends  *************************//

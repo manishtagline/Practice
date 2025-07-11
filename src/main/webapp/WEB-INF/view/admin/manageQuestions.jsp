@@ -29,7 +29,7 @@
             </div>
 
             <!-- Filter & Sort -->
-            <form method="get" action="admin/manageQuestions" class="filter-form d-flex align-items-center gap-4 flex-wrap">
+            <form method="get" action="${pageContext.request.contextPath}/admin/manageQuestions" class="filter-form d-flex align-items-center gap-4 flex-wrap">
                 <input type="hidden" name="subjectId" value="${subjectId}" />
                 <div class="d-flex align-items-center gap-2">
                     <label for="complexity" class="mb-0 fw-semibold text-white">Filter by Complexity:</label>

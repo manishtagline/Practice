@@ -1,7 +1,9 @@
     package com.example.questionbanksite.service;
 
     import com.example.questionbanksite.dto.BaseUserRegisterDto;
+    import com.example.questionbanksite.dto.QuestionDto;
     import com.example.questionbanksite.dto.TeacherDto;
+    import com.example.questionbanksite.entity.Question;
     import com.example.questionbanksite.entity.Subject;
     import com.example.questionbanksite.entity.Teacher;
     import com.example.questionbanksite.entity.User;
@@ -103,6 +105,25 @@
             return entityManager.createQuery("SELECT COUNT(q) FROM Question q WHERE q.teacher.id = :teacherId AND q.deleted = false ", Long.class)
                     .setParameter("teacherId", teacherId)
                     .getSingleResult();
+        }
+
+        @Override
+        public List<QuestionDto> getQuestionOfTeacher(Long teacherId) {
+            List<Question> questions = entityManager.createQuery("SELECT q FROM Question q WHERE q.teacher.id = :teacherId AND q.deleted = false",
+                    Question.class)
+                    .setParameter("teacherId", teacherId)
+                    .getResultList();
+            return questions.stream()
+                    .map(q -> new QuestionDto(
+                            q.getId(),
+                            q.getQuestiondDesc(),
+                            q.getOptions().stream().toList(),
+                            q.getCorrectAnswer(),
+                            q.getMarks(),
+                            q.getComplexity(),
+                            q.getSubject().getName()
+                    ))
+                    .collect(Collectors.toList());
         }
 
 

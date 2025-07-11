@@ -29,7 +29,7 @@
             </div>
 
             <!-- Filter & Sort -->
-            <form method="get" action="admin/manageQuestions" class="filter-form d-flex align-items-center gap-4 flex-wrap">
+            <form method="get" action="${pageContext.request.contextPath}/admin/manageQuestions" class="filter-form d-flex align-items-center gap-4 flex-wrap">
                 <input type="hidden" name="subjectId" value="${subjectId}" />
                 <div class="d-flex align-items-center gap-2">
                     <label for="complexity" class="mb-0 fw-semibold text-white">Filter by Complexity:</label>
@@ -82,7 +82,7 @@
                         <td>
                             <div class="d-flex justify-content-center">
                                 <a href="${pageContext.request.contextPath}/admin/editQuestion?id=${question.id}&subjectId=${subjectId}" class="btn btn-sm btn-action">Edit</a>
-                                <a href="${pageContext.request.contextPath}/admin/deleteQuestion?id=${question.id}&subjectId=${subjectId}" class="btn btn-sm btn-action btn-delete"
+                                <a href="${pageContext.request.contextPath}/deleteQuestion?id=${question.id}&subjectId=${subjectId}" class="btn btn-sm btn-action btn-delete"
                                    data-delete-url="admin/deleteQuestion?id=${question.id}&subjectId=${subjectId}"
                                    data-question-id="${question.id}">
                                     Delete

@@ -146,7 +146,7 @@
                 <a href="${pageContext.request.contextPath}/admin/viewExamDetails?facultyId=${teacher.id}" class="btn btn-sm btn-outline-success w-100">View Exams</a>
               </div>
               <div class="col-12 d-flex justify-content-center">
-                <a href="${pageContext.request.contextPath}/admin/viewQuestions?facultyId=${teacher.id}" class="btn btn-sm btn-outline-info px-4">View Questions</a>
+                <a href="${pageContext.request.contextPath}/admin/viewTeacherQuestions?facultyId=${teacher.id}" class="btn btn-sm btn-outline-info px-4">View Questions</a>
               </div>
             </div>
           </div>

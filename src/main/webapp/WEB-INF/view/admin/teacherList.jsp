@@ -166,7 +166,6 @@
   &copy; 2025 Admin Panel | Exam Center. All rights reserved.
 </footer>
 
-<!-- JS for Toast -->
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const toast = document.getElementById('successToast');

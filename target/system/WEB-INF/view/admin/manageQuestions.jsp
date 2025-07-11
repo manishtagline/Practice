@@ -82,8 +82,8 @@
                         <td>
                             <div class="d-flex justify-content-center">
                                 <a href="${pageContext.request.contextPath}/admin/editQuestion?id=${question.id}&subjectId=${subjectId}" class="btn btn-sm btn-action">Edit</a>
-                                <a href="${pageContext.request.contextPath}/deleteQuestion?id=${question.id}&subjectId=${subjectId}" class="btn btn-sm btn-action btn-delete"
-                                   data-delete-url="admin/deleteQuestion?id=${question.id}&subjectId=${subjectId}"
+                                <a href="${pageContext.request.contextPath}/admin/deleteQuestion?id=${question.id}&subjectId=${subjectId}" class="btn btn-sm btn-action btn-delete"
+                                   data-delete-url="${pageContext.request.contextPath}/admin/deleteQuestion?id=${question.id}&subjectId=${subjectId}"
                                    data-question-id="${question.id}">
                                     Delete
                                 </a>

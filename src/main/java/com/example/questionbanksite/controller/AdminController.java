@@ -14,8 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -128,11 +127,13 @@ public class AdminController {
             @RequestParam("options") String[] optionsArray,
             @ModelAttribute("question") Question question) {
 
-        List<String> options = Arrays.stream(optionsArray)
+        Set<String> optionSet = Arrays.stream(optionsArray)
                 .filter(opt -> opt != null && !opt.trim().isEmpty())
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(LinkedHashSet::new));
 
-        question.setOptions(options);
+        question.setOptions(optionSet);
+
+        List<String> options = new ArrayList<>(optionSet);
 
         String correctOptionLetter = question.getCorrectAnswer();
         String correctAnswer = "";
@@ -144,7 +145,6 @@ public class AdminController {
             case "D" -> options.get(3);
             default -> "";
         };
-
         question.setCorrectAnswer(correctAnswer);
 
         Subject subject = subjectService.getSubjectById(subjectId);
@@ -194,7 +194,7 @@ public class AdminController {
 
         Question question = questionService.getQuestionById(id);
 
-        List<String> options = question.getOptions();
+        Set<String> options = question.getOptions();
         while (options.size() < 4) {
             options.add("");
         }
@@ -265,11 +265,12 @@ public class AdminController {
             teacher.setSubjects(subjects);
             teacherService.updateTeacher(teacher);
             redirectAttributes.addFlashAttribute("successMsg", "Subject assigned successfully!");
+            return "redirect:/admin/teacherList";
         } else {
             redirectAttributes.addFlashAttribute("errorMsg", "Invalid teacher or subject.");
         }
 
-        return "redirect:/admin/assignSubjectPage?facultyId=" + teacherId;
+        return "redirect:/admin/teacherList";
     }
 
 

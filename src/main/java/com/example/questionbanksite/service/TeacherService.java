@@ -20,4 +20,6 @@ public interface TeacherService {
     Teacher getTeacherById(Long teacherId);
 
     void updateTeacher(Teacher teacher);
+
+    long countQuestionAddedByTeacher(Long teacherId);
 }

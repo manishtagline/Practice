@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -70,7 +69,10 @@ public class TeacherController{
                 .map(s -> subjectService.getSubjectWithTeachers(s.getId()))
                 .toList();
 
+        long totalAddedQuestions = teacherService.countQuestionAddedByTeacher(teacher.getId());
+
         model.addAttribute("subjects", loadedSubjects);
+        model.addAttribute("totalQuestionss", totalAddedQuestions);
         return "teacher/teacherSubject";
     }
 
@@ -111,37 +113,46 @@ public class TeacherController{
         return "teacher/addTeacherQuestion";
     }
 
-    @PostMapping("/saveQuestion")
-    public String saveQuestions(
-            @RequestParam Long subjectId,
-            @RequestParam("options") String[] optionsArrays,
-            @ModelAttribute("question") Question question,
-            RedirectAttributes redirectAttributes){
+        @PostMapping("/saveQuestion")
+        public String saveQuestions(
+                @RequestParam Long subjectId,
+                @RequestParam("options") String[] optionsArrays,
+                @ModelAttribute("question") Question question,
+                RedirectAttributes redirectAttributes,
+                HttpSession session){
 
-        List<String> options = Arrays.stream(optionsArrays)
-                .filter(opt -> opt != null && !opt.trim().isEmpty())
-                .collect(Collectors.toList());
-        question.setOptions(options);
+            Set<String> optionSet = Arrays.stream(optionsArrays)
+                    .filter(opt -> opt != null && !opt.trim().isEmpty())
+                    .collect(Collectors.toCollection(LinkedHashSet::new));
+            question.setOptions(optionSet);
+            List<String> options = new ArrayList<>(optionSet);
 
-        String correctOptionLetter = question.getCorrectAnswer();
-        String correctAnswer = "";
+            String correctOptionLetter = question.getCorrectAnswer();
+            String correctAnswer = "";
 
-        correctAnswer = switch (correctOptionLetter){
-            case "A" -> options.get(0);
-            case "B" -> options.get(1);
-            case "C" -> options.get(2);
-            case "D" -> options.get(3);
-            default -> "";
-        };
+            correctAnswer = switch (correctOptionLetter) {
+                case "A" -> options.get(0);
+                case "B" -> options.get(1);
+                case "C" -> options.get(2);
+                case "D" -> options.get(3);
+                default -> "";
+            };
 
-        question.setCorrectAnswer(correctAnswer);
+            question.setCorrectAnswer(correctAnswer);
 
-        Subject subject = subjectService.getSubjectById(subjectId);
-        question.setSubject(subject);
-        questionService.saveQuestion(question);
+            String teacherName = (String) session.getAttribute("username");
+            Teacher teacher = teacherService.getTeacherByName(teacherName);
 
-        redirectAttributes.addFlashAttribute("successToast", "Question added successfully!");
-        return "redirect:/teacher/teacherSubject";
-    }
+            Subject subject = subjectService.getSubjectById(subjectId);
+            question.setSubject(subject);
+
+            question.setTeacher(teacher);
+
+            questionService.saveQuestion(question);
+
+
+            redirectAttributes.addFlashAttribute("successToast", "Question added successfully!");
+            return "redirect:/teacher/teacherSubject";
+        }
 
 }

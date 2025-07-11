@@ -97,5 +97,13 @@
             entityManager.merge(teacher);
         }
 
+        @Override
+        @Transactional(readOnly = true)
+        public long countQuestionAddedByTeacher(Long teacherId) {
+            return entityManager.createQuery("SELECT COUNT(q) FROM Question q WHERE q.teacher.id = :teacherId AND q.deleted = false ", Long.class)
+                    .setParameter("teacherId", teacherId)
+                    .getSingleResult();
+        }
+
 
     }

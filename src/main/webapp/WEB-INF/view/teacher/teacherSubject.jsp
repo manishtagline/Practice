@@ -304,10 +304,10 @@
                 </div>
             </div>
             <div class="summary-item">
-                <i class="fas fa-clock"></i>
+                <i class="fas fa-pen"></i>
                 <div>
-                    <div><c:out value="${lastUpdated != null ? lastUpdated : 'N/A'}" /></div>
-                    <div>Last Updated</div>
+                    <div>${totalQuestionss}</div>
+                    <div>Questions Added</div>
                 </div>
             </div>
         </div>

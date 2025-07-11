@@ -7,6 +7,7 @@
 
     import javax.persistence.*;
     import java.util.List;
+    import java.util.Set;
 
     @Entity
     @Table(name = "question")
@@ -23,7 +24,7 @@
         private String questiondDesc;
 
         @ElementCollection(fetch = FetchType.EAGER)
-        private List<String> options;
+        private Set<String> options;
 
         @Column(name = "deleted")
         private boolean deleted = false;
@@ -42,5 +43,8 @@
         @ManyToMany(mappedBy = "questions")
         private List<Exam> exams;
 
+        @ManyToOne
+        @JoinColumn(name = "teacherId")
+        private Teacher teacher;
 
     }

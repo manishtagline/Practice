@@ -194,3 +194,40 @@ footer {
     padding: 1rem;
     font-size: 0.9rem;
 }
+
+.custom-toast-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1055;
+}
+
+.custom-toast {
+    background-color: rgba(40, 167, 69, 0.95);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 201, 167, 0.2);
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    animation: slideFade 3s forwards;
+}
+
+@keyframes slideFade {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    10% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}

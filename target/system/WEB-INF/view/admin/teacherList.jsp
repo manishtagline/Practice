@@ -143,7 +143,7 @@
                 <a href="${pageContext.request.contextPath}/admin/assignSubjectPage?facultyId=${teacher.id}" class="btn btn-sm btn-outline-primary w-100">Assign Subject</a>
               </div>
               <div class="col-6">
-                <a href="${pageContext.request.contextPath}/admin/viewExamDetails?facultyId=${teacher.id}" class="btn btn-sm btn-outline-success w-100">View Exams</a>
+                <a href="${pageContext.request.contextPath}/admin/viewExamDetailsOfTeacher?facultyId=${teacher.id}" class="btn btn-sm btn-outline-success w-100">View Exams</a>
               </div>
               <div class="col-12 d-flex justify-content-center">
                 <a href="${pageContext.request.contextPath}/admin/viewTeacherQuestions?facultyId=${teacher.id}" class="btn btn-sm btn-outline-info px-4">View Questions</a>
@@ -166,7 +166,6 @@
   &copy; 2025 Admin Panel | Exam Center. All rights reserved.
 </footer>
 
-<!-- JS for Toast -->
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const toast = document.getElementById('successToast');

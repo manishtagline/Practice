@@ -32,17 +32,92 @@
         }
 
         .header-container {
+            position: relative;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: space-between; /* space left summary and right back */
             padding: 1rem 0;
             margin-top: 0.5rem;
             border-bottom: 2px solid rgba(0,201,255,0.25);
             background: transparent;
             min-height: 70px;
             box-shadow: none;
-            position: relative;
-            z-index: 10;
+            gap: 1rem;
+        }
+
+        /* Left summary bar */
+        .summary-bar {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            background: rgba(0, 201, 255, 0.15);
+            border: 1px solid #00c9ff33;
+            padding: 0.7rem 1rem;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .summary-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-weight: 600;
+            color: #00c9ff;
+        }
+
+        .summary-item i {
+            font-size: 1.2rem;
+        }
+
+        .summary-item div {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
+        .summary-item div div:first-child {
+            font-size: 1.2rem;
+        }
+
+        .summary-item div div:last-child {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            white-space: nowrap;
+        }
+
+        /* Center title */
+        .header-container h2 {
+            flex-grow: 1;
+            text-align: center;
+            color: #00c9ff;
+            font-weight: 600;
+            font-size: 2rem;
+            margin: 0;
+            user-select: none;
+            z-index: 20;
+        }
+
+        /* Back button on right */
+        a.btn-back {
+            flex-shrink: 0;
+            color: #ccc;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border: 2px solid transparent;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            transition: color 0.3s ease, border-color 0.3s ease;
+            white-space: nowrap;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            user-select: none;
+        }
+
+        a.btn-back:hover {
+            color: #00c9ff;
+            border-color: #00c9ff;
         }
 
         /* Toast container positioned above back button */
@@ -110,82 +185,17 @@
             }
         }
 
-        .summary-bar {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-            background: rgba(0, 201, 255, 0.15);
-            border: 1px solid #00c9ff33;
-            padding: 0.7rem 1rem;
-            border-radius: 10px;
-        }
-
-        .summary-item {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-weight: 600;
-            color: #00c9ff;
-        }
-
-        .summary-item i {
-            font-size: 1.2rem;
-        }
-
-        .summary-item div {
-            display: flex;
-            flex-direction: column;
-            line-height: 1;
-        }
-
-        .summary-item div div:first-child {
-            font-size: 1.2rem;
-        }
-
-        .summary-item div div:last-child {
-            font-size: 0.7rem;
-            opacity: 0.7;
-            white-space: nowrap;
-        }
-
-        .header-container h2 {
-            flex: 1;
-            text-align: center;
-            color: #00c9ff;
-            font-weight: 600;
-            font-size: 2rem;
-            margin: 0;
-            user-select: none;
-        }
-
-        a.btn-back {
-            color: #ccc;
-            font-weight: 600;
-            padding: 0.5rem 1rem;
-            border: 2px solid transparent;
-            border-radius: 0.5rem;
-            text-decoration: none;
-            transition: color 0.3s ease, border-color 0.3s ease;
-            white-space: nowrap;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            user-select: none;
-            position: relative;
-            z-index: 5;
-        }
-
-        a.btn-back:hover {
-            color: #00c9ff;
-            border-color: #00c9ff;
-        }
-
         .subject-grid {
             margin-top: 2rem;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2rem;
+        }
+
+        /* When only one subject, show card with half width */
+        .subject-grid.one-subject {
+            grid-template-columns: repeat(auto-fit, minmax(350px, 50%));
+            justify-content: center;
         }
 
         .subject-card {
@@ -312,6 +322,11 @@
             </div>
         </div>
 
+        <h2>My Assigned Subjects</h2>
+
+        <a href="teacherDashboard" class="btn-back" title="Back to Dashboard">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
 
         <c:if test="${not empty successToast}">
             <div class="custom-toast-wrapper" id="toastWrapper">
@@ -322,16 +337,11 @@
             </div>
         </c:if>
 
-        <h2>My Assigned Subjects</h2>
-
-        <a href="teacherDashboard" class="btn-back" title="Back to Dashboard">
-            <i class="fas fa-arrow-left"></i> Back to Dashboard
-        </a>
     </div>
 
     <c:choose>
         <c:when test="${not empty subjects}">
-            <div class="subject-grid">
+            <div class="subject-grid ${fn:length(subjects) == 1 ? 'one-subject' : ''}">
                 <c:forEach var="subject" items="${subjects}">
                     <div class="subject-card">
                         <div class="subject-title">Subject Name: ${subject.name}</div>

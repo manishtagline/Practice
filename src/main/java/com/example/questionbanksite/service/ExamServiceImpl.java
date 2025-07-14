@@ -37,9 +37,38 @@ public class ExamServiceImpl implements ExamService{
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         return exams.stream()
-                .map(exam -> ExamDto.builder().id(exam.getId()).description( exam.getDescription()).totalMarks(exam.getTotalMarks())
+                .map(
+                        exam -> ExamDto.builder()
+                                .id(exam.getId())
+                                .description( exam.getDescription())
+                                .totalMarks(exam.getTotalMarks())
                                 .totalNumberOfQuestion(exam.getTotalNumberOfQuestion())
-                        .subjectName(exam.getSubject().getName()).formattedDate( exam.getDateCreated().format(formatter)).build()
+                                .subjectName(exam.getSubject().getName())
+                                .formattedDate( exam.getDateCreated().format(formatter))
+                                .build()
+                )
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ExamDto> getAllExamOfTeacher(Long teacherId) {
+        List<Exam> exams = entityManager.createQuery("SELECT e FROM Exam e WHERE e.teacher.id = :teacherId ", Exam.class)
+                .setParameter("teacherId", teacherId)
+                .getResultList();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+        return exams.stream()
+                .map(
+                        exam -> ExamDto.builder()
+                        .id(exam.getId())
+                        .description(exam.getDescription())
+                        .totalMarks(exam.getTotalMarks())
+                        .totalNumberOfQuestion(exam.getTotalNumberOfQuestion())
+                        .subjectName(exam.getSubject().getName())
+                        .formattedDate(exam.getDateCreated().format(formatter))
+                        .build()
                 )
                 .collect(Collectors.toList());
     }
@@ -54,6 +83,52 @@ public class ExamServiceImpl implements ExamService{
         return query.getResultStream().findFirst().orElse(null);
     }
 
+
+
+    @Override
+    @Transactional
+    public UserResult evaluateAndSaveResult(String username, Long examId, Map<String, String> answersMap) {
+        User user = userService.getUserByName(username);
+
+        Exam exam = entityManager.find(Exam.class, examId);
+        if (exam == null) {
+            throw new IllegalArgumentException("Invalid exam ID: " + examId);
+        }
+
+        List<Question> questionList = exam.getQuestions();
+        int totalScore = 0;
+
+        StringBuilder answerLog = new StringBuilder();
+
+        for (Question question : questionList) {
+            String userAnswer = answersMap.get("answers[" + question.getId() + "]");
+            if (userAnswer != null && userAnswer.equalsIgnoreCase(question.getCorrectAnswer())) {
+                totalScore += question.getMarks();
+            }
+
+            answerLog.append("Q").append(question.getId()).append(": ").append(userAnswer).append(" | ");
+        }
+
+        double percentage = (exam.getTotalMarks() > 0)
+                ? ((double) totalScore / exam.getTotalMarks()) * 100
+                : 0;
+
+        UserResult result = new UserResult();
+        result.setUser(user);
+        result.setExam(exam);
+        result.setTotalScore(totalScore);
+        result.setPercentage(percentage);
+        result.setAnswer(answerLog.toString());
+
+        entityManager.persist(result);
+        user.getCompletedExams().add(exam);
+        exam.getCompletedUsers().add(user);
+
+        entityManager.merge(exam);
+        entityManager.merge(user);
+
+        return result;
+    }
     @Override
     @Transactional
     public int createExamForSubject(Long subjectId, String description, Long targetTotalMarks, LocalDateTime enrolledStartDate, LocalDateTime enrolledEndDate,
@@ -112,6 +187,8 @@ public class ExamServiceImpl implements ExamService{
         exam.setExamStartDate(examStart);
         exam.setExamEndDate(examEnd);
         exam.setDateCreated(now);
+        exam.setCreatedByTeacher(false);
+        exam.setCreatedByAdmin(true);
 
         entityManager.persist(exam);
         return 1;
@@ -119,47 +196,77 @@ public class ExamServiceImpl implements ExamService{
 
     @Override
     @Transactional
-    public UserResult evaluateAndSaveResult(String username, Long examId, Map<String, String> answersMap) {
-        User user = userService.getUserByName(username);
+    public int createExamForSubjectByTeacher(Long teacherId, Long subjectId, String description, Long targetTotalMarks, LocalDateTime enrolledStartDate, LocalDateTime enrolledEndDate,
+                                             LocalDateTime examStartDate, LocalDateTime examEndDate, ZoneId zoneId) {
 
-        Exam exam = entityManager.find(Exam.class, examId);
-        if (exam == null) {
-            throw new IllegalArgumentException("Invalid exam ID: " + examId);
+        ZonedDateTime enrolledStart = enrolledStartDate.atZone(zoneId);
+        ZonedDateTime enrolledEnd = enrolledEndDate.atZone(zoneId);
+        ZonedDateTime examStart = examStartDate.atZone(zoneId);
+        ZonedDateTime examEnd = examEndDate.atZone(zoneId);
+
+        ZonedDateTime now = ZonedDateTime.now(zoneId);
+
+        Subject subject = entityManager.find(Subject.class, subjectId);
+        if (subject == null) {
+            throw new IllegalArgumentException("Subject not found with ID: " + subjectId);
         }
 
-        List<Question> questionList = exam.getQuestions();
-        int totalScore = 0;
+        Teacher teacher = entityManager.find(Teacher.class, teacherId);
+        if( teacher == null){
+            throw new IllegalArgumentException("Teacher not found with Id:"+ teacherId);
+        }
 
-        StringBuilder answerLog = new StringBuilder();
+        TypedQuery<Question> query = entityManager.createQuery(
+                "SELECT q FROM Question q WHERE q.subject.id = :subjectId", Question.class
+        ).setParameter("subjectId", subjectId);
 
-        for (Question question : questionList) {
-            String userAnswer = answersMap.get("answers[" + question.getId() + "]");
-            if (userAnswer != null && userAnswer.equalsIgnoreCase(question.getCorrectAnswer())) {
-                totalScore += question.getMarks();
+        List<Question> questionList = query.getResultList();
+
+        if(questionList.isEmpty()){
+            throw new RuntimeException("No question available for subject id:"+subjectId);
+        }
+
+        Collections.shuffle(questionList);
+
+        int accumulatedMarks = 0;
+        List<Question> selectedQuestions = new ArrayList<>();
+
+
+        for (Question q : questionList) {
+            if (accumulatedMarks + q.getMarks() <= targetTotalMarks) {
+                selectedQuestions.add(q);
+                accumulatedMarks += q.getMarks();
             }
-
-            answerLog.append("Q").append(question.getId()).append(": ").append(userAnswer).append(" | ");
+            if (accumulatedMarks == targetTotalMarks) {
+                break;
+            }
         }
 
-        double percentage = (exam.getTotalMarks() > 0)
-                ? ((double) totalScore / exam.getTotalMarks()) * 100
-                : 0;
+        if (accumulatedMarks == 0) {
+            throw new RuntimeException("No questions could fit into the target total marks: " + targetTotalMarks);
+        }
 
-        UserResult result = new UserResult();
-        result.setUser(user);
-        result.setExam(exam);
-        result.setTotalScore(totalScore);
-        result.setPercentage(percentage);
-        result.setAnswer(answerLog.toString());
+        int numberOfQuestion = selectedQuestions.size();
 
-        entityManager.persist(result);
-        user.getCompletedExams().add(exam);
-        exam.getCompletedUsers().add(user);
+        Exam exam = new Exam();
+        exam.setTeacher(teacher);
+        exam.setCreatedByTeacher(true);
+        exam.setCreatedByAdmin(false);
+        exam.setDescription(description);
+        exam.setSubject(subject);
+        exam.setQuestions(selectedQuestions);
+        exam.setTotalNumberOfQuestion(numberOfQuestion);
+        exam.setTotalMarks((long) accumulatedMarks);
+        exam.setEnrolledStartDate(enrolledStart);
+        exam.setEnrolledEndDate(enrolledEnd);
+        exam.setExamStartDate(examStart);
+        exam.setExamEndDate(examEnd);
+        exam.setDateCreated(now);
 
-        entityManager.merge(exam);
-        entityManager.merge(user);
-
-        return result;
+        entityManager.persist(exam);
+        return 1;
     }
+
+
 
 }

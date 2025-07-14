@@ -247,8 +247,11 @@ public class AdminController {
         List<Subject> subjects = subjectService.getAllSubjects();
         Teacher teacher = teacherService.getTeacherById(teacherId);
 
+        List<Long> assignedSubjectsId = teacher.getSubjects().stream().map(Subject::getId).collect(Collectors.toList());
+
         model.addAttribute("teacher", teacher);
         model.addAttribute("subjects", subjects);
+        model.addAttribute("assignedSubjectIds", assignedSubjectsId);
         return "admin/assignSubject";
     }
 
@@ -274,13 +277,29 @@ public class AdminController {
     }
 
     @GetMapping("/viewTeacherQuestions")
-    public String viewTeacherQuestionList(@RequestParam("facultyId") Long teacherId, Model model){
-        List<QuestionDto> questions = teacherService.getQuestionOfTeacher(teacherId);
+    public String viewTeacherQuestionList(@RequestParam("facultyId") Long facultyId, Model model){
+        List<QuestionDto> questions = teacherService.getQuestionOfTeacher(facultyId);
 
         model.addAttribute("questions", questions);
+        model.addAttribute("facultyId", facultyId);
         return "admin/teacherQuestionList";
     }
 
+    @GetMapping("/viewExamDetailsOfTeacher")
+    public String viewTeacherExamList(@RequestParam("facultyId") Long facultyId, Model model){
+        List<ExamDto> exams = examService.getAllExamOfTeacher(facultyId);
+
+        model.addAttribute("exams", exams);
+        model.addAttribute("facultyId", facultyId);
+        return "admin/teacherExamList";
+    }
+
+    @GetMapping("/deleteQuestionOfTeacher")
+    public String deleteQuestionOfTeacher(@RequestParam("questionId") Long id,
+                                          @RequestParam("facultyId")Long facultyId){
+        questionService.softDeleteQuestion(id);
+        return "redirect:/admin/viewTeacherQuestions?facultyId=" + facultyId;
+    }
 
     //**************************** Teacher Handlers Ends  *************************//
 
@@ -363,7 +382,8 @@ public class AdminController {
 
 
     @GetMapping("/viewExamDetails")
-    public String viewExamDetails(@RequestParam Long id, Model model, HttpSession session){
+    public String viewExamDetails(@RequestParam Long id, @RequestParam(required = false) String source,
+                                  @RequestParam(required = false) Long facultyId, Model model){
 
         Exam exam = examService.getExamById(id);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -371,6 +391,8 @@ public class AdminController {
 
         model.addAttribute("exam", exam);
         model.addAttribute("formattedDate", formattedDate);
+        model.addAttribute("source", source);
+        model.addAttribute("facultyId", facultyId);
         return "admin/viewExamDetails";
     }
 

@@ -15,15 +15,21 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
     <style>
-        body {
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(to right, #1f1c2c, #928dab);
             color: #f0f0f0;
         }
 
         main {
+            flex: 1;
             padding: 2rem 3rem;
             max-width: 1800px;
+            width: 100%;
             margin: 0 auto;
         }
 
@@ -70,36 +76,9 @@
             margin: 1.5rem 0;
         }
 
-        .filter-form {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .filter-form label {
-            font-weight: 600;
-            color: #fff;
-            margin-right: 0.5rem;
-        }
-
-        .filter-form select {
-            background-color: #1a1a2e;
-            border: 2px solid #00c9ff;
-            color: #00c9ff;
-            border-radius: 10px;
-            font-weight: 600;
-            padding: 0.2rem 0.5rem;
-            cursor: pointer;
-        }
-
         .table-dark th,
         .table-dark td {
             border: 1px solid #50506e;
-        }
-
-        .table-dark tbody tr {
-            border-bottom: 1px solid #50506e;
         }
 
         .table-dark tbody tr:hover {
@@ -152,7 +131,12 @@
             text-align: center;
             padding: 1rem;
             color: #ccc;
-            user-select: none;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        .pagination a {
+            text-decoration: none;
         }
     </style>
 </head>
@@ -171,30 +155,7 @@
 
     <div class="section-divider"></div>
 
-    <!-- Filter/Sort -->
-    <form method="get" action="${pageContext.request.contextPath}/admin/viewTeacherQuestions" class="filter-form">
-        <input type="hidden" name="facultyId" value="${facultyId}" />
-
-        <div class="d-flex align-items-center">
-            <label for="complexity">Filter by Complexity:</label>
-            <select name="complexity" id="complexity" onchange="this.form.submit()">
-                <option value="" <c:if test="${empty complexity}">selected</c:if>>All</option>
-                <option value="Easy" <c:if test="${complexity == 'Easy'}">selected</c:if>>Easy</option>
-                <option value="Medium" <c:if test="${complexity == 'Medium'}">selected</c:if>>Medium</option>
-                <option value="Hard" <c:if test="${complexity == 'Hard'}">selected</c:if>>Hard</option>
-            </select>
-        </div>
-
-        <div class="d-flex align-items-center">
-            <label for="sortBy">Sort by:</label>
-            <select name="sortBy" id="sortBy" onchange="this.form.submit()">
-                <option value="" <c:if test="${empty sortBy}">selected</c:if>>Default</option>
-                <option value="marks" <c:if test="${sortBy == 'marks'}">selected</c:if>>Marks</option>
-            </select>
-        </div>
-    </form>
-
-    <!-- Question Table -->
+    <!-- Table -->
     <div class="table-responsive">
         <table class="table table-hover table-dark text-center align-middle">
             <thead>
@@ -205,7 +166,7 @@
                 <th>Correct Answer</th>
                 <th>Marks</th>
                 <th>Complexity</th>
-                <th>Subject Name</th>
+                <th>Subject</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -236,7 +197,9 @@
                             <td>${question.complexity}</td>
                             <td>${question.subjectName}</td>
                             <td>
-                                <a href="${pageContext.request.contextPath}/admin/deleteQuestion?id=${question.id}&facultyId=${facultyId}" class="btn btn-sm btn-action btn-delete" onclick="return confirm('Are you sure to delete this question?');">Delete</a>
+                                <a href="${pageContext.request.contextPath}/admin/deleteQuestionOfTeacher?questionId=${question.id}&facultyId=${facultyId}"
+                                   class="btn btn-sm btn-action btn-delete"
+                                   onclick="return confirm('Are you sure to delete this question?');">Delete</a>
                             </td>
                         </tr>
                     </c:forEach>
@@ -245,8 +208,6 @@
             </tbody>
         </table>
     </div>
-
-    <div class="section-divider"></div>
 
     <!-- Pagination -->
     <nav class="pagination justify-content-center">

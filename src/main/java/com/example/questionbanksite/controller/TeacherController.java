@@ -1,9 +1,12 @@
 package com.example.questionbanksite.controller;
 
+import com.example.questionbanksite.dto.ExamDto;
 import com.example.questionbanksite.dto.SubjectDto;
+import com.example.questionbanksite.entity.Exam;
 import com.example.questionbanksite.entity.Question;
 import com.example.questionbanksite.entity.Subject;
 import com.example.questionbanksite.entity.Teacher;
+import com.example.questionbanksite.service.ExamService;
 import com.example.questionbanksite.service.QuestionService;
 import com.example.questionbanksite.service.SubjectService;
 import com.example.questionbanksite.service.TeacherService;
@@ -16,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,8 +37,15 @@ public class TeacherController{
 
     private final QuestionService questionService;
 
+    private final ExamService examService;
+
     @GetMapping("/teacherExamList")
-    public String teacherExamList(){
+    public String teacherExamList(Model model, HttpSession session){
+        String teacherName = (String) session.getAttribute("username");
+        Teacher teacher = teacherService.getTeacherByName(teacherName);
+
+        List<ExamDto> examDtoList = examService.getAllExamOfTeacher(teacher.getId());
+        model.addAttribute("exams", examDtoList);
         return "teacher/manageExam";
     }
 
@@ -113,46 +126,128 @@ public class TeacherController{
         return "teacher/addTeacherQuestion";
     }
 
-        @PostMapping("/saveQuestion")
-        public String saveQuestions(
-                @RequestParam Long subjectId,
-                @RequestParam("options") String[] optionsArrays,
-                @ModelAttribute("question") Question question,
-                RedirectAttributes redirectAttributes,
-                HttpSession session){
+    @PostMapping("/saveQuestion")
+    public String saveQuestions(
+            @RequestParam Long subjectId,
+            @RequestParam("options") String[] optionsArrays,
+            @ModelAttribute("question") Question question,
+            RedirectAttributes redirectAttributes,
+            HttpSession session){
 
-            Set<String> optionSet = Arrays.stream(optionsArrays)
-                    .filter(opt -> opt != null && !opt.trim().isEmpty())
-                    .collect(Collectors.toCollection(LinkedHashSet::new));
-            question.setOptions(optionSet);
-            List<String> options = new ArrayList<>(optionSet);
+        Set<String> optionSet = Arrays.stream(optionsArrays)
+                .filter(opt -> opt != null && !opt.trim().isEmpty())
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+        question.setOptions(optionSet);
+        List<String> options = new ArrayList<>(optionSet);
 
-            String correctOptionLetter = question.getCorrectAnswer();
-            String correctAnswer = "";
+        String correctOptionLetter = question.getCorrectAnswer();
+        String correctAnswer = "";
 
-            correctAnswer = switch (correctOptionLetter) {
-                case "A" -> options.get(0);
-                case "B" -> options.get(1);
-                case "C" -> options.get(2);
-                case "D" -> options.get(3);
-                default -> "";
-            };
+        correctAnswer = switch (correctOptionLetter) {
+            case "A" -> options.get(0);
+            case "B" -> options.get(1);
+            case "C" -> options.get(2);
+            case "D" -> options.get(3);
+            default -> "";
+        };
 
-            question.setCorrectAnswer(correctAnswer);
+        question.setCorrectAnswer(correctAnswer);
 
-            String teacherName = (String) session.getAttribute("username");
-            Teacher teacher = teacherService.getTeacherByName(teacherName);
+        String teacherName = (String) session.getAttribute("username");
+        Teacher teacher = teacherService.getTeacherByName(teacherName);
 
-            Subject subject = subjectService.getSubjectById(subjectId);
-            question.setSubject(subject);
+        Subject subject = subjectService.getSubjectById(subjectId);
+        question.setSubject(subject);
 
-            question.setTeacher(teacher);
+        question.setTeacher(teacher);
 
-            questionService.saveQuestion(question);
+        questionService.saveQuestion(question);
 
 
-            redirectAttributes.addFlashAttribute("successToast", "Question added successfully!");
-            return "redirect:/teacher/teacherSubject";
+        redirectAttributes.addFlashAttribute("successToast", "Question added successfully!");
+        return "redirect:/teacher/teacherSubject";
+    }
+
+    @GetMapping("/addExamPage")
+    public String addExamPage(Model model){
+
+        model.addAttribute("subjectList", subjectService.getAllSubjects());
+        model.addAttribute("exam", new ExamDto());
+        return "teacher/addExamOfTeacher";
+    }
+
+    @PostMapping("/saveExam")
+    public String saveExamOfTeacher(@ModelAttribute("exam") ExamDto exam,
+                                    Model model,
+                                    HttpSession session,
+                                    RedirectAttributes redirectAttributes){
+        String zoneIdStr = (String) session.getAttribute("zoneId");
+        ZoneId zoneId = (zoneIdStr != null) ? ZoneId.of(zoneIdStr) : ZoneId.systemDefault();
+
+        ZonedDateTime now = ZonedDateTime.now(zoneId);
+
+        if(!exam.getEnrolledStartDate().atZone(zoneId).isAfter(now)){
+
+            redirectAttributes.addFlashAttribute("errorMsg", "Enrollment start date must be future.");
+            return "redirect:/teacher/addExamPage";
+        } else if(!exam.getEnrolledEndDate().atZone(zoneId).isAfter(now)){
+
+            redirectAttributes.addFlashAttribute("errorMsg", "Enrollment end date must be future.");
+            return "redirect:/teacher/addExamPage";
+        } else if(!exam.getExamStartDate().atZone(zoneId).isAfter(now)){
+
+            redirectAttributes.addFlashAttribute("errorMsg", "Exam start date must be future.");
+            return "redirect:/teacher/addExamPage";
+        } else if(!exam.getExamEndDate().atZone(zoneId).isAfter(now)){
+
+            redirectAttributes.addFlashAttribute("errorMsg", "Exam end date must be future.");
+            return "redirect:/teacher/addExamPage";
         }
 
+        if (exam.getEnrolledStartDate().isAfter(exam.getEnrolledEndDate())) {
+            redirectAttributes.addFlashAttribute("errorMsg", "Enrollment start date must be before enrollment end date.");
+            return "redirect:/teacher/addExamPage";
+        }
+
+        if (exam.getExamStartDate().isAfter(exam.getExamEndDate())) {
+            redirectAttributes.addFlashAttribute("errorMsg", "Exam start date must be before exam end date.");
+            return "redirect:/teacher/addExamPage";
+        }
+
+        String teacherName = (String) session.getAttribute("username");
+        Teacher teacher = teacherService.getTeacherByName(teacherName);
+
+        System.out.println("Teacher name:"+teacher.getUsername()+", Id :"+teacher.getId()+", Subject id:"+exam.getSubjectId());
+
+        int i = examService.createExamForSubjectByTeacher(teacher.getId(),
+                exam.getSubjectId(),
+                exam.getDescription(),
+                exam.getTotalMarks(),
+                exam.getEnrolledStartDate(),
+                exam.getEnrolledEndDate(),
+                exam.getExamStartDate(),
+                exam.getExamEndDate(),
+                zoneId
+        );
+
+        if (i > 0) {
+            redirectAttributes.addFlashAttribute("successMsg", "Exam added successfully...");
+        } else {
+            redirectAttributes.addFlashAttribute("errorMsg", "Something went wrong!!!");
+        }
+        return "redirect:/teacher/addExamPage";
+    }
+
+
+    @GetMapping("/viewExamDetails")
+    public String viewTeacherExamDetails(@RequestParam("examId") Long id, Model model){
+        Exam exam = examService.getExamById(id);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String formattedDate = exam.getDateCreated().format(formatter);
+
+        model.addAttribute("exam", exam);
+        model.addAttribute("formattedDate", formattedDate);
+        return "teacher/viewTeacherExamDetails";
+    }
 }

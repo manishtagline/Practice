@@ -10,17 +10,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/adminPageCss/viewExamDetails.css"/>
-
 </head>
 <body>
 
-<div class="navbar d-flex justify-content-center">
-    <h1>📄 Exam Details</h1>
-</div>
+<!-- Include navbar -->
+<jsp:include page="/WEB-INF/view/navbar/adminNavbar.jsp" />
+
 
 <div class="back-button-container">
-    <a href="${pageContext.request.contextPath}/admin/examList" class="back1-btn">&#8592; Back to Exam List</a>
+    <c:choose>
+        <c:when test="${source == 'teacherExamList'}">
+            <a href="${pageContext.request.contextPath}/admin/viewExamDetailsOfTeacher?facultyId=${facultyId}"
+               class="back1-btn">&#8592; Back to Teacher Exam List</a>
+        </c:when>
+        <c:otherwise>
+            <a href="${pageContext.request.contextPath}/admin/examList" class="back1-btn">&#8592; Back to Exam List</a>
+        </c:otherwise>
+    </c:choose>
 </div>
+
 
 <div class="container">
 

@@ -52,7 +52,7 @@
 
     <!-- Back Button -->
     <div class="text-center mt-3">
-      <a href="admin/subjectList" class="btn-back">← Back to Subject List</a>
+      <a href="subjectList" class="btn-back">← Back to Subject List</a>
     </div>
   </div>
 </main>

@@ -25,21 +25,26 @@
         }
 
         .header-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            position: relative;
+            height: 60px;
             margin-bottom: 1.5rem;
         }
 
         .header-container h2 {
-            flex: 1;
-            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             color: #00c9ff;
             font-weight: 700;
             margin: 0;
         }
 
         .btn-back {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
             color: #ccc;
             font-weight: 600;
             padding: 0.5rem 1rem;
@@ -52,7 +57,6 @@
             display: flex;
             align-items: center;
             gap: 0.4rem;
-            user-select: none;
         }
 
         .btn-back:hover {
@@ -141,9 +145,9 @@
 <main>
     <!-- Header -->
     <div class="header-container">
-        <h2>Questions List</h2>
+        <h2>Questions List: ${subject.name}</h2>
 
-        <!-- Back button on the right -->
+        <!-- Right-aligned back button -->
         <a href="${pageContext.request.contextPath}/teacher/teacherSubject" class="btn-back" title="Back to My Subjects">
             <i class="fas fa-arrow-left"></i> Back to My Subjects
         </a>
@@ -153,7 +157,7 @@
     <div class="section-divider"></div>
 
     <!-- Filter/Sort -->
-    <form method="get" action="${pageContext.request.contextPath}/teacher/viewQuestions" class="filter-form">
+    <form method="get" action="viewQuestions" class="filter-form">
         <input type="hidden" name="subjectId" value="${subjectId}" />
 
         <div class="d-flex align-items-center">
@@ -207,8 +211,8 @@
                     <td>${question.complexity}</td>
                     <td>
                         <div class="d-flex justify-content-center">
-                            <a href="${pageContext.request.contextPath}/teacher/editQuestion?id=${question.id}&subjectId=${subjectId}" class="btn btn-sm btn-action">Edit</a>
-                            <%--<a href="${pageContext.request.contextPath}/teacher/deleteQuestion?id=${question.id}&subjectId=${subjectId}" class="btn btn-sm btn-action btn-delete">Delete</a>--%>
+                            <a href="editQuestion?questionId=${question.id}" class="btn btn-sm btn-action">Edit</a>
+                                <%--<a href="deleteQuestion?id=${question.id}&subjectId=${subjectId}" class="btn btn-sm btn-action btn-delete">Delete</a>--%>
                         </div>
                     </td>
                 </tr>
@@ -224,15 +228,15 @@
     <nav class="pagination justify-content-center">
         <c:if test="${currentPage > 1}">
             <a class="btn btn-outline-light mx-1"
-               href="${pageContext.request.contextPath}/teacher/viewQuestions?subjectId=${subjectId}&complexity=${complexity}&sortBy=${sortBy}&page=${currentPage - 1}">&laquo; Prev</a>
+               href="viewQuestions?subjectId=${subjectId}&complexity=${complexity}&sortBy=${sortBy}&page=${currentPage - 1}">&laquo; Prev</a>
         </c:if>
         <c:forEach var="i" begin="1" end="${totalPages}">
             <a class="btn ${i == currentPage ? 'btn-light' : 'btn-outline-light'} mx-1"
-               href="${pageContext.request.contextPath}/teacher/viewQuestions?subjectId=${subjectId}&complexity=${complexity}&sortBy=${sortBy}&page=${i}">${i}</a>
+               href="viewQuestions?subjectId=${subjectId}&complexity=${complexity}&sortBy=${sortBy}&page=${i}">${i}</a>
         </c:forEach>
         <c:if test="${currentPage < totalPages}">
             <a class="btn btn-outline-light mx-1"
-               href="${pageContext.request.contextPath}/teacher/viewQuestions?subjectId=${subjectId}&complexity=${complexity}&sortBy=${sortBy}&page=${currentPage + 1}">Next &raquo;</a>
+               href="viewQuestions?subjectId=${subjectId}&complexity=${complexity}&sortBy=${sortBy}&page=${currentPage + 1}">Next &raquo;</a>
         </c:if>
     </nav>
 </main>

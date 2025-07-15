@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -134,10 +135,10 @@ public class ExamServiceImpl implements ExamService{
     public int createExamForSubject(Long subjectId, String description, Long targetTotalMarks, LocalDateTime enrolledStartDate, LocalDateTime enrolledEndDate,
                                     LocalDateTime examStartDate, LocalDateTime examEndDate, ZoneId zoneId) {
 
-        ZonedDateTime enrolledStart = enrolledStartDate.atZone(zoneId);
-        ZonedDateTime enrolledEnd = enrolledEndDate.atZone(zoneId);
-        ZonedDateTime examStart = examStartDate.atZone(zoneId);
-        ZonedDateTime examEnd = examEndDate.atZone(zoneId);
+        ZonedDateTime enrolledStart = enrolledStartDate.atZone(zoneId).withZoneSameInstant(ZoneOffset.UTC);
+        ZonedDateTime enrolledEnd = enrolledEndDate.atZone(zoneId).withZoneSameInstant(ZoneOffset.UTC);
+        ZonedDateTime examStart = examStartDate.atZone(zoneId).withZoneSameInstant(ZoneOffset.UTC);
+        ZonedDateTime examEnd = examEndDate.atZone(zoneId).withZoneSameInstant(ZoneOffset.UTC);
 
         ZonedDateTime now = ZonedDateTime.now(zoneId);
 

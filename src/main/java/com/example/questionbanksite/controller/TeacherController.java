@@ -39,21 +39,12 @@ public class TeacherController{
 
     private final ExamService examService;
 
-    @GetMapping("/teacherExamList")
-    public String teacherExamList(Model model, HttpSession session){
-        String teacherName = (String) session.getAttribute("username");
-        Teacher teacher = teacherService.getTeacherByName(teacherName);
-
-        List<ExamDto> examDtoList = examService.getAllExamOfTeacher(teacher.getId());
-        model.addAttribute("exams", examDtoList);
-        return "teacher/manageExam";
-    }
-
     @GetMapping("/teacherDashboard")
     public String showTeacherDashboard(){
         return "teacher/home";
     }
 
+    //**************************** Subject Handlers  *************************//
     @GetMapping("/teacherSubject")
     public String showTeacherSubject(Model model, HttpSession session) {
         String teacherName = (String) session.getAttribute("username");
@@ -89,11 +80,17 @@ public class TeacherController{
         return "teacher/teacherSubject";
     }
 
+    //**************************** Subject Handlers Ends  *************************//
+
+
+
+    //**************************** Question Handlers  *************************//
+
     @GetMapping("/viewQuestions")
     @Transactional(readOnly = true)
     public String viewSubjectQuestions(
-        @RequestParam Long subjectId, @RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String sortBy,
-        @RequestParam(required = false) String complexity, Model model, HttpSession session
+            @RequestParam Long subjectId, @RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String complexity, Model model
     ){
         int pageSize = 10;
 
@@ -166,6 +163,45 @@ public class TeacherController{
 
         redirectAttributes.addFlashAttribute("successToast", "Question added successfully!");
         return "redirect:/teacher/teacherSubject";
+    }
+
+    @GetMapping("/editQuestion")
+    public String editQuestionPage(@RequestParam("questionId") Long questionId, Model model){
+        Question question = questionService.getQuestionById(questionId);
+
+        Set<String> option = question.getOptions();
+        while (option.size() < 4){
+            option.add("");
+        }
+
+        question.setOptions(option);
+
+        model.addAttribute("question", question);
+        return "teacher/questionEditPage";
+    }
+
+    @PostMapping("/updateTeacherQuestion")
+    public String updateTeacherQuestion(@ModelAttribute("question") Question question){
+        Long id = question.getId();
+        Long subjectId = question.getSubject().getId();
+
+        questionService.updateQuestion(id, question);
+        return "redirect:/teacher/viewQuestions?subjectId="+subjectId;
+    }
+
+    //**************************** Question Handlers Ends  *************************//
+
+
+    //**************************** Exam Handlers  *************************//
+
+    @GetMapping("/teacherExamList")
+    public String teacherExamList(Model model, HttpSession session){
+        String teacherName = (String) session.getAttribute("username");
+        Teacher teacher = teacherService.getTeacherByName(teacherName);
+
+        List<ExamDto> examDtoList = examService.getAllExamOfTeacher(teacher.getId());
+        model.addAttribute("exams", examDtoList);
+        return "teacher/manageExam";
     }
 
     @GetMapping("/addExamPage")
@@ -250,4 +286,7 @@ public class TeacherController{
         model.addAttribute("formattedDate", formattedDate);
         return "teacher/viewTeacherExamDetails";
     }
+
+    //**************************** Exam Handlers Ends  *************************//
+
 }

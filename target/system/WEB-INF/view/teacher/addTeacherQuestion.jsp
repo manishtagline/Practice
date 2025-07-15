@@ -24,55 +24,110 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #1f1c2c, #928dab);
+      color: #f0f0f0;
+      margin: 0;
     }
 
     .btn-back {
+      position: absolute;
+      right: 0;
       color: #ccc;
       font-weight: 600;
-      padding: 0.4rem 0.8rem;
+      padding: 0.5rem 1rem;
       border: 2px solid transparent;
       border-radius: 0.5rem;
       text-decoration: none;
       transition: color 0.3s ease, border-color 0.3s ease;
       white-space: nowrap;
       font-size: 0.9rem;
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 0.4rem;
+      user-select: none;
     }
 
     .btn-back:hover {
       color: #00c9ff;
       border-color: #00c9ff;
-      text-decoration: none;
     }
 
-    .back-button-wrapper {
+    .header-container {
       display: flex;
-      justify-content: flex-end;
-      padding: 0.8rem 1rem 0 1rem;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 1rem 0;
+      border-bottom: 2px solid rgba(0,201,255,0.25);
+      min-height: 70px;
+    }
+
+    .header-container h2 {
+      color: #00c9ff;
+      font-weight: 600;
+      font-size: 2rem;
+      margin: 0;
+      user-select: none;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
     .form-container {
-      padding: 1rem;
-      margin-top: 0;
+      max-width: 800px;
+      margin: 2rem auto;
+      background-color: #2f2f2f;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+      border: 1px solid rgba(0,201,255,0.25);
+    }
+
+    .form-label {
+      color: #f0f0f0;
+    }
+
+    .form-control,
+    .form-select {
+      background-color: #1f1f1f;
+      border: 1px solid #555;
+      color: #f0f0f0;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      border-color: #00c9ff;
+      box-shadow: 0 0 0 0.2rem rgba(0,201,255,0.25);
+      background-color: #1f1f1f;
+      color: #fff;
     }
 
     .btn-submit {
-      background-color: #1a73e8;
-      color: white;
-      font-weight: 600;
+      background-color: #00c9ff;
+      border: none;
+      color: #1f1c2c;
+      font-weight: bold;
+      padding: 0.6rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 0.5rem;
+      transition: background-color 0.3s ease;
     }
 
     .btn-submit:hover {
-      background-color: #155ab6;
+      background-color: #009ccf;
+      color: #fff;
+    }
+
+    .alert {
+      font-weight: 600;
+      color: #000;
     }
 
     footer {
       text-align: center;
-      margin-top: 2rem;
+      padding: 1.5rem 0;
+      color: #aaa;
       font-size: 0.9rem;
-      color: #666;
     }
   </style>
 </head>
@@ -81,14 +136,15 @@
 <!-- Navbar Include -->
 <jsp:include page="/WEB-INF/view/navbar/teacherNavbar.jsp" />
 
-<!-- Back button aligned to right -->
-<div class="back-button-wrapper">
+<!-- Header -->
+<div class="header-container">
+  <h2>Add New Question: ${subject.name}</h2>
   <a href="${pageContext.request.contextPath}/teacher/teacherSubject" class="btn-back" title="Back to My Subjects">
     <i class="fas fa-arrow-left"></i> Back to My Subjects
   </a>
 </div>
 
-<!-- Main form container -->
+<!-- Main form card -->
 <div class="form-container container">
 
   <c:if test="${not empty successMsg}">
@@ -97,19 +153,19 @@
     </div>
   </c:if>
 
-  <h2 class="text-center mb-4">Add New Question : ${subject.name}</h2>
-
   <form:form method="post" action="${pageContext.request.contextPath}/teacher/saveQuestion" modelAttribute="question" onsubmit="submitForm()">
 
     <form:hidden path="id" />
     <input type="hidden" name="subjectId" value="${subjectId}" />
 
+    <!-- Question Description -->
     <div class="mb-3">
       <label for="div_editor1" class="form-label">Question Description</label>
       <div id="div_editor1"></div>
       <form:hidden path="questiondDesc" id="questiondDesc" />
     </div>
 
+    <!-- Options -->
     <label class="form-label">Options</label>
     <div class="mb-2">
       <input type="text" name="options" class="form-control mb-2" placeholder="Option 1" required />
@@ -118,6 +174,7 @@
       <input type="text" name="options" class="form-control" placeholder="Option 4" />
     </div>
 
+    <!-- Correct Answer -->
     <div class="mb-3">
       <form:label path="correctAnswer" cssClass="form-label">Correct Answer</form:label>
       <form:select path="correctAnswer" cssClass="form-select" required="true">
@@ -129,11 +186,13 @@
       </form:select>
     </div>
 
+    <!-- Marks -->
     <div class="mb-3">
       <form:label path="marks" cssClass="form-label">Marks</form:label>
       <form:input path="marks" type="number" cssClass="form-control" required="true" />
     </div>
 
+    <!-- Complexity -->
     <div class="mb-3">
       <form:label path="complexity" cssClass="form-label">Complexity</form:label>
       <form:select path="complexity" cssClass="form-select" required="true">
@@ -144,13 +203,15 @@
       </form:select>
     </div>
 
-    <button type="submit" class="btn btn-submit">Save Question</button>
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-submit"><i class="fas fa-save me-2"></i>Save Question</button>
+
   </form:form>
 </div>
 
 <!-- Footer -->
 <footer>
-  © 2025 Admin Panel | Exam Center. All rights reserved.
+  &copy; 2025 Admin Panel | Exam Center. All rights reserved.
 </footer>
 
 <!-- RichTextEditor Scripts -->

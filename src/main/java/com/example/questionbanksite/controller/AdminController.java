@@ -190,7 +190,7 @@ public class AdminController {
     }
 
     @GetMapping("/editQuestion")
-    public String editQuestionPage(@RequestParam Long id, Model model, HttpSession session) {
+    public String editQuestionPage(@RequestParam Long id, Model model) {
 
         Question question = questionService.getQuestionById(id);
 
@@ -208,8 +208,6 @@ public class AdminController {
     public String updateQuestion(@ModelAttribute("question") Question question) {
         Long id = question.getId();
         Long subjectId = question.getSubject().getId();
-        System.out.println("Question id :" + id);
-        System.out.println("Subject id :" + subjectId);
 
         questionService.updateQuestion(id, question);
         return "redirect:/admin/manageQuestions?subjectId=" + subjectId;

@@ -322,7 +322,7 @@
             </div>
         </div>
 
-        <h2>My Assigned Subjects</h2>
+        <h2 class="d-flex justify-content-center">My Assigned Subjects</h2>
 
         <a href="teacherDashboard" class="btn-back" title="Back to Dashboard">
             <i class="fas fa-arrow-left"></i> Back to Dashboard
@@ -349,11 +349,11 @@
                             <i class="fas fa-book-open"></i> Total Questions: ${subject.questionCount}
                         </div>
                         <div class="button-group">
-                            <a href="${pageContext.request.contextPath}/teacher/viewQuestions?subjectId=${subject.id}"
+                            <a href="viewQuestions?subjectId=${subject.id}"
                                class="btn btn-sm btn-outline-info">
                                 <i class="fas fa-eye"></i> View Questions
                             </a>
-                            <a href="${pageContext.request.contextPath}/teacher/addQuestionPage?subjectId=${subject.id}"
+                            <a href="addQuestionPage?subjectId=${subject.id}"
                                class="btn btn-sm btn-outline-success">
                                 <i class="fas fa-plus"></i> Add Question
                             </a>

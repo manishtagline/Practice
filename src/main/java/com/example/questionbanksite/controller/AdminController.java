@@ -313,13 +313,6 @@ public class AdminController {
         return "admin/examList";
     }
 
-    @GetMapping("/addExamPage")
-    public String addExam(Model model, HttpSession session){
-
-        model.addAttribute("subjectList", subjectService.getAllSubjects());
-        model.addAttribute("exam", new ExamDto());
-        return "admin/addExam";
-    }
 
 
     @PostMapping("/saveExam")

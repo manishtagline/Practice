@@ -63,6 +63,10 @@
                 session.setAttribute("username", user.getUsername());
                 session.setAttribute("role", user.getRole());
 
+                user.setZoneId(zoneId);
+                userService.updateUser(user.getId(), user);
+
+
                 if("ADMIN".equalsIgnoreCase(user.getRole())){
                     return "admin/adminPage";
                 }else if("USER".equalsIgnoreCase(user.getRole())){
@@ -74,6 +78,9 @@
                 session.setAttribute("teacher", teacher);
                 session.setAttribute("username", teacher.getUsername());
                 session.setAttribute("role", teacher.getRole());
+
+                teacher.setZoneId(zoneId);
+                teacherService.updateTeacherZoneId(teacher.getId(), teacher);
 
                 return "teacher/home";
             }

@@ -3,6 +3,7 @@ package com.example.questionbanksite.service;
 import com.example.questionbanksite.dto.BaseUserRegisterDto;
 import com.example.questionbanksite.dto.QuestionDto;
 import com.example.questionbanksite.dto.TeacherDto;
+import com.example.questionbanksite.dto.TeacherSubjectDto;
 import com.example.questionbanksite.entity.Teacher;
 import com.example.questionbanksite.entity.UserResult;
 
@@ -26,4 +27,7 @@ public interface TeacherService {
 
     List<QuestionDto> getQuestionOfTeacher(Long teacherId);
 
+    List<TeacherSubjectDto> getSubjectStatsForTeacher(String teacherName);
+
+    Teacher updateTeacherZoneId(Long id, Teacher teacher);
 }

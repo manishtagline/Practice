@@ -1,23 +1,27 @@
     package com.example.questionbanksite.service;
 
-    import com.example.questionbanksite.dto.BaseUserRegisterDto;
-    import com.example.questionbanksite.dto.QuestionDto;
-    import com.example.questionbanksite.dto.TeacherDto;
+    import com.example.questionbanksite.dto.*;
     import com.example.questionbanksite.entity.Question;
     import com.example.questionbanksite.entity.Subject;
     import com.example.questionbanksite.entity.Teacher;
     import com.example.questionbanksite.entity.User;
+    import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.stereotype.Service;
     import org.springframework.transaction.annotation.Transactional;
 
     import javax.persistence.EntityManager;
     import javax.persistence.NoResultException;
     import javax.persistence.PersistenceContext;
+    import java.util.ArrayList;
+    import java.util.Collections;
     import java.util.List;
     import java.util.stream.Collectors;
 
     @Service
     public class TeacherServiceImpl implements TeacherService{
+
+        @Autowired
+        private TeacherService teacherService;
 
         @PersistenceContext
         private EntityManager entityManager;
@@ -124,6 +128,54 @@
                             q.getSubject().getName()
                     ))
                     .collect(Collectors.toList());
+        }
+
+        @Override
+        @Transactional(readOnly = true)
+        public List<TeacherSubjectDto> getSubjectStatsForTeacher(String teacherName) {
+
+            Teacher teacher = teacherService.getTeacherByName(teacherName);
+
+            List<TeacherSubjectDto> teacherDto = new ArrayList<>();
+
+            for(Subject subject : teacher.getSubjects()){
+
+                int questionsCount = subject.getQuestions().size();
+
+                int addedQuestions = (int) teacher.getQuestions().stream()
+                        .filter(q -> q.getSubject().getId().equals(subject.getId()))
+                        .count();
+
+                int examCount = (int) teacher.getCreatedExam().stream()
+                        .filter(q -> q.getSubject().getId().equals(subject.getId()))
+                        .count();
+
+                TeacherSubjectDto dto = TeacherSubjectDto.builder()
+                        .id(subject.getId())
+                        .name(subject.getName())
+                        .questionCount(questionsCount)
+                        .addedQuestions(addedQuestions)
+                        .examCount(examCount)
+                        .build();
+
+                teacherDto.add(dto);
+            }
+
+            return teacherDto;
+        }
+
+        @Override
+        @Transactional
+        public Teacher updateTeacherZoneId(Long id, Teacher teacher) {
+            Teacher existingTeacher = entityManager.find(Teacher.class, id);
+            if (existingTeacher != null) {
+                existingTeacher.setUsername(teacher.getUsername());
+                existingTeacher.setPassword(teacher.getPassword());
+                existingTeacher.setZoneId(teacher.getZoneId());
+
+                entityManager.merge(existingTeacher);
+            }
+            return existingTeacher;
         }
 
 

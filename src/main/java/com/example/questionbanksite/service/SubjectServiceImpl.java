@@ -47,6 +47,12 @@ public class SubjectServiceImpl implements SubjectService {
         }
     }
 
+    @Override
+    public List<Subject> getSubjectsOfTeacher(Long teacherId) {
+        return entityManager.createQuery("SELECT t FROM Teacher t WHERE t.id = :teacherId ", Teacher.class).setParameter("teacherId", teacherId)
+                .getResultList().getFirst().getSubjects();
+    }
+
 
     @Override
     @Transactional(readOnly = true)

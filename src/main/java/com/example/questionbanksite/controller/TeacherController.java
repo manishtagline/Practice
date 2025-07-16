@@ -2,6 +2,7 @@ package com.example.questionbanksite.controller;
 
 import com.example.questionbanksite.dto.ExamDto;
 import com.example.questionbanksite.dto.SubjectDto;
+import com.example.questionbanksite.dto.TeacherSubjectDto;
 import com.example.questionbanksite.entity.Exam;
 import com.example.questionbanksite.entity.Question;
 import com.example.questionbanksite.entity.Subject;
@@ -201,13 +202,16 @@ public class TeacherController{
 
         List<ExamDto> examDtoList = examService.getAllExamOfTeacher(teacher.getId());
         model.addAttribute("exams", examDtoList);
+        model.addAttribute("teacher", teacher);
         return "teacher/manageExam";
     }
 
     @GetMapping("/addExamPage")
-    public String addExamPage(Model model){
+    public String addExamPage(@RequestParam("facultyId") Long teacherId ,Model model){
 
-        model.addAttribute("subjectList", subjectService.getAllSubjects());
+        List<Subject> subjectList = subjectService.getSubjectsOfTeacher(teacherId);
+
+        model.addAttribute("subjectList", subjectList);
         model.addAttribute("exam", new ExamDto());
         return "teacher/addExamOfTeacher";
     }
@@ -217,6 +221,9 @@ public class TeacherController{
                                     Model model,
                                     HttpSession session,
                                     RedirectAttributes redirectAttributes){
+        String teacherName = (String) session.getAttribute("username");
+        Teacher teacher = teacherService.getTeacherByName(teacherName);
+
         String zoneIdStr = (String) session.getAttribute("zoneId");
         ZoneId zoneId = (zoneIdStr != null) ? ZoneId.of(zoneIdStr) : ZoneId.systemDefault();
 
@@ -225,33 +232,31 @@ public class TeacherController{
         if(!exam.getEnrolledStartDate().atZone(zoneId).isAfter(now)){
 
             redirectAttributes.addFlashAttribute("errorMsg", "Enrollment start date must be future.");
-            return "redirect:/teacher/addExamPage";
+            return "redirect:/teacher/addExamPage?facultyId="+teacher.getId();
         } else if(!exam.getEnrolledEndDate().atZone(zoneId).isAfter(now)){
 
             redirectAttributes.addFlashAttribute("errorMsg", "Enrollment end date must be future.");
-            return "redirect:/teacher/addExamPage";
+            return "redirect:/teacher/addExamPage?facultyId="+teacher.getId();
         } else if(!exam.getExamStartDate().atZone(zoneId).isAfter(now)){
 
             redirectAttributes.addFlashAttribute("errorMsg", "Exam start date must be future.");
-            return "redirect:/teacher/addExamPage";
+            return "redirect:/teacher/addExamPage?facultyId="+teacher.getId();
         } else if(!exam.getExamEndDate().atZone(zoneId).isAfter(now)){
 
             redirectAttributes.addFlashAttribute("errorMsg", "Exam end date must be future.");
-            return "redirect:/teacher/addExamPage";
+            return "redirect:/teacher/addExamPage?facultyId="+teacher.getId();
         }
 
         if (exam.getEnrolledStartDate().isAfter(exam.getEnrolledEndDate())) {
             redirectAttributes.addFlashAttribute("errorMsg", "Enrollment start date must be before enrollment end date.");
-            return "redirect:/teacher/addExamPage";
+            return "redirect:/teacher/addExamPage?facultyId="+teacher.getId();
         }
 
         if (exam.getExamStartDate().isAfter(exam.getExamEndDate())) {
             redirectAttributes.addFlashAttribute("errorMsg", "Exam start date must be before exam end date.");
-            return "redirect:/teacher/addExamPage";
+            return "redirect:/teacher/addExamPage?facultyId="+teacher.getId();
         }
 
-        String teacherName = (String) session.getAttribute("username");
-        Teacher teacher = teacherService.getTeacherByName(teacherName);
 
         System.out.println("Teacher name:"+teacher.getUsername()+", Id :"+teacher.getId()+", Subject id:"+exam.getSubjectId());
 
@@ -271,7 +276,7 @@ public class TeacherController{
         } else {
             redirectAttributes.addFlashAttribute("errorMsg", "Something went wrong!!!");
         }
-        return "redirect:/teacher/addExamPage";
+        return "redirect:/teacher/addExamPage?facultyId="+teacher.getId();
     }
 
 
@@ -289,4 +294,20 @@ public class TeacherController{
 
     //**************************** Exam Handlers Ends  *************************//
 
+
+    //**************************** Teacher Profile Handlers  *************************//
+
+    @GetMapping("/teacherProfile")
+    public String teacherProfile(HttpSession session, Model model){
+        String teacherName = (String) session.getAttribute("username");
+        Teacher teacher = teacherService.getTeacherByName(teacherName);
+
+        List<TeacherSubjectDto> subjectDtos = teacherService.getSubjectStatsForTeacher(teacherName);
+
+        model.addAttribute("teacher", teacher);
+        model.addAttribute("subjectsStats", subjectDtos);
+        return "teacher/teacherProfile";
+    }
+
+    //**************************** Teacher Profile Handlers Ends  *************************//
 }

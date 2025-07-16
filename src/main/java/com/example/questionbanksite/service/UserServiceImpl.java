@@ -104,6 +104,7 @@ public class UserServiceImpl implements UserService{
         if (existingUser != null) {
             existingUser.setUsername(updatedUser.getUsername());
             existingUser.setPassword(updatedUser.getPassword());
+            existingUser.setZoneId(updatedUser.getZoneId());
 
             entityManager.merge(existingUser);
         }

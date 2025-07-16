@@ -2,6 +2,7 @@ package com.example.questionbanksite.service;
 
 
 import com.example.questionbanksite.dto.SubjectDto;
+import com.example.questionbanksite.dto.TeacherSubjectDto;
 import com.example.questionbanksite.entity.Subject;
 
 import java.util.List;
@@ -23,4 +24,6 @@ public interface SubjectService {
     List<Subject> getSubjectsByIds(List<Long> ids);
 
     List<Subject> getSubjectByListOfId(List<Long> subjectId);
+
+    List<Subject> getSubjectsOfTeacher(Long teacherId);
 }

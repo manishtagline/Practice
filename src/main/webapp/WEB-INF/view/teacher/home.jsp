@@ -211,7 +211,7 @@
                 <path d="M5.5 21h13a2 2 0 0 0-13 0z"/>
             </svg>
             <h5 class="card-title">My Profile</h5>
-            <p class="card-text">Update your profile information.</p>
+            <p class="card-text">See your profile information and Statistics./p>
         </div>
 
         <!-- Logout -->

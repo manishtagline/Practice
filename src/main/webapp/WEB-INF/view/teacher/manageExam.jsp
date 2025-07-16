@@ -244,12 +244,12 @@
         </c:forEach>
       </div>
 
-      <a href="addExamPage?facultyId=${facultyId}" class="add-exam-btn" title="Add New Exam">+</a>
+      <a href="addExamPage?facultyId=${teacher.id}" class="add-exam-btn" title="Add New Exam">+</a>
     </c:when>
 
     <c:otherwise>
       <div style="text-align: center;">
-        <a href="addExamPage?facultyId=${facultyId}" class="add-exam-btn" title="Add New Exam">+</a>
+        <a href="addExamPage?facultyId=${teacher.id}" class="add-exam-btn" title="Add New Exam">+</a>
         <p class="no-exams">📘 No exams created yet for this faculty.</p>
       </div>
     </c:otherwise>

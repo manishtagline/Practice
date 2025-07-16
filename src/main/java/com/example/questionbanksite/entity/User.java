@@ -30,7 +30,7 @@ public class User {
 
     private String role;
 
-    private Long zoneId;
+    private String zoneId;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Fetch(FetchMode.SUBSELECT)

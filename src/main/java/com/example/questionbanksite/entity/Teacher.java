@@ -24,7 +24,7 @@ public class Teacher {
 
     private String username;
 
-    private Long zoneId;
+    private String zoneId;
     private String password;
     private String email;
     private String role;

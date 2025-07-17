@@ -175,12 +175,13 @@
                         <div class="stat-item"><i class="fas fa-file-alt"></i><strong> Total Exams Enrolled:</strong> ${examStats.enrolledCount}</div>
                         <div class="stat-item"><i class="fas fa-check-circle"></i><strong> Exams Completed:</strong> ${examStats.completedCount}</div>
                         <div class="stat-item"><i class="fas fa-clock"></i><strong> Pending Exams:</strong> ${examStats.pendingCount}</div>
+                        <div class="stat-item"><i class="fas fa-check"></i><strong> Total Correct Answers:</strong> ${examStats.totalCorrectAnswers}</div>
+                        <div class="stat-item"><i class="fas fa-times"></i><strong> Total Wrong Answers:</strong> ${examStats.totalWrongAnswers}</div>
+                        <div class="stat-item"><i class="fas fa-percent"></i><strong> Overall Percentage:</strong> ${examStats.overallPercentage} %</div>
                     </div>
                 </c:when>
                 <c:otherwise>
-                    <p class="text-center text-muted fs-5">
-                        You currently have no exam statistics to display.
-                    </p>
+                    <p>No exam data available.</p>
                 </c:otherwise>
             </c:choose>
         </div>

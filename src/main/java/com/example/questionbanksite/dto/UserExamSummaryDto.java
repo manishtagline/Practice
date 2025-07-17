@@ -14,7 +14,7 @@ public class UserExamSummaryDto {
 
     private int totalWrongAnswers;
 
-    private int overallPercentage;
+    private double overallPercentage;
 
     private int enrolledCount;
 

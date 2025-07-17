@@ -1,6 +1,7 @@
 package com.example.questionbanksite.controller;
 
 import com.example.questionbanksite.dto.ExamDto;
+import com.example.questionbanksite.dto.UserExamSummaryDto;
 import com.example.questionbanksite.entity.Exam;
 import com.example.questionbanksite.entity.Question;
 import com.example.questionbanksite.entity.User;
@@ -216,7 +217,10 @@ public class UserController {
 
         User user = userService.getUserByName(username);
 
+        UserExamSummaryDto examSummaryDto = userResultService.getUserExamSummary(user.getId());
+
         model.addAttribute("user", user);
+        model.addAttribute("examStats", examSummaryDto);
         return "user/userProfile";
     }
 

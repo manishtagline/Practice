@@ -3,184 +3,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Student Exam Center</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8"/>
+  <title>Student Dashboard - Exam Center</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
 
   <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #1f1c2c, #928dab);
-      min-height: 100vh;
+      background: linear-gradient(to right, #1f1c2c, #928dab);
+      color: #f0f0f0;
       display: flex;
       flex-direction: column;
-      margin: 0;
-      color: #f1f1f1;
     }
 
-    .navbar {
-      background: rgba(31, 38, 135, 0.8);
-      box-shadow: 0 4px 15px rgba(31, 38, 135, 0.6);
-      height: 80px;
-      padding: 0 2rem;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    main {
+      flex: 1;
+      padding: 2rem;
+      z-index: 2;
     }
 
-    .navbar-brand-container {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .navbar-brand {
-      font-weight: 700;
-      font-size: 1.8rem;
-      color: #00c9ff;
-      letter-spacing: 2px;
-      margin-left: 0.5rem;
-      transition: color 0.3s ease;
-      text-shadow: 0 0 8px #00c9ffaa;
-    }
-
-    .navbar-brand-container:hover .navbar-brand {
-      color: #92fe9d;
-      text-shadow: 0 0 12px #92fe9daa;
-    }
-
-    .logo-svg {
-      width: 40px;
-      height: 40px;
-      stroke: #00c9ff;
-      stroke-width: 2;
-      fill: none;
-      animation: logo-spin 3s linear infinite;
-    }
-
-    @keyframes logo-spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .username-badge {
-      position: absolute;
-      right: 2rem;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(255, 255, 255, 0.1);
-      color: #00c9ff;
-      padding: 8px 20px;
-      border-radius: 30px;
-      font-weight: 600;
-      font-size: 1.1rem;
-      box-shadow: 0 3px 10px rgba(0, 201, 255, 0.4);
-      animation: fadeInSlide 1.5s ease-out;
-      user-select: none;
-      letter-spacing: 0.03em;
-      text-transform: capitalize;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      cursor: default;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(0, 201, 255, 0.3);
-    }
-
-    @keyframes fadeInSlide {
-      from { opacity: 0; right: -100px; }
-      to { opacity: 1; right: 2rem; }
-    }
-
-    .hero {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 4rem 1rem;
-      text-align: center;
-      max-width: 960px;
-      margin: 0 auto;
-    }
-
-    .hero h1 {
-      font-weight: 700;
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      color: #00c9ff;
-      text-shadow: 0 0 10px #00c9ffbb;
-    }
-
-    .hero .welcome-user {
-      font-size: 1.5rem;
-      color: #92fe9d;
+    .welcome-user {
+      font-size: 1.4rem;
+      color: #ffffff;
       background: rgba(255, 255, 255, 0.1);
       padding: 12px 30px;
       border-radius: 30px;
       font-weight: 600;
-      margin-bottom: 2rem;
-      box-shadow: 0 4px 10px rgba(146, 254, 157, 0.3);
-      user-select: none;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(146, 254, 157, 0.4);
+      margin: 0 auto 1.5rem auto;
+      max-width: fit-content;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      text-align: center;
     }
 
-    .hero p {
-      color: #ccc;
-      font-size: 1.1rem;
-      user-select: none;
-      text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    h1 {
+      text-align: center;
+      color: #00c9ff;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 10px #00c9ffbb;
     }
 
     .card-container {
       display: flex;
-      gap: 2rem;
       flex-wrap: wrap;
       justify-content: center;
-      margin-top: 2rem;
-      max-width: 900px;
-      width: 100%;
+      gap: 2rem;
+      max-width: 1000px;
+      margin: auto;
     }
 
     .card {
-      flex: 1 1 280px;
+      background: #3c3c3c;
+      padding: 2rem 1.5rem;
       border-radius: 1rem;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      transition: 0.3s;
+      flex: 1 1 280px;
+      text-align: center;
       cursor: pointer;
-      background: rgba(255, 255, 255, 0.07);
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      color: #fff;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 2rem 1.5rem;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      color: #e0e0ff;
-      user-select: none;
     }
 
     .card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 15px 40px rgba(0, 201, 255, 0.6);
-      border-color: #00c9ff;
-      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+      background-color: #505050;
     }
 
     .card-icon {
@@ -188,153 +84,187 @@
       height: 80px;
       margin-bottom: 1rem;
       stroke: #00c9ff;
-      fill: none;
-      animation: bounce 2s infinite ease-in-out;
+      animation: bounce 2s infinite;
     }
 
     @keyframes bounce {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-15px); }
+      50% { transform: translateY(-10px); }
     }
 
     .card-title {
+      font-size: 1.2rem;
       font-weight: 600;
-      font-size: 1.3rem;
-      margin-bottom: 0.75rem;
-      color: #92fe9d;
+      color: #00c9ff;
+      margin-bottom: 0.5rem;
     }
 
     .card-text {
-      color: #bbb;
-      font-size: 1rem;
-      text-align: center;
+      color: #ccc;
     }
 
     footer {
+      background-color: #1a1a2e;
+      color: #ccc;
       text-align: center;
       padding: 1rem;
       font-size: 0.9rem;
-      background: rgba(31, 38, 135, 0.8);
-      color: #00c9ff;
-      box-shadow: 0 -4px 10px rgba(0, 201, 255, 0.3);
-      user-select: none;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    @media (max-width: 576px) {
-      .hero h1 { font-size: 2rem; }
-      .card-container { flex-direction: column; gap: 1.5rem; }
-      .username-badge {
-        font-size: 1rem;
-        padding: 6px 14px;
-        right: 1rem;
+    @media (max-width: 768px) {
+      .card-container {
+        flex-direction: column;
+        gap: 1.5rem;
       }
+    }
+
+    /* Modal Styling */
+    .modal-content.custom-modal {
+      background: #2a2a40;
+      color: #f0f0f0;
+      border: 1px solid #444;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    .modal-header.custom-header {
+      background: #38385a;
+      border-bottom: 1px solid #555;
+      color: #00c9ff;
+    }
+
+    .modal-footer .btn-danger {
+      background-color: #ff4d4d;
+      border: none;
+    }
+
+    .modal-footer .btn-danger:hover {
+      background-color: #e60000;
+    }
+
+    .modal-footer .btn-secondary {
+      background-color: #444;
+      border: none;
+    }
+
+    .modal-footer .btn-secondary:hover {
+      background-color: #666;
     }
   </style>
 </head>
-
 <body>
 
 <!-- Navbar -->
-<nav class="navbar">
-  <div class="navbar-brand-container" onclick="location.href='home'" role="button" tabindex="0" aria-label="Go to Home">
-    <svg class="logo-svg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-label="Exam Center Logo" role="img">
-      <path d="M8 12h48v40H8z" stroke-linejoin="round" />
-      <line x1="8" y1="12" x2="56" y2="12" />
-      <line x1="32" y1="12" x2="32" y2="52" />
-    </svg>
-    <span class="navbar-brand">Exam Center</span>
-  </div>
-  <div class="username-badge" aria-label="Logged in username">
-    Welcome, ${username}
-  </div>
-</nav>
+<jsp:include page="/WEB-INF/view/navbar/userNavbar.jsp"/>
 
-<!-- Hero Section -->
-<section class="hero" role="main" aria-labelledby="main-title">
+<main>
+
+  <h1>Student Dashboard</h1>
+
   <div class="welcome-user" aria-live="polite" aria-atomic="true">
-    👋 Hello <strong>${username}</strong>, ready for your next challenge?
+    👋 Welcome <strong>${username}</strong>, ready for your next exam?
   </div>
-  <h1 id="main-title">Welcome to the Student Exam Center</h1>
-  <p>Your gateway to manage and take exams easily and securely.</p>
 
-  <div class="card-container" role="list">
-    <div class="card" onclick="location.href='exam'" role="listitem" tabindex="0" aria-label="Start Exam" onkeypress="if(event.key==='Enter'){location.href='exam'}">
-      <svg class="card-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"
-           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <circle cx="12" cy="12" r="10" />
-        <polygon points="10 8 16 12 10 16 10 8" />
+  <div class="card-container">
+
+    <!-- Enrollment Exam -->
+    <div class="card" onclick="location.href='enrollExam'" role="button" tabindex="0"
+         aria-label="Enroll in Exam" onkeypress="if(event.key==='Enter'){location.href='enrollExam'}">
+      <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <!-- Clipboard shape -->
+        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+        <path d="M6 6h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/>
+        <!-- Check mark -->
+        <polyline points="9 12 11 14 15 10" />
+      </svg>
+      <h5 class="card-title">Enroll Exam</h5>
+      <p class="card-text">Register for upcoming exams easily.</p>
+    </div>
+
+    <!-- Start Exam -->
+    <div class="card" onclick="location.href='exam'" role="button" tabindex="0"
+         aria-label="Start Exam" onkeypress="if(event.key==='Enter'){location.href='exam'}">
+      <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"/>
+        <polygon points="10 8 16 12 10 16 10 8"/>
       </svg>
       <h5 class="card-title">Start Exam</h5>
-      <p class="card-text">Begin your scheduled exams with just a click.</p>
+      <p class="card-text">Begin your scheduled exams with a click.</p>
     </div>
 
-    <div class="card" onclick="location.href='result'" role="listitem" tabindex="0" aria-label="View Results" onkeypress="if(event.key==='Enter'){location.href='result'}">
-      <svg class="card-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"
-           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M12 20h9" />
-        <path d="M12 4h9" />
-        <path d="M3 12h18" />
-        <circle cx="6" cy="12" r="3" />
-        <circle cx="18" cy="12" r="3" />
+    <!-- View Results -->
+    <div class="card" onclick="location.href='result'" role="button" tabindex="0"
+         aria-label="View Results" onkeypress="if(event.key==='Enter'){location.href='${pageContext.request.contextPath}/exam/results'}">
+      <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="#00c9ff"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" role="img" focusable="false">
+        <path d="M12 2l7 4v6c0 5-3 9-7 10-4-1-7-5-7-10V6l7-4z"/>
+        <polyline points="9 12 11 14 15 10" />
       </svg>
       <h5 class="card-title">View Results</h5>
-      <p class="card-text">Check your exam scores and performance history.</p>
+      <p class="card-text">Check your exam scores and history.</p>
     </div>
 
-    <div class="card" role="listitem" tabindex="0" aria-label="Logout"
-         onclick="showLogoutModal()" onkeypress="if(event.key==='Enter'){showLogoutModal()}">
-      <svg class="card-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"
-           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M16 17l5-5-5-5" />
-        <path d="M21 12H9" />
-        <path d="M12 19H9a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h3" />
+    <!-- Profile -->
+    <div class="card" onclick="location.href='profile'" role="button" tabindex="0"
+         aria-label="View Profile" onkeypress="if(event.key==='Enter'){location.href='${pageContext.request.contextPath}/user/profile'}">
+      <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="7" r="4"/>
+        <path d="M5.5 21h13a2 2 0 0 0-13 0z"/>
+      </svg>
+      <h5 class="card-title">My Profile</h5>
+      <p class="card-text">View and update your profile information.</p>
+    </div>
+
+    <!-- Logout -->
+    <div class="card" onclick="showLogoutModal()" role="button" tabindex="0"
+         aria-label="Logout" onkeypress="if(event.key==='Enter'){showLogoutModal()}">
+      <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M16 17l5-5-5-5"/>
+        <path d="M21 12H9"/>
+        <path d="M12 19H9a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h3"/>
       </svg>
       <h5 class="card-title">Logout</h5>
-      <p class="card-text">Securely sign out from your account.</p>
+      <p class="card-text">Sign out of your account securely.</p>
     </div>
-  </div>
-</section>
 
-<!-- Footer -->
+  </div>
+</main>
+
 <footer>
-  &copy; 2025 Student Exam Center. All rights reserved.
+  &copy; 2025 Exam Center. All rights reserved.
 </footer>
 
-<!-- Logout Confirmation Modal -->
+<!-- Logout Modal -->
 <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content" style="background: rgba(31, 38, 135, 0.9); border-radius: 1rem; border: 1px solid #00c9ff;">
-      <div class="modal-header border-0">
-        <h5 class="modal-title" id="logoutModalLabel" style="color: #92fe9d; font-weight: 700;">Confirm Logout</h5>
+    <div class="modal-content custom-modal">
+      <div class="modal-header custom-header">
+        <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body" style="color: #e0e0ff; font-size: 1.1rem;">
+      <div class="modal-body">
         Are you sure you want to logout?
       </div>
-      <div class="modal-footer border-0">
-        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal" style="border-radius: 30px;">Cancel</button>
-        <button type="button" id="confirmLogoutBtn" class="btn" style="background: #00c9ff; color: #1f1c2c; border-radius: 30px;">Logout</button>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <form action="${pageContext.request.contextPath}/logout" method="post" class="d-inline">
+          <button type="submit" class="btn btn-danger">Logout</button>
+        </form>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Bootstrap JS Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
-
   function showLogoutModal() {
     const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
     logoutModal.show();
   }
-
-  document.getElementById('confirmLogoutBtn').addEventListener('click', () => {
-    location.href = 'logout';
-  });
 </script>
 
 </body>

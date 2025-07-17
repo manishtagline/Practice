@@ -37,4 +37,7 @@ public class ExamDto {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime examEndDate;
 
+    private String formattedEnrolledStartDate;
+    private String formattedEnrolledEndDate;
+
 }

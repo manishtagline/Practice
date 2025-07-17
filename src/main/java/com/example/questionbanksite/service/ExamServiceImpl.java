@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
@@ -46,6 +47,10 @@ public class ExamServiceImpl implements ExamService{
                                 .totalNumberOfQuestion(exam.getTotalNumberOfQuestion())
                                 .subjectName(exam.getSubject().getName())
                                 .formattedDate( exam.getDateCreated().format(formatter))
+                                .enrolledStartDate(exam.getEnrolledStartDate() != null ? exam.getEnrolledStartDate().toLocalDateTime() : null)
+                                .enrolledEndDate(exam.getEnrolledEndDate() != null ? exam.getEnrolledEndDate().toLocalDateTime() : null)
+                                .examStartDate(exam.getExamStartDate() != null ? exam.getExamStartDate().toLocalDateTime() : null)
+                                .examEndDate(exam.getExamEndDate() != null ? exam.getExamEndDate().toLocalDateTime() : null)
                                 .build()
                 )
                 .collect(Collectors.toList());
@@ -73,6 +78,7 @@ public class ExamServiceImpl implements ExamService{
                 )
                 .collect(Collectors.toList());
     }
+
 
 
     @Override
@@ -268,6 +274,37 @@ public class ExamServiceImpl implements ExamService{
         return 1;
     }
 
+
+
+    @Override
+    @Transactional
+    public String enrollUserInExam(String username, Long examId) {
+
+        User user = entityManager.createQuery(
+                "SELECT u FROM User u LEFT JOIN FETCH u.enrolledExams WHERE u.username = :username", User.class)
+                .setParameter("username", username)
+                .getSingleResult();
+
+        Exam exam = entityManager.createQuery(
+                "SELECT e FROM Exam e LEFT JOIN FETCH e.enrolledUsers WHERE e.id = :examId", Exam.class)
+                .setParameter("examId", examId)
+                .getSingleResult();
+
+
+        // Already enrolled
+        if (exam.getEnrolledUsers().contains(user)) {
+            return "already_enrolled";
+        }
+
+        // Enroll the user
+        exam.getEnrolledUsers().add(user);
+        user.getEnrolledExams().add(exam);
+
+        entityManager.merge(user);
+        entityManager.merge(exam);
+
+        return "success";
+    }
 
 
 }

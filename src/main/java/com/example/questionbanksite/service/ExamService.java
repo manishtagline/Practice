@@ -27,4 +27,6 @@
         int createExamForSubjectByTeacher(Long id, Long subjectId, String description, Long totalMarks, LocalDateTime enrolledStartDate, LocalDateTime enrolledEndDate, LocalDateTime examStartDate, LocalDateTime examEndDate, ZoneId zoneId);
 
         List<ExamDto> getAllExamOfTeacher(Long teacherid);
+
+        String enrollUserInExam(String username, Long examId);
     }

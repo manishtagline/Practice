@@ -12,8 +12,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,13 +40,27 @@ public class UserController {
 
 
     //Handler for opening exam available for user
-    @GetMapping("/exam")
+    @GetMapping("/enrollExam")
     public String examPage(HttpSession session, Model model) {
 
         List<ExamDto> examDescriptions = examService.getAllExam();
+
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
+
+        examDescriptions.forEach(exam -> {
+            if (exam.getEnrolledStartDate() != null) {
+                exam.setFormattedEnrolledStartDate(exam.getEnrolledStartDate().format(formatter));
+            }
+            if (exam.getEnrolledEndDate() != null) {
+                exam.setFormattedEnrolledEndDate(exam.getEnrolledEndDate().format(formatter));
+            }
+        });
+
+
         model.addAttribute("examList", examDescriptions);
 
-        return "user/exam";
+        return "user/enrollmentExam";
     }
 
 
@@ -165,6 +181,43 @@ public class UserController {
     @GetMapping("/errorPage")
     public String errorPage() {
         return "user/errorPage";
+    }
+
+
+    @GetMapping("/enrollUser")
+    public String enrollUserForExam(@RequestParam("examId") Long examId, HttpSession session, RedirectAttributes redirectAttributes){
+
+        String username = (String) session.getAttribute("username");
+
+        String status = examService.enrollUserInExam(username, examId);
+
+        switch (status) {
+            case "already_enrolled":
+                redirectAttributes.addFlashAttribute("toastMessage", "You are already enrolled for this exam.");
+                redirectAttributes.addFlashAttribute("toastType", "warning");
+                break;
+            case "success":
+                redirectAttributes.addFlashAttribute("toastMessage", "You have successfully enrolled. You can see your exam dates on the calendar.");
+                redirectAttributes.addFlashAttribute("toastType", "success");
+                break;
+            default:
+                redirectAttributes.addFlashAttribute("toastMessage", "Enrollment failed. Please try again.");
+                redirectAttributes.addFlashAttribute("toastType", "danger");
+        }
+
+        return "redirect:/exam";
+    }
+
+
+    @GetMapping("/profile")
+    public String userProfile(Model model, HttpSession session){
+
+        String username = (String) session.getAttribute("username");
+
+        User user = userService.getUserByName(username);
+
+        model.addAttribute("user", user);
+        return "user/userProfile";
     }
 
 }

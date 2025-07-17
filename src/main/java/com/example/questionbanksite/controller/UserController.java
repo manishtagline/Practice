@@ -7,6 +7,8 @@ import com.example.questionbanksite.entity.Question;
 import com.example.questionbanksite.entity.User;
 import com.example.questionbanksite.entity.UserResult;
 import com.example.questionbanksite.service.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,36 +35,35 @@ public class UserController {
 
     private final UserResultService userResultService;
 
-
-
     //Handler for hom page
     @GetMapping("/home")
     public String homePage(HttpSession session, Model model) {
         return "user/home";
     }
 
-
     //Handler for opening exam available for user
     @GetMapping("/enrollExam")
     public String examPage(HttpSession session, Model model) {
+        String username = (String) session.getAttribute("username");
+        User user = userService.getUserByName(username);
 
         List<ExamDto> examDescriptions = examService.getAllExam();
 
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
 
-        examDescriptions.forEach(exam -> {
-            if (exam.getEnrolledStartDate() != null) {
-                exam.setFormattedEnrolledStartDate(exam.getEnrolledStartDate().format(formatter));
+        for (ExamDto examDto : examDescriptions) {
+            if (examDto.getEnrolledStartDate() != null) {
+                examDto.setFormattedEnrolledStartDate(examDto.getEnrolledStartDate().format(formatter));
             }
-            if (exam.getEnrolledEndDate() != null) {
-                exam.setFormattedEnrolledEndDate(exam.getEnrolledEndDate().format(formatter));
+            if (examDto.getEnrolledEndDate() != null) {
+                examDto.setFormattedEnrolledEndDate(examDto.getEnrolledEndDate().format(formatter));
             }
-        });
 
+            boolean isEnrolled = examService.isUserEnrolledInExam(user.getId(), examDto.getId());
+            examDto.setUserEnrolled(isEnrolled);
+        }
 
         model.addAttribute("examList", examDescriptions);
-
         return "user/enrollmentExam";
     }
 
@@ -76,8 +79,6 @@ public class UserController {
 
         return "user/questionpaper";
     }
-
-
 
 
     //Handler for submit the question paper
@@ -193,20 +194,21 @@ public class UserController {
         String status = examService.enrollUserInExam(username, examId);
 
         switch (status) {
-            case "already_enrolled":
+            case "already_enrolled" -> {
                 redirectAttributes.addFlashAttribute("toastMessage", "You are already enrolled for this exam.");
                 redirectAttributes.addFlashAttribute("toastType", "warning");
-                break;
-            case "success":
+            }
+            case "success" -> {
                 redirectAttributes.addFlashAttribute("toastMessage", "You have successfully enrolled. You can see your exam dates on the calendar.");
                 redirectAttributes.addFlashAttribute("toastType", "success");
-                break;
-            default:
+            }
+            default -> {
                 redirectAttributes.addFlashAttribute("toastMessage", "Enrollment failed. Please try again.");
                 redirectAttributes.addFlashAttribute("toastType", "danger");
+            }
         }
 
-        return "redirect:/exam";
+        return "redirect:/enrollExam";
     }
 
 
@@ -223,5 +225,44 @@ public class UserController {
         model.addAttribute("examStats", examSummaryDto);
         return "user/userProfile";
     }
+
+
+    @GetMapping("/calendar")
+    public String calendarPage(Model model, HttpSession session) throws JsonProcessingException {
+        String username = (String) session.getAttribute("username");
+        User user = userService.getUserByName(username);
+
+        List<Exam> upcomingExams = examService.getTodayAndFutureExamsForUser(user.getId());
+        
+        List<Map<String, Object>> events = new ArrayList<>();
+        for (Exam exam : upcomingExams) {
+            Map<String, Object> event = new HashMap<>();
+            event.put("id", exam.getId());
+            event.put("title", exam.getDescription());
+            event.put("start", exam.getExamStartDate().withZoneSameInstant(ZoneOffset.UTC).toString());
+            if (exam.getExamEndDate() != null) {
+                event.put("end", exam.getExamEndDate().plusDays(1).withZoneSameInstant(ZoneOffset.UTC).toString());
+            }
+            events.add(event);
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        model.addAttribute("calendarEvents", mapper.writeValueAsString(events));
+
+        return "user/showUpcomingExam";
+    }
+
+    @GetMapping("/exam")
+    public String todaysExams(Model model, HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        User user = userService.getUserByName(username);
+
+        List<Exam> todayExams = examService.getTodayExamsForUser(user.getId());
+
+        model.addAttribute("todayExams", todayExams);
+
+        return "user/todayExams";
+    }
+
 
 }

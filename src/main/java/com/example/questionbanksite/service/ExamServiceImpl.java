@@ -10,10 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -304,6 +301,50 @@ public class ExamServiceImpl implements ExamService{
         entityManager.merge(exam);
 
         return "success";
+    }
+
+    @Override
+    @Transactional
+    public boolean isUserEnrolledInExam(Long userId, Long examId) {
+        Exam exam = getExamById(examId);
+        return exam.getEnrolledUsers().stream().anyMatch(u -> u.getId().equals(userId));
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Exam> getTodayAndFutureExamsForUser(Long userId) {
+        ZonedDateTime nowUtc = ZonedDateTime.now(ZoneOffset.UTC);
+
+        TypedQuery<Exam> query = entityManager.createQuery(
+                "SELECT e FROM Exam e JOIN e.enrolledUsers u " +
+                        "WHERE u.id = :userId AND e.examEndDate >= :now " +
+                        "ORDER BY e.examStartDate ASC", Exam.class);
+
+        query.setParameter("userId", userId);
+        query.setParameter("now", nowUtc);
+
+        return query.getResultList();
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Exam> getTodayExamsForUser(Long userId) {
+        ZonedDateTime nowUtc = ZonedDateTime.now(ZoneOffset.UTC);
+
+        TypedQuery<Exam> query = entityManager.createQuery(
+                "SELECT e FROM Exam e JOIN e.enrolledUsers u " +
+                        "WHERE u.id = :userId " +
+                        "AND e.examStartDate <= :now " +
+                        "AND e.examEndDate >= :now " +
+                        "ORDER BY e.examStartDate ASC", Exam.class);
+
+        query.setParameter("userId", userId);
+        query.setParameter("now", nowUtc);
+
+
+        return query.getResultList();
     }
 
 

@@ -23,6 +23,8 @@ public class ExamDto {
     private String subjectName;
     private String formattedDate;
 
+    private boolean isUserEnrolled;
+
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime enrolledStartDate;
 

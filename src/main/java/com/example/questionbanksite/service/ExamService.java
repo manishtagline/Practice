@@ -29,4 +29,12 @@
         List<ExamDto> getAllExamOfTeacher(Long teacherid);
 
         String enrollUserInExam(String username, Long examId);
+
+        boolean isUserEnrolledInExam(Long userId, Long examId);
+
+        List<Exam> getTodayAndFutureExamsForUser(Long userId);
+
+
+        List<Exam> getTodayExamsForUser(Long userId);
+
     }

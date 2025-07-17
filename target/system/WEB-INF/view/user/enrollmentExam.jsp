@@ -253,10 +253,17 @@
                         </div>
                     </c:if>
                 </div>
-                <form method="get" action="enrollUser">
-                    <input type="hidden" name="examId" value="${exam.id}" />
-                    <button type="submit" class="btn btn-start">Enroll</button>
-                </form>
+                <c:choose>
+                    <c:when test="${exam.userEnrolled}">
+                        <div class="text-center text-success fw-bold mt-2">✅ Already Enrolled</div>
+                    </c:when>
+                    <c:otherwise>
+                        <form method="get" action="enrollUser">
+                            <input type="hidden" name="examId" value="${exam.id}" />
+                            <button type="submit" class="btn btn-start">Enroll</button>
+                        </form>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </c:forEach>
     </section>

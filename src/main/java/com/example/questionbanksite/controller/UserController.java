@@ -82,8 +82,24 @@ public class UserController {
 
     //Handler for opening particular question paper
     @GetMapping("/questionPaper")
-    public String questionPaper(@RequestParam("examId") Long examId, Model model, HttpSession session) {
+    public String questionPaper(@RequestParam("examId") Long examId, Model model, HttpSession session,RedirectAttributes redirectAttributes) {
+        String username = (String) session.getAttribute("username");
 
+        User user = userService.getUserByName(username);
+        Long userId = user.getId();
+
+        boolean enrolled = examService.isUserEnrolledInExam(userId, examId);
+        if (!enrolled) {
+            model.addAttribute("errorMessage", "You are not enrolled for this exam.");
+            return "user/errorPage";
+        }
+
+        boolean completed = examService.hasUserCompletedExam(userId, examId);
+
+        if(completed){
+            model.addAttribute("errorMessage", "You already given that exam.");
+            return "user/errorPage";
+        }
 
 
         Exam exam = examService.getExamById(examId);

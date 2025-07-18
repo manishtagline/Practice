@@ -260,16 +260,20 @@ public class AdminController {
             RedirectAttributes redirectAttributes) {
 
         Teacher teacher = teacherService.getTeacherById(teacherId);
-        List<Subject> subjects = subjectService.getSubjectByListOfId(subjectId);
 
-        if (teacher != null && subjects != null) {
+        if (teacher != null) {
+            List<Subject> subjects = (subjectId != null)
+                    ? subjectService.getSubjectByListOfId(subjectId)
+                    : new ArrayList<>();
+
             teacher.setSubjects(subjects);
             teacherService.updateTeacher(teacher);
-            redirectAttributes.addFlashAttribute("successMsg", "Subject assigned successfully!");
-            return "redirect:/admin/teacherList";
+
+            redirectAttributes.addFlashAttribute("successMsg", "Subject Assigned successfully.");
         } else {
             redirectAttributes.addFlashAttribute("errorMsg", "Invalid teacher or subject.");
         }
+
 
         return "redirect:/admin/teacherList";
     }

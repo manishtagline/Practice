@@ -115,5 +115,39 @@
   &copy; 2025 Admin Panel | Exam Center. All rights reserved.
 </footer>
 
+<!-- Modal for warning -->
+<div class="modal fade" id="subjectWarningModal" tabindex="-1" aria-labelledby="subjectWarningModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-white" style="background-color: #222;">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="subjectWarningModalLabel">⚠️ Subject Selection Required</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Please select at least one subject before submitting the form.
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Bootstrap 5 modal instance
+  const warningModal = new bootstrap.Modal(document.getElementById('subjectWarningModal'));
+
+  document.querySelector("form").addEventListener("submit", function (e) {
+    const select = document.querySelector("select[name='subjectId']");
+    const selectedOptions = [...select.selectedOptions];
+
+    if (selectedOptions.length === 0) {
+      e.preventDefault();
+      // Show Bootstrap modal instead of alert
+      warningModal.show();
+    }
+  });
+</script>
+
 </body>
 </html>

@@ -310,6 +310,12 @@ public class ExamServiceImpl implements ExamService{
         return exam.getEnrolledUsers().stream().anyMatch(u -> u.getId().equals(userId));
     }
 
+    @Transactional(readOnly = true)
+    public boolean hasUserCompletedExam(Long userId, Long examId) {
+        Exam exam = getExamById(examId);
+        return exam.getCompletedUsers().stream().anyMatch(u -> u.getId().equals(userId));
+    }
+
 
     @Override
     @Transactional(readOnly = true)

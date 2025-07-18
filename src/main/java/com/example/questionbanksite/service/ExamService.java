@@ -32,6 +32,8 @@
 
         boolean isUserEnrolledInExam(Long userId, Long examId);
 
+        boolean hasUserCompletedExam(Long userId, Long examId);
+
         List<Exam> getTodayAndFutureExamsForUser(Long userId);
 
 

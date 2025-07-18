@@ -96,7 +96,7 @@
 <!-- Student Navbar -->
 <nav class="navbar">
     <!-- Logo + Brand Centered -->
-    <div class="navbar-brand-container" onclick="location.href='${pageContext.request.contextPath}/student/dashboard'">
+    <div class="navbar-brand-container" onclick="location.href='${pageContext.request.contextPath}/home'">
         <svg class="logo-svg" viewBox="0 0 64 64">
             <circle cx="32" cy="32" r="28" stroke-linejoin="round"/>
             <line x1="20" y1="32" x2="44" y2="32"/>
@@ -108,14 +108,6 @@
     <!-- Right-side Menu -->
     <div class="right-side">
         <div class="nav-menu">
-
-            <!-- Dashboard -->
-            <div class="nav-item" onclick="location.href='home'">
-                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 12l2-2 4 4 8-8 4 4v6H3z"/>
-                </svg> Dashboard
-            </div>
 
             <!-- Start Exam -->
             <div class="nav-item" onclick="location.href='exam'">
@@ -133,6 +125,14 @@
                     <path d="M4 4h16v16H4z"/>
                     <polyline points="8 12 10.5 14.5 16 9"/>
                 </svg> Results
+            </div>
+
+            <!-- Upcoming Exam -->
+            <div class="nav-item" onclick="location.href='calendar'">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 4v16M4 12h16"/>
+                </svg> Upcoming Exam
             </div>
 
             <!-- Profile -->

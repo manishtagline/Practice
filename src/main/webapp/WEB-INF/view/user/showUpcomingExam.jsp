@@ -29,6 +29,28 @@
 
         main {
             padding: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Back button in top right */
+        .back-button-container {
+            position: absolute;
+            top: 1rem;
+            right: 0;
+        }
+
+        .back-button-container .btn {
+            font-weight: 600;
+            color: #00c9ff;
+            border-color: #00c9ff;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .back-button-container .btn:hover {
+            background-color: #00c9ff;
+            color: #1f1c2c;
         }
 
         h1 {
@@ -39,8 +61,6 @@
         }
 
         #calendar {
-            max-width: 1000px;
-            margin: 0 auto;
             background-color: #fff;
             padding: 20px;
             border-radius: 12px;
@@ -67,6 +87,13 @@
 <jsp:include page="/WEB-INF/view/navbar/userNavbar.jsp"/>
 
 <main>
+    <!-- Back Button top right -->
+    <div class="back-button-container">
+        <button onclick="history.back()" class="btn btn-outline-info">
+            ← Back to Dashboard
+        </button>
+    </div>
+
     <h1>📅 Upcoming Exams</h1>
     <div id="calendar"></div>
 </main>
@@ -80,8 +107,6 @@
         const calendarEl = document.getElementById('calendar');
         const event = JSON.parse('${calendarEvents}');
 
-        console.log(event)
-
         const calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             height: 'auto',
@@ -90,13 +115,7 @@
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
-            events: event,
-            /*eventClick: function(info) {
-                const examId = info.event.id;
-                if (confirm(`Open exam page for "${info.event.title}"?`)) {
-                    location.href = '${pageContext.request.contextPath}/questionPaper?examId=' + examId;
-                }
-            }*/
+            events: event
         });
 
         calendar.render();

@@ -73,22 +73,19 @@
             margin-bottom: 1.5rem;
             border-bottom: 2px dashed #00c9ff66;
             padding-bottom: 0.3rem;
+            text-align: center;
         }
 
         .stats-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
         .stats-card {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
             background: rgba(47, 47, 47, 0.9);
             border-radius: 1rem;
             border: 1px solid #00c9ff33;
-            padding: 2rem;
+            padding: 2rem 3rem;
             box-shadow: 0 12px 30px rgba(0, 201, 255, 0.1);
             position: relative;
             transition: all 0.3s ease-in-out;
@@ -103,17 +100,28 @@
             color: #00c9ff;
             font-weight: 700;
             font-size: 1.5rem;
-            margin-bottom: 1rem;
-            width: 100%;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        /* Flex container for each row of stats */
+        .stats-row {
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
         }
 
         .stat-item {
-            font-size: 1.1rem;
-            margin: 0.3rem 1rem 0.3rem 0;
-            font-weight: 500;
-            position: relative;
-            padding-left: 32px;
-            flex: 1 1 30%;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+            min-width: 180px; /* to keep some width consistency */
         }
 
         .stat-item strong {
@@ -121,30 +129,20 @@
         }
 
         .stat-item i {
-            position: absolute;
-            left: 0;
-            top: 2px;
             color: #00c9ff;
-            font-size: 1.2rem;
-        }
-
-        footer {
-            background-color: #1a1a2e;
-            color: #aaa;
-            text-align: center;
-            padding: 1rem;
-            font-size: 0.9rem;
-            user-select: none;
+            font-size: 1.3rem;
         }
 
         @media(max-width: 768px) {
-            .stats-card {
+            .stats-row {
                 flex-direction: column;
+                gap: 1rem;
+                margin-bottom: 1rem;
             }
 
             .stat-item {
-                flex: 1 1 100%;
-                margin-bottom: 0.6rem;
+                justify-content: center;
+                min-width: auto;
             }
         }
     </style>
@@ -165,19 +163,26 @@
 
     <!-- User Stats or Summary Section -->
     <section aria-label="User Exam Statistics or Summary">
-        <h2 class="section-title d-flex justify-content-center">Your Exam Summary</h2>
+        <h2 class="section-title">Your Exam Summary</h2>
 
         <div class="stats-wrapper">
             <c:choose>
                 <c:when test="${not empty examStats}">
                     <div class="stats-card" role="region" aria-labelledby="exam-summary-title">
                         <h3 id="exam-summary-title">Exams Overview</h3>
-                        <div class="stat-item"><i class="fas fa-file-alt"></i><strong> Total Exams Enrolled:</strong> ${examStats.enrolledCount}</div>
-                        <div class="stat-item"><i class="fas fa-check-circle"></i><strong> Exams Completed:</strong> ${examStats.completedCount}</div>
-                        <div class="stat-item"><i class="fas fa-clock"></i><strong> Pending Exams:</strong> ${examStats.pendingCount}</div>
-                        <div class="stat-item"><i class="fas fa-check"></i><strong> Total Correct Answers:</strong> ${examStats.totalCorrectAnswers}</div>
-                        <div class="stat-item"><i class="fas fa-times"></i><strong> Total Wrong Answers:</strong> ${examStats.totalWrongAnswers}</div>
-                        <div class="stat-item"><i class="fas fa-percent"></i><strong> Overall Percentage:</strong> ${examStats.overallPercentage} %</div>
+
+                        <!-- First Row -->
+                        <div class="stats-row">
+                            <div class="stat-item"><i class="fas fa-file-alt"></i><strong>Total Exams Enrolled:</strong> ${examStats.enrolledCount}</div>
+                            <div class="stat-item"><i class="fas fa-check-circle"></i><strong>Exams Completed:</strong> ${examStats.completedCount}</div>
+                        </div>
+
+                        <!-- Second Row -->
+                        <div class="stats-row">
+                            <div class="stat-item"><i class="fas fa-check"></i><strong>Total Correct Answers:</strong> ${examStats.totalCorrectAnswers}</div>
+                            <div class="stat-item"><i class="fas fa-times"></i><strong>Total Wrong Answers:</strong> ${examStats.totalWrongAnswers}</div>
+                            <div class="stat-item"><i class="fas fa-percent"></i><strong>Overall Percentage:</strong> ${examStats.overallPercentage} %</div>
+                        </div>
                     </div>
                 </c:when>
                 <c:otherwise>

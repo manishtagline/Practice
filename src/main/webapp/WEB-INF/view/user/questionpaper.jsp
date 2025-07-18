@@ -3,92 +3,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>Question Paper - Student Exam Center</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8"/>
+    <title>Question Paper - Exam Center</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
 
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
-            margin: 0;
+            background: linear-gradient(to right, #1f1c2c, #928dab);
+            color: #f0f0f0;
             min-height: 100vh;
+            margin: 0;
             display: flex;
             flex-direction: column;
         }
-
-        .navbar {
-            background: linear-gradient(90deg, #4a47a3, #6a67ce);
-            height: 80px;
-            padding: 0 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: #fff;
-        }
-
-        .navbar h2 {
-            font-weight: 700;
-            font-size: 1.5rem;
-            letter-spacing: 1px;
-        }
-
-        .navbar span {
-            font-size: 1rem;
-            font-weight: 500;
-            background-color: #ffd700;
-            color: #4a47a3;
-            padding: 6px 18px;
-            border-radius: 20px;
-        }
-
-        .question-header {
-            text-align: center;
-            padding: 3rem 1rem 1rem;
-            color: #2c3e50;
-        }
-
-        .question-header h1 {
-            font-size: 2.8rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .question-header p {
-            font-size: 1.2rem;
-            color: #4a47a3;
-        }
-
-        .question-list {
+        main {
+            flex: 1;
+            padding: 2rem;
             max-width: 900px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        h1.page-title {
+            text-align: center;
+            font-weight: 700;
+            font-size: 2.8rem;
+            color: #00c9ff;
+            text-shadow: 0 0 10px #00c9ff88;
+            margin-bottom: 0.25rem;
+        }
+        .exam-info {
+            text-align: center;
+            font-size: 1.25rem;
+            color: #a0d8ff;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        .exam-description {
+            text-align: center;
+            font-size: 1rem;
+            color: #7f8c8d;
+            margin-bottom: 2rem;
         }
 
         .question-card {
-            background-color: white;
+            background: #3c3c3c;
             border-radius: 1rem;
-            box-shadow: 0 10px 30px rgba(74, 71, 163, 0.15);
-            padding: 2rem;
+            padding: 1.8rem 2rem;
             margin-bottom: 2rem;
-            animation: slideUp 0.6s ease forwards;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            color: #f0f0f0;
         }
-
         .question-card:hover {
-            box-shadow: 0 20px 40px rgba(74, 71, 163, 0.3);
+            background-color: #505050;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.9);
         }
 
         .question-desc {
-            font-size: 1.25rem;
+            font-size: 1.3rem;
             font-weight: 600;
-            color: #4a47a3;
             margin-bottom: 1rem;
+            color: #00c9ff;
         }
 
         .option-list {
@@ -96,18 +79,20 @@
             padding-left: 0;
             margin-bottom: 1rem;
         }
-
         .option-list li {
-            background-color: #f4f6ff;
+            background-color: #575757;
             margin-bottom: 0.6rem;
-            padding: 10px 15px;
+            padding: 12px 18px;
             border-radius: 15px;
-            border: 1px solid #d0d6f9;
+            border: 1px solid #00c9ff;
             font-size: 1rem;
-            color: #333;
             cursor: pointer;
+            color: #f0f0f0;
+            transition: background-color 0.3s ease;
         }
-
+        .option-list li:hover {
+            background-color: #00a1cc;
+        }
         .option-list li input[type="radio"] {
             margin-right: 10px;
             cursor: pointer;
@@ -115,127 +100,200 @@
 
         .marks-complexity {
             font-size: 0.9rem;
-            color: #6a67ce;
+            color: #a0d8ff;
             font-weight: 600;
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
+        }
+
+        .submit-container {
+            text-align: center;
+            margin: 3rem 0 2rem;
         }
 
         footer {
+            background-color: #1a1a2e;
+            color: #ccc;
             text-align: center;
             padding: 1rem;
             font-size: 0.9rem;
-            background-color: rgba(255, 255, 255, 0.9);
-            color: #4a47a3;
-            margin-top: auto;
-            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
         }
 
-        @keyframes slideUp {
-            from {
-                transform: translateY(50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+        /* Modal custom styling */
+        .modal-content {
+            background: #2b2b3d;
+            color: #e0e6f1;
+            border-radius: 1rem;
+            box-shadow: 0 12px 30px rgba(0, 201, 255, 0.7);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #00c9ff55;
+        }
+
+        .modal-title {
+            color: #00c9ff;
+            font-weight: 700;
+            font-size: 1.4rem;
+        }
+
+        .modal-body p {
+            font-size: 1rem;
+            color: #cce7ff;
+            line-height: 1.4;
+        }
+
+        .btn-outline-secondary {
+            color: #00c9ff;
+            border-color: #00c9ff;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: #00c9ff;
+            color: #1f1c2c;
+        }
+
+        .btn-primary {
+            background-color: #00c9ff;
+            border-color: #00c9ff;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0099cc;
+            border-color: #0099cc;
         }
 
         @media (max-width: 576px) {
-            .question-header h1 { font-size: 2rem; }
-            .question-card { padding: 1.5rem; }
+            main {
+                padding: 1rem;
+            }
+            h1.page-title {
+                font-size: 2rem;
+            }
+            .question-card {
+                padding: 1.2rem 1.5rem;
+            }
         }
     </style>
 </head>
 
 <body>
 
-<!-- Navbar -->
-<nav class="navbar">
-    <h2>📘 Exam Center</h2>
-    <span>Exam: ${exam.description}</span>
-</nav>
+<main>
 
-<!-- Header -->
-<section class="question-header">
-    <h1>Question Paper</h1>
-    <p>Subject: ${exam.subject.name} | Total Marks: ${exam.totalMarks}</p>
-</section>
+    <h1 class="page-title">Question Paper</h1>
+    <div class="exam-info">${exam.subject.name} | Total Marks: ${exam.totalMarks}</div>
+    <div class="exam-description">${exam.description}</div>
 
-<!-- Question List Form -->
-<form id="examForm" action="${pageContext.request.contextPath}/submitExam" method="post" class="question-list">
+    <form id="examForm" action="${pageContext.request.contextPath}/submitExam" method="post">
 
-    <!-- Hidden examId -->
-    <input type="hidden" name="examId" value="${exam.id}" />
+        <input type="hidden" name="examId" value="${exam.id}" />
 
-    <c:forEach var="question" items="${questions}">
-        <div class="question-card">
-            <div class="question-desc">${question.questiondDesc}</div>
+        <c:forEach var="question" items="${questions}">
+            <div class="question-card">
+                <div class="question-desc">${question.questiondDesc}</div>
 
-            <ul class="option-list">
-                <c:forEach var="opt" items="${question.options}" varStatus="status">
-                    <li>
-                        <input
-                                type="radio"
-                                name="answers[${question.id}]"
-                                id="q${question.id}_opt${status.index}"
-                                value="${opt}"
-                                required
-                        />
-                        <label for="q${question.id}_opt${status.index}">${opt}</label>
-                    </li>
-                </c:forEach>
-            </ul>
+                <ul class="option-list">
+                    <c:forEach var="opt" items="${question.options}" varStatus="status">
+                        <li>
+                            <input
+                                    type="radio"
+                                    name="answers[${question.id}]"
+                                    id="q${question.id}_opt${status.index}"
+                                    value="${opt}"
+                                    required
+                            />
+                            <label for="q${question.id}_opt${status.index}">${opt}</label>
+                        </li>
+                    </c:forEach>
+                </ul>
 
-            <div class="marks-complexity">
-                <span>Marks: ${question.marks}</span>
-                <%--<span>Complexity: ${question.complexity}</span>--%>
+                <div class="marks-complexity">Marks: ${question.marks}</div>
             </div>
+        </c:forEach>
+
+        <div class="submit-container">
+            <button type="button" class="btn btn-primary btn-lg" id="submitBtn">
+                Submit Exam
+            </button>
         </div>
-    </c:forEach>
+    </form>
 
-    <div style="text-align:center; margin: 2rem;">
-        <!-- Button triggers Bootstrap modal -->
-        <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#confirmSubmitModal">
-            Submit Exam
-        </button>
-    </div>
-</form>
+</main>
 
-<!-- Bootstrap Confirmation Modal -->
-<div class="modal fade" id="confirmSubmitModal" tabindex="-1" aria-labelledby="confirmSubmitModalLabel" aria-hidden="true">
+<footer>
+    <p>&copy; 2025 Exam Center. All rights reserved.</p>
+</footer>
+
+<!-- Bootstrap JS and necessary Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom Script -->
+<script>
+    let allAnswered = true; // To track if all questions are answered
+
+    const formElements = document.querySelectorAll("input[type='radio']");
+
+    // This will track if any of the questions has been answered
+    function checkAllAnswered() {
+        allAnswered = true;
+        document.querySelectorAll('.question-card').forEach(function(card) {
+            const selectedOption = card.querySelector('input[type="radio"]:checked');
+            if (!selectedOption) {
+                allAnswered = false;
+            }
+        });
+    }
+
+    document.getElementById('submitBtn').addEventListener('click', function(e) {
+        checkAllAnswered(); // Check if all questions are answered
+
+        if (!allAnswered) {
+            // If not all questions are answered, show a modal
+            const modal = new bootstrap.Modal(document.getElementById('incompleteModal'), {
+                backdrop: 'static',
+                keyboard: false
+            });
+            modal.show();
+            return; // Prevent form submission
+        }
+
+        // If all answered, submit the form
+        document.getElementById('examForm').submit();
+    });
+
+    window.addEventListener('beforeunload', function(event) {
+        checkAllAnswered(); // Check if all questions are answered
+
+        if (!allAnswered) {
+            const message = "Please provide all answers before submitting the exam.";
+            event.returnValue = message; // Standard for most browsers
+            return message; // For some older browsers
+        }
+    });
+
+</script>
+
+<!-- Incomplete Answer Modal -->
+<div class="modal fade" id="incompleteModal" tabindex="-1" aria-labelledby="incompleteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 shadow">
             <div class="modal-header border-bottom-0">
-                <h5 class="modal-title" id="confirmSubmitModalLabel">Confirm Submission</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="incompleteModalLabel">Incomplete Answers</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body py-4">
-                <p>Are you sure you want to submit the exam? Once submitted, you cannot change your answers.</p>
+                <p>Please make sure you have answered all the questions before submitting the exam.</p>
             </div>
-            <div class="modal-footer border-top-0 d-flex justify-content-between">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="modalConfirmBtn">Yes, Submit</button>
+            <div class="modal-footer border-top-0 d-flex justify-content-center">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
             </div>
         </div>
     </div>
 </div>
-
-<!-- Footer -->
-<footer>
-    &copy; 2025 Student Exam Center. All rights reserved.
-</footer>
-
-<!-- Bootstrap JS Bundle (includes Popper) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<script>
-    // Submit form when modal confirmation button clicked
-    document.getElementById('modalConfirmBtn').addEventListener('click', function () {
-        document.getElementById('examForm').submit();
-    });
-</script>
 
 </body>
 </html>

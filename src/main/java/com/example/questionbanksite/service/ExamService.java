@@ -37,4 +37,5 @@
 
         List<Exam> getTodayExamsForUser(Long userId);
 
+        List<ExamDto> getActiveExam(ZonedDateTime nowUserZone);
     }

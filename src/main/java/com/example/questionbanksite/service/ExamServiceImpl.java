@@ -334,17 +334,49 @@ public class ExamServiceImpl implements ExamService{
         ZonedDateTime nowUtc = ZonedDateTime.now(ZoneOffset.UTC);
 
         TypedQuery<Exam> query = entityManager.createQuery(
-                "SELECT e FROM Exam e JOIN e.enrolledUsers u " +
+                "SELECT e FROM Exam e " +
+                        "JOIN e.enrolledUsers u " +
                         "WHERE u.id = :userId " +
                         "AND e.examStartDate <= :now " +
                         "AND e.examEndDate >= :now " +
-                        "ORDER BY e.examStartDate ASC", Exam.class);
+                        "AND :userId NOT IN (SELECT cu.id FROM e.completedUsers cu) " +
+                        "ORDER BY e.examStartDate ASC", Exam.class
+        );
+
 
         query.setParameter("userId", userId);
         query.setParameter("now", nowUtc);
 
-
         return query.getResultList();
+    }
+
+    @Override
+    public List<ExamDto> getActiveExam(ZonedDateTime nowUserZone) {
+
+        ZonedDateTime nowUtc = nowUserZone.withZoneSameInstant(ZoneOffset.UTC);
+
+        List<Exam> exams = entityManager.createQuery(
+                "SELECT e FROM Exam e WHERE e.enrolledEndDate IS NULL OR e.enrolledEndDate >= :now ORDER BY e.enrolledStartDate ASC", Exam.class)
+                .setParameter("now", nowUtc)
+                .getResultList();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+        return exams.stream()
+                .map(exam -> ExamDto.builder()
+                        .id(exam.getId())
+                        .description(exam.getDescription())
+                        .totalMarks(exam.getTotalMarks())
+                        .totalNumberOfQuestion(exam.getTotalNumberOfQuestion())
+                        .subjectName(exam.getSubject().getName())
+                        .formattedDate(exam.getDateCreated().format(formatter))
+                        .enrolledStartDate(exam.getEnrolledStartDate() != null ? exam.getEnrolledStartDate().toLocalDateTime() : null)
+                        .enrolledEndDate(exam.getEnrolledEndDate() != null ? exam.getEnrolledEndDate().toLocalDateTime() : null)
+                        .examStartDate(exam.getExamStartDate() != null ? exam.getExamStartDate().toLocalDateTime() : null)
+                        .examEndDate(exam.getExamEndDate() != null ? exam.getExamEndDate().toLocalDateTime() : null)
+                        .build())
+                .collect(Collectors.toList());
+
     }
 
 

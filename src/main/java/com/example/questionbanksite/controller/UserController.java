@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,16 +49,26 @@ public class UserController {
         String username = (String) session.getAttribute("username");
         User user = userService.getUserByName(username);
 
-        List<ExamDto> examDescriptions = examService.getAllExam();
+        ZoneId userZoneId = ZoneId.of(user.getZoneId());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
 
+        ZonedDateTime nowUserZone = ZonedDateTime.now(userZoneId);
+
+        List<ExamDto> examDescriptions = examService.getActiveExam(nowUserZone);
+
         for (ExamDto examDto : examDescriptions) {
             if (examDto.getEnrolledStartDate() != null) {
-                examDto.setFormattedEnrolledStartDate(examDto.getEnrolledStartDate().format(formatter));
+                ZonedDateTime utcStart = examDto.getEnrolledStartDate().atZone(ZoneOffset.UTC);
+                ZonedDateTime userStart = utcStart.withZoneSameInstant(userZoneId);
+
+                examDto.setFormattedEnrolledStartDate(userStart.format(formatter));
             }
             if (examDto.getEnrolledEndDate() != null) {
-                examDto.setFormattedEnrolledEndDate(examDto.getEnrolledEndDate().format(formatter));
+                ZonedDateTime utcEnd = examDto.getEnrolledEndDate().atZone(ZoneOffset.UTC);
+                ZonedDateTime userEnd = utcEnd.withZoneSameInstant(userZoneId);
+
+                examDto.setFormattedEnrolledEndDate(userEnd.format(formatter));
             }
 
             boolean isEnrolled = examService.isUserEnrolledInExam(user.getId(), examDto.getId());
@@ -71,6 +83,8 @@ public class UserController {
     //Handler for opening particular question paper
     @GetMapping("/questionPaper")
     public String questionPaper(@RequestParam("examId") Long examId, Model model, HttpSession session) {
+
+
 
         Exam exam = examService.getExamById(examId);
 
@@ -231,6 +245,8 @@ public class UserController {
     public String calendarPage(Model model, HttpSession session) throws JsonProcessingException {
         String username = (String) session.getAttribute("username");
         User user = userService.getUserByName(username);
+
+        ZoneId userZoneId = ZoneId.of(user.getZoneId());
 
         List<Exam> upcomingExams = examService.getTodayAndFutureExamsForUser(user.getId());
         

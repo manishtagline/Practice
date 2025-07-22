@@ -12,7 +12,6 @@ import com.example.questionbanksite.service.QuestionService;
 import com.example.questionbanksite.service.SubjectService;
 import com.example.questionbanksite.service.TeacherService;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.matcher.StringMatcher;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -52,7 +51,7 @@ public class TeacherController{
 
         if (teacherName == null) {
             model.addAttribute("errorMsg", "Session expired or invalid.");
-            model.addAttribute("subjects", List.of());  // empty list so JSP handles it
+            model.addAttribute("subjects", List.of());
             return "teacher/teacherSubject";
         }
 
@@ -87,13 +86,23 @@ public class TeacherController{
 
     //**************************** Question Handlers  *************************//
 
+
     @GetMapping("/viewQuestions")
     @Transactional(readOnly = true)
     public String viewSubjectQuestions(
             @RequestParam Long subjectId, @RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String sortBy,
-            @RequestParam(required = false) String complexity, Model model
+            @RequestParam(required = false) String complexity, Model model, HttpSession session
     ){
         int pageSize = 10;
+        String teacherName = (String) session.getAttribute("username");
+
+        List<TeacherSubjectDto> subjectStats = teacherService.getSubjectStatsForTeacher(teacherName);
+        boolean hasAccess = subjectStats.stream().anyMatch(s -> s.getId().equals(subjectId));
+
+        if (!hasAccess) {
+            model.addAttribute("errorMessage", "Access denied: You are not assigned to this subject.");
+            return "teacher/errorPageTeacher";
+        }
 
         List<Question> questions = questionService.getFilteredAndSortedQuestions(subjectId, complexity, sortBy, page, pageSize);
 

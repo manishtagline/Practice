@@ -97,6 +97,59 @@
       flex-wrap: wrap;
     }
   }
+
+  /* ---- Modal Styling ---- */
+  .custom-modal {
+    background: linear-gradient(to right, #1f1c2c, #928dab);
+    color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    border: none;
+  }
+
+  .custom-header {
+    background-color: #2c2f4a;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .modal-title {
+    font-weight: bold;
+    font-size: 1.25rem;
+  }
+
+  .modal-body {
+    font-size: 1rem;
+    padding: 1rem 1.5rem;
+  }
+
+  .modal-footer {
+    background-color: #2c2f4a;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.75rem 1.5rem;
+  }
+
+  .btn-danger {
+    background-color: #e74c3c;
+    border: none;
+  }
+
+  .btn-danger:hover {
+    background-color: #c0392b;
+  }
+
+  .btn-secondary {
+    background-color: #6c757d;
+    border: none;
+  }
+
+  .btn-secondary:hover {
+    background-color: #5a6268;
+  }
+
+  .btn-close-white {
+    filter: invert(1);
+  }
 </style>
 
 <nav class="navbarTeacher">
@@ -177,7 +230,7 @@
   </div>
 </nav>
 
-<!-- Logout Modal (included with navbar) -->
+<!-- Logout Modal -->
 <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content custom-modal">

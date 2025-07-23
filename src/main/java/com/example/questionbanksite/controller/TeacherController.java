@@ -227,7 +227,6 @@ public class TeacherController{
 
     @PostMapping("/saveExam")
     public String saveExamOfTeacher(@ModelAttribute("exam") ExamDto exam,
-                                    Model model,
                                     HttpSession session,
                                     RedirectAttributes redirectAttributes){
         String teacherName = (String) session.getAttribute("username");

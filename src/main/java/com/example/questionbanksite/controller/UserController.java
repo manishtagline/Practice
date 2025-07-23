@@ -43,6 +43,10 @@ public class UserController {
         return "user/home";
     }
 
+
+
+    //**************************** Exam Enrollments Handlers  *************************//
+
     //Handler for opening exam available for user
     @GetMapping("/enrollExam")
     public String examPage(HttpSession session, Model model) {
@@ -79,6 +83,92 @@ public class UserController {
         return "user/enrollmentExam";
     }
 
+    @GetMapping("/enrollUser")
+    public String enrollUserForExam(@RequestParam("examId") Long examId, HttpSession session, RedirectAttributes redirectAttributes){
+
+        String username = (String) session.getAttribute("username");
+
+        String status = examService.enrollUserInExam(username, examId);
+
+        switch (status) {
+            case "already_enrolled" -> {
+                redirectAttributes.addFlashAttribute("toastMessage", "You are already enrolled for this exam.");
+                redirectAttributes.addFlashAttribute("toastType", "warning");
+            }
+            case "success" -> {
+                redirectAttributes.addFlashAttribute("toastMessage", "You have successfully enrolled. You can see your exam dates on the calendar.");
+                redirectAttributes.addFlashAttribute("toastType", "success");
+            }
+            default -> {
+                redirectAttributes.addFlashAttribute("toastMessage", "Enrollment failed. Please try again.");
+                redirectAttributes.addFlashAttribute("toastType", "danger");
+            }
+        }
+
+        return "redirect:/enrollExam";
+    }
+
+
+    //**************************** Exam Enrollments Handlers Ends  *************************//
+
+
+
+
+    //**************************** Exam Calendar Handlers  *************************//
+
+
+    @GetMapping("/calendar")
+    public String calendarPage(Model model, HttpSession session) throws JsonProcessingException {
+        String username = (String) session.getAttribute("username");
+        User user = userService.getUserByName(username);
+
+        ZoneId userZoneId = ZoneId.of(user.getZoneId());
+
+        List<Exam> upcomingExams = examService.getTodayAndFutureExamsForUser(user.getId());
+
+        List<Map<String, Object>> events = new ArrayList<>();
+        for (Exam exam : upcomingExams) {
+            Map<String, Object> event = new HashMap<>();
+            event.put("id", exam.getId());
+            event.put("title", exam.getDescription());
+            event.put("start", exam.getExamStartDate().withZoneSameInstant(ZoneOffset.UTC).toString());
+            if (exam.getExamEndDate() != null) {
+                event.put("end", exam.getExamEndDate().plusDays(1).withZoneSameInstant(ZoneOffset.UTC).toString());
+            }
+
+            // Check if user has submitted/completed the exam
+            boolean submitted = examService.hasUserCompletedExam(user.getId(), exam.getId());
+            event.put("submitted", submitted);
+
+            events.add(event);
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        model.addAttribute("calendarEvents", mapper.writeValueAsString(events));
+
+        return "user/showUpcomingExam";
+    }
+
+
+    @GetMapping("/exam")
+    public String todaysExams(Model model, HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        User user = userService.getUserByName(username);
+
+        List<Exam> todayExams = examService.getTodayExamsForUser(user.getId());
+
+        model.addAttribute("todayExams", todayExams);
+
+        return "user/todayExams";
+    }
+
+
+    //**************************** Exam Calendar Handlers Ends  *************************//
+
+
+
+
+    //**************************** Exams Handlers  *************************//
 
     //Handler for opening particular question paper
     @GetMapping("/questionPaper")
@@ -135,12 +225,6 @@ public class UserController {
     }
 
 
-    @GetMapping("/submissionMessage")
-    public String submission(Model model, HttpSession session) {
-
-        return "user/submissionMessage";
-    }
-
 
     //Handler for Checking exam history / Result
     @GetMapping("/result")
@@ -159,10 +243,9 @@ public class UserController {
 
 
 
-
     //Handler for checking
     @GetMapping("/examResultDetails")
-    public String examResultDetails(@RequestParam("resultId") Long resultId, Model model, HttpSession session) {
+    public String examResultDetails(@RequestParam("resultId") Long resultId, Model model) {
         UserResult userResult = userResultService.getResultDetailsById(resultId);
 
         if (userResult == null) {
@@ -210,35 +293,22 @@ public class UserController {
         return "user/resultDetails";
     }
 
+
+    //**************************** Exam Calendar Handlers Ends  *************************//
+
+
+
+    //**************************** User Page Related Handlers  *************************//
+
+    @GetMapping("/submissionMessage")
+    public String submission(Model model, HttpSession session) {
+
+        return "user/submissionMessage";
+    }
+
     @GetMapping("/errorPage")
     public String errorPage() {
         return "user/errorPage";
-    }
-
-
-    @GetMapping("/enrollUser")
-    public String enrollUserForExam(@RequestParam("examId") Long examId, HttpSession session, RedirectAttributes redirectAttributes){
-
-        String username = (String) session.getAttribute("username");
-
-        String status = examService.enrollUserInExam(username, examId);
-
-        switch (status) {
-            case "already_enrolled" -> {
-                redirectAttributes.addFlashAttribute("toastMessage", "You are already enrolled for this exam.");
-                redirectAttributes.addFlashAttribute("toastType", "warning");
-            }
-            case "success" -> {
-                redirectAttributes.addFlashAttribute("toastMessage", "You have successfully enrolled. You can see your exam dates on the calendar.");
-                redirectAttributes.addFlashAttribute("toastType", "success");
-            }
-            default -> {
-                redirectAttributes.addFlashAttribute("toastMessage", "Enrollment failed. Please try again.");
-                redirectAttributes.addFlashAttribute("toastType", "danger");
-            }
-        }
-
-        return "redirect:/enrollExam";
     }
 
 
@@ -257,44 +327,8 @@ public class UserController {
     }
 
 
-    @GetMapping("/calendar")
-    public String calendarPage(Model model, HttpSession session) throws JsonProcessingException {
-        String username = (String) session.getAttribute("username");
-        User user = userService.getUserByName(username);
+    //**************************** User Page Related Handlers Ends  *************************//
 
-        ZoneId userZoneId = ZoneId.of(user.getZoneId());
-
-        List<Exam> upcomingExams = examService.getTodayAndFutureExamsForUser(user.getId());
-        
-        List<Map<String, Object>> events = new ArrayList<>();
-        for (Exam exam : upcomingExams) {
-            Map<String, Object> event = new HashMap<>();
-            event.put("id", exam.getId());
-            event.put("title", exam.getDescription());
-            event.put("start", exam.getExamStartDate().withZoneSameInstant(ZoneOffset.UTC).toString());
-            if (exam.getExamEndDate() != null) {
-                event.put("end", exam.getExamEndDate().plusDays(1).withZoneSameInstant(ZoneOffset.UTC).toString());
-            }
-            events.add(event);
-        }
-
-        ObjectMapper mapper = new ObjectMapper();
-        model.addAttribute("calendarEvents", mapper.writeValueAsString(events));
-
-        return "user/showUpcomingExam";
-    }
-
-    @GetMapping("/exam")
-    public String todaysExams(Model model, HttpSession session) {
-        String username = (String) session.getAttribute("username");
-        User user = userService.getUserByName(username);
-
-        List<Exam> todayExams = examService.getTodayExamsForUser(user.getId());
-
-        model.addAttribute("todayExams", todayExams);
-
-        return "user/todayExams";
-    }
 
 
 }

@@ -86,16 +86,12 @@ public class AdminController {
         return "admin/subjectList";
     }
 
-
-    // Update subject by id
     @PostMapping("/updateSubject")
     public String updateSubjectForm(@ModelAttribute Subject subject) {
         subjectService.updateSubject(subject.getId(), subject);
         return "redirect:/admin/subjectList";
     }
 
-
-    // Delete subject by id
     @GetMapping("/deleteSubject/{id}")
     public String deleteSubject(@PathVariable Long id) {
         subjectService.deleteSubject(id);
@@ -242,14 +238,23 @@ public class AdminController {
 
     @GetMapping("/assignSubjectPage")
     public String assignSubjectPage(@RequestParam("facultyId") Long teacherId, Model model) {
+
         List<Subject> subjects = subjectService.getAllSubjects();
+
         Teacher teacher = teacherService.getTeacherById(teacherId);
 
-        List<Long> assignedSubjectsId = teacher.getSubjects().stream().map(Subject::getId).collect(Collectors.toList());
+        List<Long> assignedSubjectIds = new ArrayList<>();
+        if (teacher.getSubjects() != null) {
+            assignedSubjectIds = teacher.getSubjects()
+                    .stream()
+                    .map(Subject::getId)
+                    .collect(Collectors.toList());
+        }
 
         model.addAttribute("teacher", teacher);
         model.addAttribute("subjects", subjects);
-        model.addAttribute("assignedSubjectIds", assignedSubjectsId);
+        model.addAttribute("assignedSubjectIds", assignedSubjectIds);
+
         return "admin/assignSubject";
     }
 

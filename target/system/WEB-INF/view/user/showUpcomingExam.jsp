@@ -95,17 +95,29 @@
     </div>
 
     <h1>📅 Upcoming Exams</h1>
+
+    <!-- Legend for colors -->
+    <div class="d-flex justify-content-center mb-3" style="gap: 1.5rem; font-weight: 600;">
+        <div class="d-flex align-items-center" style="gap: 0.5rem;">
+            <span style="display: inline-block; width: 20px; height: 20px; background-color: #28a745; border-radius: 4px;"></span>
+            <span>Not Given (Enrolled but not submitted)</span>
+        </div>
+        <div class="d-flex align-items-center" style="gap: 0.5rem;">
+            <span style="display: inline-block; width: 20px; height: 20px; background-color: #6c757d; border-radius: 4px;"></span>
+            <span>Given (Submitted)</span>
+        </div>
+    </div>
+
     <div id="calendar"></div>
 </main>
 
 <footer>
     &copy; 2025 Student Exam Center. All rights reserved.
 </footer>
-
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const calendarEl = document.getElementById('calendar');
-        const event = JSON.parse('${calendarEvents}');
+        const events = JSON.parse('${calendarEvents}');
 
         const calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
@@ -115,11 +127,24 @@
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
-            events: event
+            events: events,
+            eventDidMount: function(info) {
+                // info.event.extendedProps contains extra properties like 'submitted'
+                if (info.event.extendedProps.submitted) {
+                    // Submitted exams - grey color
+                    info.el.style.backgroundColor = '#6c757d'; // Bootstrap grey
+                    info.el.style.borderColor = '#6c757d';
+                    info.el.style.color = '#ffffff';
+                } else {
+                    // Enrolled but not submitted - green color
+                    info.el.style.backgroundColor = '#28a745'; // Bootstrap green
+                    info.el.style.borderColor = '#28a745';
+                    info.el.style.color = '#ffffff';
+                }
+            }
         });
 
         calendar.render();
     });
-</script>
-</body>
+</script></body>
 </html>

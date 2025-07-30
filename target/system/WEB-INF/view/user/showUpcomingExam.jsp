@@ -17,69 +17,8 @@
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(to right, #1f1c2c, #928dab);
-            color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-        }
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/userPageCss/showUpcomingExam.css"/>
 
-        main {
-            padding: 2rem;
-            max-width: 1000px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        /* Back button in top right */
-        .back-button-container {
-            position: absolute;
-            top: 1rem;
-            right: 0;
-        }
-
-        .back-button-container .btn {
-            font-weight: 600;
-            color: #00c9ff;
-            border-color: #00c9ff;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .back-button-container .btn:hover {
-            background-color: #00c9ff;
-            color: #1f1c2c;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: #00c9ff;
-            text-shadow: 0 0 10px #00c9ff88;
-        }
-
-        #calendar {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
-        }
-
-        .fc-event-title {
-            font-weight: bold;
-            color: #333;
-        }
-
-        footer {
-            background-color: #1a1a2e;
-            color: #ccc;
-            text-align: center;
-            padding: 1rem;
-            margin-top: 2rem;
-        }
-    </style>
 </head>
 <body>
 

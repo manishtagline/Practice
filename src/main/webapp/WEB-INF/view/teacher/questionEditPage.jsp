@@ -21,61 +21,9 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/richtexteditor/rte_theme_default.css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/adminPageCss/editQuestion.css"/>
 
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-        }
-        .back-button-wrapper {
-            display: flex;
-            justify-content: flex-end;
-            padding: 0.8rem 1rem 0 1rem;
-        }
-        .btn-back {
-            color: #ccc;
-            font-weight: 600;
-            padding: 0.4rem 0.8rem;
-            border: 2px solid transparent;
-            border-radius: 0.5rem;
-            text-decoration: none;
-            transition: color 0.3s ease, border-color 0.3s ease;
-            white-space: nowrap;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-        .btn-back:hover {
-            color: #00c9ff;
-            border-color: #00c9ff;
-            text-decoration: none;
-        }
-        .form-container {
-            padding: 1rem;
-            margin-top: 0;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .btn-submit {
-            background-color: #1a73e8;
-            color: white;
-            font-weight: 600;
-        }
-        .btn-submit:hover {
-            background-color: #155ab6;
-        }
-        footer {
-            text-align: center;
-            margin-top: 2rem;
-            font-size: 0.9rem;
-            color: #666;
-        }
-        /* Optional: style for success/error messages */
-        .alert {
-            max-width: 800px;
-            margin: 1rem auto;
-        }
-    </style>
+
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/teacherPageCss/questionEditPage.css"/>
+
 </head>
 
 <body>

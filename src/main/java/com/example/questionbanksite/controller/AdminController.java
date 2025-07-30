@@ -316,14 +316,14 @@ public class AdminController {
     //**************************** Exam Handlers  *************************//
 
     @GetMapping("/examList")
-    public String examList(Model model, HttpSession session){
+    public String examList(Model model){
         List<ExamDto> exam = examService.getAllExam();
         model.addAttribute("exams", exam);
         return "admin/examList";
     }
 
     @GetMapping("/addExamPage")
-    public String addExam(Model model, HttpSession session){
+    public String addExam(Model model){
 
         model.addAttribute("subjectList", subjectService.getAllSubjects());
         model.addAttribute("exam", new ExamDto());

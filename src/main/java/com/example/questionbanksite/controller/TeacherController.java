@@ -90,7 +90,8 @@ public class TeacherController{
     @GetMapping("/viewQuestions")
     @Transactional(readOnly = true)
     public String viewSubjectQuestions(
-            @RequestParam Long subjectId, @RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String sortBy,
+            @RequestParam
+                    Long subjectId, @RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String sortBy,
             @RequestParam(required = false) String complexity, Model model, HttpSession session
     ){
         int pageSize = 10;
@@ -228,7 +229,7 @@ public class TeacherController{
     @PostMapping("/saveExam")
     public String saveExamOfTeacher(@ModelAttribute("exam") ExamDto exam,
                                     HttpSession session,
-                                    RedirectAttributes redirectAttributes){
+                                    RedirectAttributes redirectAttributes){         
         String teacherName = (String) session.getAttribute("username");
         Teacher teacher = teacherService.getTeacherByName(teacherName);
 

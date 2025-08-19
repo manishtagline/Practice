@@ -24,6 +24,9 @@
     <!-- Static Resource Handler -->
     <mvc:resources mapping="/static/**" location="/resources/static/" />
 
+
+
+
     <mvc:interceptors>
         <!-- Interceptor for user pages -->
        <!-- <mvc:interceptor>
@@ -48,12 +51,14 @@
         <property name="suffix" value=".jsp" />
     </bean>
 
+    <context:property-placeholder ignore-unresolvable="true" system-properties-mode="FALLBACK"/>
+
     <!-- Database Configuration -->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://localhost:3306/questionbank" />
-        <property name="username" value="root" />
-        <property name="password" value="Manish789" />
+        <property name="url" value="${DATASOURCE_URL:jdbc:mysql://localhost:3306/questionbank}" />
+        <property name="username" value="${DATASOURCE_USERNAME:root}" />
+        <property name="password" value="${DATASOURCE_PASSWORD:Manish789}" />
     </bean>
 
     <!-- JPA Entity Manager Factory -->

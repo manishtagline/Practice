@@ -66,12 +66,8 @@ public class QuestionServiceImpl implements QuestionService {
 
         if (sortBy != null) {
             switch (sortBy) {
-                case "marks":
-                case "complexity":
-                    queryBuilder.append(" ORDER BY q.").append(sortBy);
-                    break;
-                default:
-                    queryBuilder.append(" ORDER BY q.id");
+                case "marks", "complexity" -> queryBuilder.append(" ORDER BY q.").append(sortBy);
+                default -> queryBuilder.append(" ORDER BY q.id");
             }
         } else {
             queryBuilder.append(" ORDER BY q.id");

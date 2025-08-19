@@ -40,7 +40,7 @@
       <div class="message error-msg">${errorMsg}</div>
     </c:if>
 
-    <form action="admin/saveSubject" method="post">
+    <form action="saveSubject" method="post">
       <div class="mb-3">
         <label for="subjectName" class="form-label">Subject Name</label>
         <input type="text" class="form-control" id="subjectName" name="name" required placeholder="Enter subject name" />

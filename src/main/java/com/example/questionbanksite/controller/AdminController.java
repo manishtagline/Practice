@@ -66,7 +66,7 @@ public class AdminController {
 
     @GetMapping("/subjectList")
     @Transactional(readOnly = true)
-    public String showSubjectList(Model model, HttpSession session) {
+    public String showSubjectList(Model model) {
 
         List<Subject> subjects = subjectService.getAllSubjects();
 
